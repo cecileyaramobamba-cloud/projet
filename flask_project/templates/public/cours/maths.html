@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+
+{% block title %}Mathématiques - Exemple de cours{% endblock %}
+
+{% block content %}
+
+<div style="max-width: 850px; margin: 0 auto; padding-bottom: 2rem;">
+
+    <a href="{{ url_for('main.matieres') }}" style="display:inline-flex; align-items:center; gap:0.4rem; color:#2563eb; text-decoration:none; font-weight:600; font-size:0.9rem; margin:1.5rem 0 1rem;">
+        <i class="fas fa-arrow-left"></i> Retour aux matières
+    </a>
+
+    <img src="https://placehold.co/850x260/2563eb/ffffff?text=Mathematiques" alt="Mathématiques" style="width:100%; border-radius:16px; box-shadow:0 4px 24px rgba(37,99,235,0.08);">
+
+    <div style="text-align:center; padding:1.5rem 0;">
+        <span style="background:#eff6ff; color:#2563eb; padding:0.25rem 0.9rem; border-radius:40px; font-size:0.8rem; font-weight:700;">Terminale • Chapitre 4</span>
+        <h1 style="font-size:2.2rem; color:#0f172a; font-weight:800; margin-top:0.8rem;">📘 Les suites numériques</h1>
+        <p style="color:#475569; font-size:1.05rem; margin-top:0.3rem;">Exemple de cours donné par un tuteur EduSen en Mathématiques</p>
+    </div>
+
+    <div style="background:white; border-radius:20px; padding:2rem; box-shadow:0 4px 24px rgba(37,99,235,0.08); border:1px solid #dbeafe; margin-bottom:1.5rem;">
+        <h3 style="color:#0f172a;">🎯 Objectifs du cours</h3>
+        <ul style="color:#475569; line-height:2; list-style:none; margin-top:0.5rem;">
+            <li>✅ Définir une suite numérique et calculer ses termes</li>
+            <li>✅ Reconnaître une suite arithmétique et une suite géométrique</li>
+            <li>✅ Calculer la somme des premiers termes d'une suite</li>
+            <li>✅ Étudier le sens de variation et la limite d'une suite</li>
+        </ul>
+    </div>
+
+    <div style="background:white; border-radius:20px; padding:2rem; box-shadow:0 4px 24px rgba(37,99,235,0.08); border:1px solid #dbeafe; margin-bottom:1.5rem;">
+        <h3 style="color:#0f172a;">1. Qu'est-ce qu'une suite numérique ?</h3>
+        <p style="color:#475569; line-height:1.8; margin-top:0.5rem;">
+            Une suite numérique est une fonction définie sur l'ensemble des entiers naturels ℕ (ou une partie de ℕ), qui à chaque entier <em>n</em> associe un nombre réel noté u<sub>n</sub>. On note la suite (u<sub>n</sub>). Le terme u<sub>0</sub> est le premier terme, u<sub>1</sub> le second, et ainsi de suite.
+        </p>
+
+        <h3 style="color:#0f172a; margin-top:1.5rem;">2. Suites arithmétiques</h3>
+        <p style="color:#475569; line-height:1.8; margin-top:0.5rem;">
+            Une suite (u<sub>n</sub>) est <strong>arithmétique</strong> s'il existe un nombre réel <em>r</em>, appelé <strong>raison</strong>, tel que pour tout entier <em>n</em> :
+        </p>
+        <div style="background:#eff6ff; border-radius:12px; padding:1rem 1.5rem; margin:1rem 0; font-weight:600; color:#0f172a; text-align:center;">
+            u<sub>n+1</sub> = u<sub>n</sub> + r
+        </div>
+        <p style="color:#475569; line-height:1.8;">
+            On passe donc d'un terme au suivant en ajoutant toujours la même valeur <em>r</em>. Le terme général s'exprime par :
+        </p>
+        <div style="background:#eff6ff; border-radius:12px; padding:1rem 1.5rem; margin:1rem 0; font-weight:600; color:#0f172a; text-align:center;">
+            u<sub>n</sub> = u<sub>0</sub> + n × r
+        </div>
+
+        <p style="color:#475569; line-height:1.8; background:#f8fafc; border-left:4px solid #2563eb; padding:1rem 1.2rem; border-radius:8px;">
+            <strong>Exemple :</strong> Soit (u<sub>n</sub>) la suite arithmétique de premier terme u<sub>0</sub> = 5 et de raison r = 3.<br>
+            u<sub>1</sub> = 5 + 3 = 8, u<sub>2</sub> = 8 + 3 = 11, u<sub>3</sub> = 11 + 3 = 14 …<br>
+            Le 10<sup>e</sup> terme vaut : u<sub>10</sub> = u<sub>0</sub> + 10 × r = 5 + 30 = <strong>35</strong>.
+        </p>
+
+        <p style="color:#475569; line-height:1.8; margin-top:1rem;">
+            La somme des <em>n</em> premiers termes d'une suite arithmétique se calcule ainsi :
+        </p>
+        <div style="background:#eff6ff; border-radius:12px; padding:1rem 1.5rem; margin:1rem 0; font-weight:600; color:#0f172a; text-align:center;">
+            S = (nombre de termes) × (premier terme + dernier terme) / 2
+        </div>
+
+        <h3 style="color:#0f172a; margin-top:1.5rem;">3. Suites géométriques</h3>
+        <p style="color:#475569; line-height:1.8; margin-top:0.5rem;">
+            Une suite (u<sub>n</sub>) est <strong>géométrique</strong> s'il existe un nombre réel <em>q</em> (non nul), appelé <strong>raison</strong>, tel que pour tout entier <em>n</em> :
+        </p>
+        <div style="background:#eff6ff; border-radius:12px; padding:1rem 1.5rem; margin:1rem 0; font-weight:600; color:#0f172a; text-align:center;">
+            u<sub>n+1</sub> = u<sub>n</sub> × q
+        </div>
+        <p style="color:#475569; line-height:1.8;">
+            Le terme général s'exprime par :
+        </p>
+        <div style="background:#eff6ff; border-radius:12px; padding:1rem 1.5rem; margin:1rem 0; font-weight:600; color:#0f172a; text-align:center;">
+            u<sub>n</sub> = u<sub>0</sub> × q<sup>n</sup>
+        </div>
+
+        <p style="color:#475569; line-height:1.8; background:#f8fafc; border-left:4px solid #2563eb; padding:1rem 1.2rem; border-radius:8px;">
+            <strong>Exemple :</strong> Soit (u<sub>n</sub>) la suite géométrique de premier terme u<sub>0</sub> = 2 et de raison q = 3.<br>
+            u<sub>1</sub> = 2 × 3 = 6, u<sub>2</sub> = 6 × 3 = 18, u<sub>3</sub> = 18 × 3 = 54 …<br>
+            Le 5<sup>e</sup> terme vaut : u<sub>5</sub> = u<sub>0</sub> × q<sup>5</sup> = 2 × 243 = <strong>486</strong>.
+        </p>
+    </div>
+
+    <div style="background:white; border-radius:20px; padding:2rem; box-shadow:0 4px 24px rgba(37,99,235,0.08); border:1px solid #dbeafe;">
+        <h3 style="color:#0f172a;">📝 Exercice d'application</h3>
+        <p style="color:#475569; line-height:1.8; margin-top:0.5rem;">
+            Une entreprise sénégalaise verse à un employé un salaire mensuel de 150 000 FCFA la première année, avec une augmentation fixe de 10 000 FCFA chaque année suivante.
+        </p>
+        <ol style="color:#475569; line-height:2;">
+            <li>Justifier que le salaire annuel forme une suite arithmétique et donner sa raison.</li>
+            <li>Calculer le salaire lors de la 6<sup>e</sup> année.</li>
+            <li>Calculer le total perçu sur les 6 premières années.</li>
+        </ol>
+        <details style="margin-top:1rem;">
+            <summary style="cursor:pointer; color:#2563eb; font-weight:600;">Voir la correction</summary>
+            <p style="color:#475569; line-height:1.8; margin-top:0.8rem;">
+                1) u<sub>0</sub> = 150 000 et r = 10 000, donc la suite est arithmétique de raison 10 000.<br>
+                2) u<sub>5</sub> = 150 000 + 5 × 10 000 = <strong>200 000 FCFA</strong> (6<sup>e</sup> année = indice 5).<br>
+                3) S = 6 × (150 000 + 200 000) / 2 = <strong>1 050 000 FCFA</strong> perçus au total.
+            </p>
+        </details>
+    </div>
+
+</div>
+
+{% endblock %}

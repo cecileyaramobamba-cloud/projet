@@ -1,0 +1,234 @@
+
+{% extends "base.html" %}
+
+{% block title %}Gestion des réservations - Admin{% endblock %}
+
+{% block content %}
+
+<div style="max-width: 1400px; margin: 0 auto; padding: 1rem 0;">
+
+    <!-- ===== EN-TÊTE ===== -->
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
+        <div>
+            <h1 style="font-size: 2rem; color: #0f172a; font-weight: 800;">
+                📅 Gestion des réservations
+            </h1>
+            <p style="color: #475569; font-size: 1rem;">
+                Consultez, filtrez et gérez toutes les réservations de la plateforme.
+            </p>
+        </div>
+        <div style="display: flex; align-items: center; gap: 1rem;">
+            <span style="background: #dbeafe; padding: 0.3rem 1rem; border-radius: 40px; color: #2563eb; font-weight: 600; font-size: 0.85rem;">
+                👤 Admin
+            </span>
+            <a href="/auth/deconnexion" style="padding: 0.3rem 1rem; background: #dc2626; color: #fff; border-radius: 40px; text-decoration: none; font-weight: 600; font-size: 0.85rem;">
+                <i class="fas fa-sign-out-alt"></i> Déconnexion
+            </a>
+        </div>
+    </div>
+
+    <!-- ===== STATISTIQUES ===== -->
+    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; margin-bottom: 2rem;">
+        <div style="background: white; border-radius: 16px; padding: 1.5rem; box-shadow: 0 4px 24px rgba(37,99,235,0.08); border: 1px solid #dbeafe; text-align: center;">
+            <div style="font-size: 2rem; font-weight: 800; color: #2563eb;">3 250</div>
+            <div style="color: #475569; font-size: 0.9rem;">📊 Total des réservations</div>
+        </div>
+        <div style="background: white; border-radius: 16px; padding: 1.5rem; box-shadow: 0 4px 24px rgba(37,99,235,0.08); border: 1px solid #dbeafe; text-align: center; border-color: #d1fae5;">
+            <div style="font-size: 2rem; font-weight: 800; color: #059669;">2 890</div>
+            <div style="color: #475569; font-size: 0.9rem;">✅ Confirmées</div>
+        </div>
+        <div style="background: white; border-radius: 16px; padding: 1.5rem; box-shadow: 0 4px 24px rgba(37,99,235,0.08); border: 1px solid #dbeafe; text-align: center; border-color: #fef3c7;">
+            <div style="font-size: 2rem; font-weight: 800; color: #d97706;">245</div>
+            <div style="color: #475569; font-size: 0.9rem;">⏳ En attente</div>
+        </div>
+        <div style="background: white; border-radius: 16px; padding: 1.5rem; box-shadow: 0 4px 24px rgba(37,99,235,0.08); border: 1px solid #dbeafe; text-align: center; border-color: #fecaca;">
+            <div style="font-size: 2rem; font-weight: 800; color: #dc2626;">115</div>
+            <div style="color: #475569; font-size: 0.9rem;">❌ Annulées</div>
+        </div>
+    </div>
+
+    <!-- ===== RECHERCHE ET FILTRES ===== -->
+    <div style="background: white; border-radius: 16px; padding: 1.5rem; box-shadow: 0 4px 24px rgba(37,99,235,0.08); border: 1px solid #dbeafe; margin-bottom: 2rem;">
+        
+        <!-- Recherche -->
+        <div style="display: flex; gap: 1rem; margin-bottom: 1rem; flex-wrap: wrap;">
+            <div style="flex: 2; min-width: 200px; display: flex; align-items: center; background: #f8fafc; border-radius: 60px; padding: 0 1rem; border: 2px solid #e2e8f0; transition: 0.3s ease;">
+                <i class="fas fa-search" style="color: #475569;"></i>
+                <input type="text" placeholder="🔍 Rechercher une réservation..." style="border: none; padding: 0.7rem 1rem; flex: 1; background: transparent; font-size: 0.95rem; outline: none;">
+            </div>
+            <button style="padding: 0.7rem 2rem; background: #2563eb; color: #fff; border: none; border-radius: 60px; font-weight: 600; cursor: pointer; transition: 0.3s ease;">
+                <i class="fas fa-search"></i> Rechercher
+            </button>
+        </div>
+
+        <!-- Filtres -->
+        <div style="display: flex; gap: 1rem; flex-wrap: wrap; align-items: center;">
+            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                <span style="color: #475569; font-size: 0.85rem; font-weight: 600;">📚 Matière</span>
+                <select style="padding: 0.5rem 1rem; border-radius: 60px; border: 1px solid #dbeafe; background: white; font-size: 0.85rem; outline: none;">
+                    <option>Toutes</option>
+                    <option>Mathématiques</option>
+                    <option>Informatique</option>
+                    <option>Français</option>
+                    <option>Anglais</option>
+                    <option>Physique</option>
+                </select>
+            </div>
+            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                <span style="color: #475569; font-size: 0.85rem; font-weight: 600;">👨‍🏫 Tuteur</span>
+                <select style="padding: 0.5rem 1rem; border-radius: 60px; border: 1px solid #dbeafe; background: white; font-size: 0.85rem; outline: none;">
+                    <option>Tous</option>
+                    <option>Awa Ndiaye</option>
+                    <option>Mamadou Diop</option>
+                    <option>Fatou Sow</option>
+                    <option>Cheikh Ba</option>
+                </select>
+            </div>
+            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                <span style="color: #475569; font-size: 0.85rem; font-weight: 600;">📅 Date</span>
+                <input type="date" style="padding: 0.5rem 1rem; border-radius: 60px; border: 1px solid #dbeafe; font-size: 0.85rem; outline: none;">
+            </div>
+            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                <span style="color: #475569; font-size: 0.85rem; font-weight: 600;">📌 Statut</span>
+                <select style="padding: 0.5rem 1rem; border-radius: 60px; border: 1px solid #dbeafe; background: white; font-size: 0.85rem; outline: none;">
+                    <option>Tous</option>
+                    <option>Confirmée</option>
+                    <option>En attente</option>
+                    <option>Annulée</option>
+                    <option>Terminée</option>
+                </select>
+            </div>
+            <div style="display: flex; gap: 0.5rem;">
+                <button onclick="showToast('✅ Filtres appliqués')" style="padding: 0.5rem 1.5rem; background: #2563eb; color: #fff; border: none; border-radius: 60px; font-weight: 600; cursor: pointer; font-size: 0.85rem;">
+                    <i class="fas fa-check"></i> Appliquer
+                </button>
+                <button onclick="showToast('🔄 Filtres réinitialisés')" style="padding: 0.5rem 1.5rem; background: transparent; color: #475569; border: 1px solid #dbeafe; border-radius: 60px; font-weight: 600; cursor: pointer; font-size: 0.85rem;">
+                    <i class="fas fa-undo"></i> Réinitialiser
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== LISTE DES RÉSERVATIONS ===== -->
+    <div style="background: white; border-radius: 16px; padding: 1.5rem; box-shadow: 0 4px 24px rgba(37,99,235,0.08); border: 1px solid #dbeafe; margin-bottom: 2rem;">
+        <div style="overflow-x: auto;">
+            <table style="width: 100%; border-collapse: collapse;">
+                <thead>
+                    <tr style="background: #eff6ff;">
+                        <th style="padding: 0.75rem 1rem; text-align: left; font-weight: 600; color: #0f172a;">N°</th>
+                        <th style="padding: 0.75rem 1rem; text-align: left; font-weight: 600; color: #0f172a;">Élève</th>
+                        <th style="padding: 0.75rem 1rem; text-align: left; font-weight: 600; color: #0f172a;">Tuteur</th>
+                        <th style="padding: 0.75rem 1rem; text-align: left; font-weight: 600; color: #0f172a;">Matière</th>
+                        <th style="padding: 0.75rem 1rem; text-align: left; font-weight: 600; color: #0f172a;">Date</th>
+                        <th style="padding: 0.75rem 1rem; text-align: left; font-weight: 600; color: #0f172a;">Heure</th>
+                        <th style="padding: 0.75rem 1rem; text-align: left; font-weight: 600; color: #0f172a;">Statut</th>
+                        <th style="padding: 0.75rem 1rem; text-align: left; font-weight: 600; color: #0f172a;">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for reservation in reservations %}
+                    <tr>
+                        <td style="padding: 0.75rem 1rem; border-bottom: 1px solid #dbeafe; font-weight: 600;">{{ "%02d"|format(loop.index) }}</td>
+                        <td style="padding: 0.75rem 1rem; border-bottom: 1px solid #dbeafe;">{{ reservation.etudiant.nom }}</td>
+                        <td style="padding: 0.75rem 1rem; border-bottom: 1px solid #dbeafe;">{{ reservation.tuteur.nom }}</td>
+                        <td style="padding: 0.75rem 1rem; border-bottom: 1px solid #dbeafe;">{{ reservation.matiere }}</td>
+                        <td style="padding: 0.75rem 1rem; border-bottom: 1px solid #dbeafe;">{{ reservation.date_seance.strftime('%d/%m/%Y') }}</td>
+                        <td style="padding: 0.75rem 1rem; border-bottom: 1px solid #dbeafe;">{{ reservation.heure_debut }}</td>
+                        <td style="padding: 0.75rem 1rem; border-bottom: 1px solid #dbeafe;">
+                            {% if reservation.statut == "Confirmée" %}
+                            <span style="background: #d1fae5; color: #065f46; padding: 0.15rem 0.7rem; border-radius: 40px; font-size: 0.7rem; font-weight: 600;">✅ Confirmée</span>
+                            {% elif reservation.statut == "Terminée" %}
+                            <span style="background: #d1fae5; color: #065f46; padding: 0.15rem 0.7rem; border-radius: 40px; font-size: 0.7rem; font-weight: 600;">✅ Terminée</span>
+                            {% elif reservation.statut == "Annulée" %}
+                            <span style="background: #fecaca; color: #991b1b; padding: 0.15rem 0.7rem; border-radius: 40px; font-size: 0.7rem; font-weight: 600;">❌ Annulée</span>
+                            {% else %}
+                            <span style="background: #fef3c7; color: #92400e; padding: 0.15rem 0.7rem; border-radius: 40px; font-size: 0.7rem; font-weight: 600;">⏳ En attente</span>
+                            {% endif %}
+                        </td>
+                        <td style="padding: 0.75rem 1rem; border-bottom: 1px solid #dbeafe;">
+                            <button onclick="showToast('📋 Détails de la réservation')" style="padding: 0.3rem 0.8rem; background: #2563eb; color: #fff; border: none; border-radius: 40px; cursor: pointer; font-size: 0.75rem; margin-right: 0.3rem;">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            {% if reservation.statut == "En attente" %}
+                            <form method="POST" action="{{ url_for('main.confirmer_reservation_admin', reservation_id=reservation.id) }}" style="display: inline;">
+                                <button type="submit" style="padding: 0.3rem 0.8rem; background: #059669; color: #fff; border: none; border-radius: 40px; cursor: pointer; font-size: 0.75rem; margin-right: 0.3rem;"><i class="fas fa-check"></i></button>
+                            </form>
+                            {% endif %}
+                            {% if reservation.statut == "Confirmée" %}
+                            <form method="POST" action="{{ url_for('main.terminer_reservation_admin', reservation_id=reservation.id) }}" style="display: inline;">
+                                <button type="submit" style="padding: 0.3rem 0.8rem; background: #059669; color: #fff; border: none; border-radius: 40px; cursor: pointer; font-size: 0.75rem; margin-right: 0.3rem;"><i class="fas fa-check-double"></i></button>
+                            </form>
+                            {% endif %}
+                            {% if reservation.statut in ("En attente", "Confirmée") %}
+                            <form method="POST" action="{{ url_for('main.annuler_reservation_admin', reservation_id=reservation.id) }}" style="display: inline;">
+                                <button type="submit" style="padding: 0.3rem 0.8rem; background: #dc2626; color: #fff; border: none; border-radius: 40px; cursor: pointer; font-size: 0.75rem;"><i class="fas fa-times"></i></button>
+                            </form>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="8" style="text-align: center; padding: 2rem; color: #475569;">Aucune réservation pour le moment.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- ===== DÉTAIL D'UNE RÉSERVATION ===== -->
+    <div style="background: white; border-radius: 16px; padding: 1.5rem; box-shadow: 0 4px 24px rgba(37,99,235,0.08); border: 1px solid #dbeafe; margin-bottom: 2rem;">
+        <h3 style="color: #0f172a; font-size: 1.1rem; margin-bottom: 1rem;">📋 Détail d'une réservation</h3>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; background: #f8fafc; padding: 1rem; border-radius: 12px;">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem;">
+                <div><strong style="color: #0f172a;">Référence :</strong> RES-2026-001</div>
+                <div><strong style="color: #0f172a;">Élève :</strong> Aminata Ndiaye</div>
+                <div><strong style="color: #0f172a;">Tuteur :</strong> Awa Ndiaye</div>
+                <div><strong style="color: #0f172a;">Matière :</strong> Mathématiques</div>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem;">
+                <div><strong style="color: #0f172a;">Date :</strong> 02/07/2026</div>
+                <div><strong style="color: #0f172a;">Heure :</strong> 14h00 - 15h00</div>
+                <div><strong style="color: #0f172a;">Mode :</strong> 💻 En ligne</div>
+                <div><strong style="color: #0f172a;">Paiement :</strong> ✅ Effectué</div>
+                <div><strong style="color: #0f172a;">Statut :</strong> <span style="background: #d1fae5; color: #065f46; padding: 0.15rem 0.7rem; border-radius: 40px; font-size: 0.7rem; font-weight: 600;">✅ Confirmée</span></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== ACTIONS ADMINISTRATEUR ===== -->
+    <div style="background: white; border-radius: 16px; padding: 1.5rem; box-shadow: 0 4px 24px rgba(37,99,235,0.08); border: 1px solid #dbeafe; margin-bottom: 2rem;">
+        <h3 style="color: #0f172a; font-size: 1.1rem; margin-bottom: 1rem;">⚡ Actions administrateur</h3>
+        <div style="display: flex; flex-wrap: wrap; gap: 0.8rem;">
+            <button onclick="showToast('✏️ Modification de la réservation')" style="padding: 0.6rem 1.5rem; background: #2563eb; color: #fff; border: none; border-radius: 60px; font-weight: 600; cursor: pointer; transition: 0.3s ease; display: flex; align-items: center; gap: 0.5rem;">
+                <i class="fas fa-edit"></i> Modifier
+            </button>
+            <button onclick="showToast('❌ Réservation annulée')" style="padding: 0.6rem 1.5rem; background: #dc2626; color: #fff; border: none; border-radius: 60px; font-weight: 600; cursor: pointer; transition: 0.3s ease; display: flex; align-items: center; gap: 0.5rem;">
+                <i class="fas fa-times"></i> Annuler
+            </button>
+            <button onclick="showToast('✅ Réservation terminée')" style="padding: 0.6rem 1.5rem; background: #059669; color: #fff; border: none; border-radius: 60px; font-weight: 600; cursor: pointer; transition: 0.3s ease; display: flex; align-items: center; gap: 0.5rem;">
+                <i class="fas fa-check-double"></i> Marquer comme terminée
+            </button>
+        </div>
+    </div>
+
+    <!-- ===== PAGINATION ===== -->
+    <div style="display: flex; justify-content: center; align-items: center; gap: 0.5rem; padding: 1rem 0; flex-wrap: wrap;">
+        <button onclick="showToast('Page précédente')" style="padding: 0.5rem 1.2rem; background: transparent; color: #2563eb; border: 1px solid #dbeafe; border-radius: 60px; cursor: pointer; transition: 0.3s ease; font-size: 0.85rem;">
+            <i class="fas fa-chevron-left"></i> Précédent
+        </button>
+        <button onclick="showToast('Page 1')" style="padding: 0.5rem 1rem; background: #2563eb; color: #fff; border: none; border-radius: 60px; cursor: pointer; font-weight: 600; font-size: 0.85rem;">1</button>
+        <button onclick="showToast('Page 2')" style="padding: 0.5rem 1rem; background: transparent; color: #475569; border: 1px solid #dbeafe; border-radius: 60px; cursor: pointer; transition: 0.3s ease; font-size: 0.85rem;">2</button>
+        <button onclick="showToast('Page 3')" style="padding: 0.5rem 1rem; background: transparent; color: #475569; border: 1px solid #dbeafe; border-radius: 60px; cursor: pointer; transition: 0.3s ease; font-size: 0.85rem;">3</button>
+        <button onclick="showToast('Page 4')" style="padding: 0.5rem 1rem; background: transparent; color: #475569; border: 1px solid #dbeafe; border-radius: 60px; cursor: pointer; transition: 0.3s ease; font-size: 0.85rem;">4</button>
+        <button onclick="showToast('Page 5')" style="padding: 0.5rem 1rem; background: transparent; color: #475569; border: 1px solid #dbeafe; border-radius: 60px; cursor: pointer; transition: 0.3s ease; font-size: 0.85rem;">5</button>
+        <span style="color: #475569; font-size: 0.85rem;">...</span>
+        <button onclick="showToast('Page 7')" style="padding: 0.5rem 1rem; background: transparent; color: #475569; border: 1px solid #dbeafe; border-radius: 60px; cursor: pointer; transition: 0.3s ease; font-size: 0.85rem;">7</button>
+        <button onclick="showToast('Page suivante')" style="padding: 0.5rem 1.2rem; background: transparent; color: #2563eb; border: 1px solid #dbeafe; border-radius: 60px; cursor: pointer; transition: 0.3s ease; font-size: 0.85rem;">
+            Suivant <i class="fas fa-chevron-right"></i>
+        </button>
+    </div>
+
+</div>
+
+{% endblock %}

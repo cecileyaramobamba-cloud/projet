@@ -1,0 +1,909 @@
+
+{% extends "base.html" %}
+
+{% block title %}Liste des tuteurs{% endblock %}
+
+{% block content %}
+
+<!-- ============================================
+   PAGE LISTE DES TUTEURS
+   ============================================ -->
+
+<!-- ===== EN-TÊTE ===== -->
+<div style="text-align: center; padding: 2rem 0 1.5rem; border-bottom: 1px solid #dbeafe;">
+    <h1 style="font-size: 2.5rem; color: #0f172a; font-weight: 800;">
+        📚 Nos Tuteurs
+    </h1>
+    <p style="color: #475569; font-size: 1.05rem; margin-top: 0.3rem;">
+        Trouvez le professeur idéal selon votre matière, votre niveau et votre budget.
+    </p>
+    <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; margin-top: 1rem; font-size: 0.85rem;">
+        <span style="background: #dbeafe; padding: 0.3rem 1rem; border-radius: 40px;">
+            🎓 <strong>Étudiants tuteurs</strong> : 140
+        </span>
+        <span style="background: #d1fae5; padding: 0.3rem 1rem; border-radius: 40px;">
+            👨‍🏫 <strong>Professeurs</strong> : 60
+        </span>
+        <span style="background: #fef3c7; padding: 0.3rem 1rem; border-radius: 40px;">
+            ⭐ <strong>Total</strong> : 200 tuteurs
+        </span>
+    </div>
+</div>
+
+<!-- ===== STATISTIQUES RAPIDES ===== -->
+<div id="statsContainer" style="display: flex; flex-wrap: wrap; gap: 0.6rem; padding: 1rem 0; justify-content: center;">
+    <span style="background: white; padding: 0.2rem 1rem; border-radius: 40px; border: 1px solid #dbeafe; font-size: 0.8rem;">
+        📊 Total : <strong id="totalStats">0</strong>
+    </span>
+    <span style="background: white; padding: 0.2rem 1rem; border-radius: 40px; border: 1px solid #dbeafe; font-size: 0.8rem;">
+        📘 Maths : <strong id="statsMaths">0</strong>
+    </span>
+    <span style="background: white; padding: 0.2rem 1rem; border-radius: 40px; border: 1px solid #dbeafe; font-size: 0.8rem;">
+        💻 Info : <strong id="statsInfo">0</strong>
+    </span>
+    <span style="background: white; padding: 0.2rem 1rem; border-radius: 40px; border: 1px solid #dbeafe; font-size: 0.8rem;">
+        🇫🇷 Français : <strong id="statsFrancais">0</strong>
+    </span>
+    <span style="background: white; padding: 0.2rem 1rem; border-radius: 40px; border: 1px solid #dbeafe; font-size: 0.8rem;">
+        🇬🇧 Anglais : <strong id="statsAnglais">0</strong>
+    </span>
+    <span style="background: white; padding: 0.2rem 1rem; border-radius: 40px; border: 1px solid #dbeafe; font-size: 0.8rem;">
+        ⚛️ Physique : <strong id="statsPhysique">0</strong>
+    </span>
+    <span style="background: white; padding: 0.2rem 1rem; border-radius: 40px; border: 1px solid #dbeafe; font-size: 0.8rem;">
+        🧬 SVT : <strong id="statsSVT">0</strong>
+    </span>
+    <span style="background: white; padding: 0.2rem 1rem; border-radius: 40px; border: 1px solid #dbeafe; font-size: 0.8rem;">
+        🌐 Web : <strong id="statsWeb">0</strong>
+    </span>
+</div>
+
+<!-- ===== FILTRES + RÉSULTATS ===== -->
+<div style="display: flex; gap: 2rem; padding: 1.5rem 0; flex-wrap: wrap;">
+
+    <!-- ===== SIDEBAR FILTRES ===== -->
+    <div style="flex: 0 0 280px; min-width: 240px; background: white; border-radius: 16px; padding: 1.5rem; box-shadow: 0 4px 24px rgba(37,99,235,0.08); border: 1px solid #dbeafe; height: fit-content; position: sticky; top: 90px;">
+
+        <h3 style="font-size: 1.1rem; margin-bottom: 1rem; color: #0f172a;">
+            <i class="fas fa-filter" style="color: #2563eb;"></i> Filtres
+        </h3>
+
+        <!-- Recherche -->
+        <div style="margin-bottom: 1.2rem;">
+            <label style="display: block; font-weight: 600; font-size: 0.85rem; color: #0f172a; margin-bottom: 0.3rem;">
+                <i class="fas fa-search" style="color: #2563eb;"></i> Rechercher un tuteur
+            </label>
+            <input type="text" id="searchTuteur" placeholder="Nom, matière..." 
+                   style="width: 100%; padding: 0.6rem 1rem; border-radius: 10px; border: 1px solid #dbeafe; font-size: 0.9rem; outline: none; transition: 0.3s ease;">
+        </div>
+
+        <!-- Matière -->
+        <div style="margin-bottom: 1.2rem;">
+            <label style="display: block; font-weight: 600; font-size: 0.85rem; color: #0f172a; margin-bottom: 0.3rem;">
+                <i class="fas fa-book" style="color: #2563eb;"></i> Matière
+            </label>
+            <div style="display: flex; flex-direction: column; gap: 0.3rem; font-size: 0.9rem; max-height: 180px; overflow-y: auto;">
+                <label><input type="checkbox" class="matiere-filter" value="maths" checked> Mathématiques</label>
+                <label><input type="checkbox" class="matiere-filter" value="informatique" checked> Informatique</label>
+                <label><input type="checkbox" class="matiere-filter" value="python" checked> Python</label>
+                <label><input type="checkbox" class="matiere-filter" value="mysql" checked> MySQL</label>
+                <label><input type="checkbox" class="matiere-filter" value="francais" checked> Français</label>
+                <label><input type="checkbox" class="matiere-filter" value="anglais" checked> Anglais</label>
+                <label><input type="checkbox" class="matiere-filter" value="physique" checked> Physique</label>
+                <label><input type="checkbox" class="matiere-filter" value="svt" checked> SVT</label>
+                <label><input type="checkbox" class="matiere-filter" value="web" checked> Développement Web</label>
+                <label><input type="checkbox" class="matiere-filter" value="economie" checked> Économie</label>
+                <label><input type="checkbox" class="matiere-filter" value="droit" checked> Droit</label>
+            </div>
+        </div>
+
+        <!-- Type -->
+        <div style="margin-bottom: 1.2rem;">
+            <label style="display: block; font-weight: 600; font-size: 0.85rem; color: #0f172a; margin-bottom: 0.3rem;">
+                <i class="fas fa-user-graduate" style="color: #2563eb;"></i> Type
+            </label>
+            <div style="display: flex; flex-direction: column; gap: 0.3rem; font-size: 0.9rem;">
+                <label><input type="radio" name="type" value="tous" checked> Tous</label>
+                <label><input type="radio" name="type" value="etudiant"> 🎓 Étudiants</label>
+                <label><input type="radio" name="type" value="professeur"> 👨‍🏫 Professeurs</label>
+            </div>
+        </div>
+
+        <!-- Note -->
+        <div style="margin-bottom: 1.2rem;">
+            <label style="display: block; font-weight: 600; font-size: 0.85rem; color: #0f172a; margin-bottom: 0.3rem;">
+                <i class="fas fa-star" style="color: #2563eb;"></i> Note minimum
+            </label>
+            <div style="display: flex; flex-direction: column; gap: 0.3rem; font-size: 0.9rem;">
+                <label><input type="radio" name="note" value="3"> ⭐⭐⭐ 3 étoiles</label>
+                <label><input type="radio" name="note" value="4" checked> ⭐⭐⭐⭐ 4 étoiles</label>
+                <label><input type="radio" name="note" value="5"> ⭐⭐⭐⭐⭐ 5 étoiles</label>
+            </div>
+        </div>
+
+        <!-- Tarif -->
+        <div style="margin-bottom: 1.2rem;">
+            <label style="display: block; font-weight: 600; font-size: 0.85rem; color: #0f172a; margin-bottom: 0.3rem;">
+                <i class="fas fa-money-bill-wave" style="color: #2563eb;"></i> Tarif
+            </label>
+            <div style="display: flex; flex-direction: column; gap: 0.3rem; font-size: 0.9rem;">
+                <label><input type="radio" name="tarif" value="1-1.5"> 1 000 - 1 500 FCFA</label>
+                <label><input type="radio" name="tarif" value="1.5-3.5"> 1 500 - 3 500 FCFA</label>
+                <label><input type="radio" name="tarif" value="3.5-5"> 3 500 - 5 000 FCFA</label>
+            </div>
+        </div>
+
+        <!-- Mode -->
+        <div style="margin-bottom: 1.2rem;">
+            <label style="display: block; font-weight: 600; font-size: 0.85rem; color: #0f172a; margin-bottom: 0.3rem;">
+                <i class="fas fa-laptop" style="color: #2563eb;"></i> Mode
+            </label>
+            <div style="display: flex; flex-direction: column; gap: 0.3rem; font-size: 0.9rem;">
+                <label><input type="checkbox" class="mode-filter" value="en-ligne" checked> En ligne</label>
+                <label><input type="checkbox" class="mode-filter" value="presentiel" checked> Présentiel</label>
+            </div>
+        </div>
+
+        <!-- Boutons -->
+        <div style="display: flex; gap: 0.8rem; flex-wrap: wrap;">
+            <button onclick="appliquerFiltres()" style="flex: 1; padding: 0.7rem; background: #2563eb; color: #fff; border: none; border-radius: 60px; font-weight: 600; cursor: pointer; transition: 0.3s ease; font-size: 0.9rem;">
+                <i class="fas fa-check"></i> Appliquer
+            </button>
+            <button onclick="reinitialiserFiltres()" style="flex: 1; padding: 0.7rem; background: transparent; color: #475569; border: 1px solid #dbeafe; border-radius: 60px; font-weight: 600; cursor: pointer; transition: 0.3s ease; font-size: 0.9rem;">
+                <i class="fas fa-undo"></i> Réinitialiser
+            </button>
+        </div>
+    </div>
+
+    <!-- ===== RÉSULTATS ===== -->
+    <div style="flex: 1; min-width: 0;">
+
+        <!-- Entête résultats -->
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; margin-bottom: 1.5rem;">
+            <div>
+                <span style="font-size: 1.1rem; font-weight: 600; color: #0f172a;">
+                    📊 <span id="totalTuteurs">0</span> tuteurs disponibles
+                </span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;">
+                <div style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.9rem; color: #475569;">
+                    <span>Trier par :</span>
+                    <select id="triSelect" onchange="trierTuteurs()" style="padding: 0.4rem 1rem; border-radius: 60px; border: 1px solid #dbeafe; background: white; outline: none; font-size: 0.85rem;">
+                        <option value="popularite">Popularité</option>
+                        <option value="note">⭐ Note</option>
+                        <option value="prix">💰 Prix</option>
+                        <option value="experience">🎓 Expérience</option>
+                    </select>
+                </div>
+                <div style="display: flex; gap: 0.3rem; font-size: 0.9rem; color: #475569;">
+                    <span>Affichage :</span>
+                    <button onclick="switchVue('grille')" id="vueGrille" style="padding: 0.3rem 0.8rem; background: #2563eb; color: #fff; border: none; border-radius: 8px; cursor: pointer; transition: 0.3s ease;">
+                        <i class="fas fa-th"></i>
+                    </button>
+                    <button onclick="switchVue('liste')" id="vueListe" style="padding: 0.3rem 0.8rem; background: transparent; color: #475569; border: 1px solid #dbeafe; border-radius: 8px; cursor: pointer; transition: 0.3s ease;">
+                        <i class="fas fa-list"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Liste des tuteurs -->
+        <div id="tuteursContainer" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem;"></div>
+
+        <!-- ===== PAGINATION ===== -->
+        <div style="display: flex; justify-content: center; align-items: center; gap: 0.5rem; padding: 2rem 0; flex-wrap: wrap;">
+            <button onclick="pagePrecedente()" style="padding: 0.4rem 1rem; background: transparent; color: #2563eb; border: 1px solid #dbeafe; border-radius: 60px; cursor: pointer; transition: 0.3s ease; font-size: 0.85rem;">
+                <i class="fas fa-chevron-left"></i> Précédent
+            </button>
+            <div id="paginationContainer" style="display: flex; gap: 0.3rem; flex-wrap: wrap;"></div>
+            <button onclick="pageSuivante()" style="padding: 0.4rem 1rem; background: transparent; color: #2563eb; border: 1px solid #dbeafe; border-radius: 60px; cursor: pointer; transition: 0.3s ease; font-size: 0.85rem;">
+                Suivant <i class="fas fa-chevron-right"></i>
+            </button>
+        </div>
+
+        <!-- ===== BANNIÈRE CONSEIL ===== -->
+        <div style="background: linear-gradient(135deg, #eff6ff, #dbeafe); border-radius: 16px; padding: 2rem; text-align: center; margin-top: 1rem;">
+            <h3 style="color: #0f172a; font-size: 1.3rem; margin-bottom: 0.5rem;">
+                🤝 Vous ne trouvez pas le tuteur idéal ?
+            </h3>
+            <p style="color: #475569; margin-bottom: 1rem;">
+                Nos conseillers sont disponibles pour vous orienter gratuitement.
+            </p>
+            <a href="#" onclick="showToast('📞 Conseiller contacté ! Un expert vous rappelle sous 5 min.')" style="padding: 0.7rem 2rem; background: #2563eb; color: #fff; border-radius: 60px; font-weight: 600; transition: 0.3s ease; display: inline-block; text-decoration: none;">
+                <i class="fas fa-headset"></i> Contacter un conseiller
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- ============================================
+   POURQUOI CHOISIR EDUSEN
+   ============================================ -->
+<div style="padding: 2rem 0; border-top: 1px solid #dbeafe; border-bottom: 1px solid #dbeafe; margin-top: 1rem;">
+    <h2 style="text-align: center; font-size: 2rem; margin-bottom: 1.5rem; color: #0f172a;">
+        🌟 Pourquoi choisir EduSen ?
+    </h2>
+    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; max-width: 800px; margin: 0 auto;">
+        <div style="text-align: center;">
+            <div style="font-size: 2rem;">✔</div>
+            <div style="font-weight: 600; font-size: 0.95rem;">200+ tuteurs certifiés</div>
+        </div>
+        <div style="text-align: center;">
+            <div style="font-size: 2rem;">✔</div>
+            <div style="font-weight: 600; font-size: 0.95rem;">70% d'étudiants tuteurs</div>
+        </div>
+        <div style="text-align: center;">
+            <div style="font-size: 2rem;">✔</div>
+            <div style="font-weight: 600; font-size: 0.95rem;">Réservation en quelques clics</div>
+        </div>
+        <div style="text-align: center;">
+            <div style="font-size: 2rem;">✔</div>
+            <div style="font-weight: 600; font-size: 0.95rem;">Paiement sécurisé</div>
+        </div>
+        <div style="text-align: center;">
+            <div style="font-size: 2rem;">✔</div>
+            <div style="font-weight: 600; font-size: 0.95rem;">Assistance 7j/7</div>
+        </div>
+        <div style="text-align: center;">
+            <div style="font-size: 2rem;">✔</div>
+            <div style="font-weight: 600; font-size: 0.95rem;">Cours en ligne ou en présentiel</div>
+        </div>
+    </div>
+</div>
+
+<!-- ============================================
+   STYLES ET JAVASCRIPT COMPLET
+   ============================================ -->
+<style>
+    .tutor-card {
+        background: white;
+        border-radius: 16px;
+        padding: 1.2rem;
+        box-shadow: 0 4px 24px rgba(37,99,235,0.08);
+        border: 1px solid #dbeafe;
+        transition: all 0.3s ease;
+        animation: fadeInUp 0.4s ease forwards;
+    }
+    .tutor-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 12px 48px rgba(37,99,235,0.12) !important;
+    }
+    .tutor-card .avatar {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        font-size: 1.2rem;
+        color: #fff;
+        flex-shrink: 0;
+        background: #2563eb;
+    }
+    .avatar.a1 { background: #2563eb; }
+    .avatar.a2 { background: #0891b2; }
+    .avatar.a3 { background: #059669; }
+    .avatar.a4 { background: #d97706; }
+    .avatar.a5 { background: #7c3aed; }
+    .avatar.a6 { background: #dc2626; }
+    .avatar.a7 { background: #0d9488; }
+    .avatar.a8 { background: #6d28d9; }
+    .avatar.a9 { background: #b45309; }
+    .avatar.a10 { background: #2563eb; }
+    .avatar.a11 { background: #0891b2; }
+    .avatar.a12 { background: #059669; }
+
+    .btn-reserver {
+        flex: 1;
+        padding: 0.5rem;
+        background: #2563eb;
+        color: #fff;
+        border: none;
+        border-radius: 60px;
+        font-weight: 600;
+        font-size: 0.85rem;
+        cursor: pointer;
+        transition: 0.3s ease;
+    }
+    .btn-reserver:hover {
+        background: #1d4ed8;
+        transform: scale(1.02);
+    }
+    .btn-profil {
+        flex: 1;
+        text-align: center;
+        padding: 0.5rem;
+        background: transparent;
+        color: #2563eb;
+        border: 1px solid #2563eb;
+        border-radius: 60px;
+        font-weight: 600;
+        font-size: 0.85rem;
+        transition: 0.3s ease;
+        text-decoration: none;
+        display: inline-block;
+    }
+    .btn-profil:hover {
+        background: #eff6ff;
+    }
+    .badge-verified {
+        background: #d1fae5;
+        color: #065f46;
+        padding: 0.1rem 0.6rem;
+        border-radius: 40px;
+        font-size: 0.6rem;
+        font-weight: 600;
+    }
+    .badge-matiere {
+        background: #eff6ff;
+        color: #2563eb;
+        padding: 0.1rem 0.6rem;
+        border-radius: 40px;
+        font-size: 0.65rem;
+        font-weight: 500;
+    }
+    .badge-etudiant {
+        background: #dbeafe;
+        color: #1e40af;
+        padding: 0.1rem 0.6rem;
+        border-radius: 40px;
+        font-size: 0.6rem;
+        font-weight: 600;
+    }
+    .badge-professeur {
+        background: #d1fae5;
+        color: #065f46;
+        padding: 0.1rem 0.6rem;
+        border-radius: 40px;
+        font-size: 0.6rem;
+        font-weight: 600;
+    }
+
+    @keyframes fadeInUp {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .vue-liste .tutor-card {
+        grid-column: 1 / -1;
+        display: flex;
+        gap: 1.5rem;
+        align-items: center;
+        padding: 1rem 1.5rem;
+    }
+    .vue-liste .tutor-card .card-left { flex: 2; }
+    .vue-liste .tutor-card .card-right { flex: 1; display: flex; gap: 0.5rem; flex-wrap: wrap; }
+
+    #vueGrille.active, #vueListe.active {
+        background: #2563eb !important;
+        color: #fff !important;
+        border-color: #2563eb !important;
+    }
+
+    .page-btn {
+        padding: 0.4rem 0.9rem;
+        background: transparent;
+        color: #475569;
+        border: 1px solid #dbeafe;
+        border-radius: 60px;
+        cursor: pointer;
+        transition: 0.3s ease;
+        font-size: 0.85rem;
+    }
+    .page-btn.active {
+        background: #2563eb;
+        color: #fff;
+        border-color: #2563eb;
+    }
+    .page-btn:hover:not(.active) {
+        background: #eff6ff;
+    }
+
+    .filters-scroll {
+        max-height: 160px;
+        overflow-y: auto;
+        scrollbar-width: thin;
+    }
+    .filters-scroll::-webkit-scrollbar {
+        width: 4px;
+    }
+    .filters-scroll::-webkit-scrollbar-thumb {
+        background: #dbeafe;
+        border-radius: 10px;
+    }
+</style>
+
+<script>
+    // ============================================
+    // GÉNÉRATION DES 200 TUTEURS (70% Étudiants / 30% Professeurs)
+    // ============================================
+    function genererTuteurs() {
+        const prenomsFemmes = ['Awa', 'Fatou', 'Mariama', 'Aminata', 'Sokhna', 'Ndeye', 'Arame', 'Rokhaya', 'Aissatou', 'Khadija', 'Ndeye', 'Fatoumata', 'Adji', 'Mame', 'Coumba', 'Oulimata', 'Bineta', 'Anta', 'Ndeye', 'Awa'];
+        const prenomsHommes = ['Mamadou', 'Cheikh', 'Ousmane', 'Ibrahima', 'Moussa', 'Pape', 'Mor', 'Serigne', 'Alioune', 'Oumar', 'Abdoulaye', 'Modou', 'Amadou', 'Moustapha', 'Souleymane', 'Mouhamed', 'Idrissa', 'Boubacar', 'Mansour', 'Mamadou'];
+        const noms = ['Diop', 'Ndiaye', 'Fall', 'Sarr', 'Ba', 'Kane', 'Diallo', 'Mbaye', 'Diouf', 'Gueye', 'Thiam', 'Ndao', 'Diagne', 'Sow', 'Faye', 'Niang', 'Dieng', 'Cissé', 'Dione', 'Seck'];
+        
+        const matieresList = [
+            { nom: 'Mathématiques', short: 'maths' },
+            { nom: 'Informatique', short: 'informatique' },
+            { nom: 'Python', short: 'python' },
+            { nom: 'MySQL', short: 'mysql' },
+            { nom: 'Français', short: 'francais' },
+            { nom: 'Anglais', short: 'anglais' },
+            { nom: 'Physique', short: 'physique' },
+            { nom: 'SVT', short: 'svt' },
+            { nom: 'Développement Web', short: 'web' },
+            { nom: 'Économie', short: 'economie' },
+            { nom: 'Droit', short: 'droit' }
+        ];
+        
+        const tuteurs = [];
+        const totalEtudiants = 140;
+        const totalProfesseurs = 60;
+        
+        // ===== GÉNÉRER 140 ÉTUDIANTS TUTEURS =====
+        for (let i = 0; i < totalEtudiants; i++) {
+            const genre = Math.random() > 0.5 ? 'femme' : 'homme';
+            const prenom = genre === 'femme' 
+                ? prenomsFemmes[Math.floor(Math.random() * prenomsFemmes.length)]
+                : prenomsHommes[Math.floor(Math.random() * prenomsHommes.length)];
+            const nom = noms[Math.floor(Math.random() * noms.length)];
+            
+            // 1-2 matières
+            const nbMatieres = 1 + (Math.random() > 0.5 ? 1 : 0);
+            const matieresChoisies = [];
+            const matieresDispo = [...matieresList];
+            for (let j = 0; j < nbMatieres && matieresDispo.length > 0; j++) {
+                const idx = Math.floor(Math.random() * matieresDispo.length);
+                matieresChoisies.push(matieresDispo[idx]);
+                matieresDispo.splice(idx, 1);
+            }
+            
+            const note = 4.0 + Math.random() * 1.0;
+            const prix = 1500 + Math.floor(Math.random() * 2000);
+            const prixFinal = Math.round(Math.min(prix, 3500) / 100) * 100;
+            
+            tuteurs.push({
+                nom: prenom + ' ' + nom,
+                genre: genre,
+                matieres: matieresChoisies.map(m => m.nom),
+                matieresShort: matieresChoisies.map(m => m.short),
+                note: Math.round(note * 10) / 10,
+                avis: 30 + Math.floor(Math.random() * 200),
+                eleves: 50 + Math.floor(Math.random() * 400),
+                experience: 1 + Math.floor(Math.random() * 4),
+                prix: Math.max(1500, prixFinal),
+                mode: Math.random() > 0.3 ? 'en-ligne' : 'en-ligne presentiel',
+                niveau: ['college', 'lycee', 'universite'][Math.floor(Math.random() * 3)],
+                avatar: 'a' + (1 + Math.floor(Math.random() * 12)),
+                type: 'etudiant'
+            });
+        }
+        
+        // ===== GÉNÉRER 60 PROFESSEURS =====
+        // 10 professeurs 5⭐ avec prix élevés
+        const profsNoms = [
+            { nom: 'Dr. Mamadou Diop', genre: 'homme', matieres: ['Mathématiques', 'Physique'], note: 5.0, prix: 4800, experience: 12 },
+            { nom: 'Prof. Aminata Mbaye', genre: 'femme', matieres: ['Mathématiques', 'SVT'], note: 5.0, prix: 4600, experience: 11 },
+            { nom: 'Prof. Souleymane Ndiaye', genre: 'homme', matieres: ['Français', 'Philosophie'], note: 5.0, prix: 4700, experience: 15 },
+            { nom: 'Dr. Aissatou Diallo', genre: 'femme', matieres: ['Informatique', 'Développement Web'], note: 5.0, prix: 4900, experience: 10 },
+            { nom: 'Prof. Cheikh Kane', genre: 'homme', matieres: ['Physique', 'Mathématiques'], note: 5.0, prix: 4500, experience: 13 },
+            { nom: 'Dr. Fatou Sarr', genre: 'femme', matieres: ['Anglais', 'Linguistique'], note: 5.0, prix: 4650, experience: 11 },
+            { nom: 'Prof. Ousmane Diallo', genre: 'homme', matieres: ['Informatique', 'Python', 'MySQL'], note: 5.0, prix: 4850, experience: 12 },
+            { nom: 'Dr. Ndeye Thiam', genre: 'femme', matieres: ['Mathématiques', 'Économie'], note: 5.0, prix: 4550, experience: 10 },
+            { nom: 'Prof. Ibrahima Niang', genre: 'homme', matieres: ['Droit', 'Économie'], note: 5.0, prix: 4750, experience: 14 },
+            { nom: 'Dr. Mariama Fall', genre: 'femme', matieres: ['SVT', 'Physique'], note: 5.0, prix: 4600, experience: 11 }
+        ];
+        
+        // Ajouter les 10 professeurs 5⭐
+        profsNoms.forEach(p => {
+            tuteurs.push({
+                nom: p.nom,
+                genre: p.genre,
+                matieres: p.matieres,
+                matieresShort: p.matieres.map(m => m.toLowerCase().replace(/[^a-z]/g, '')),
+                note: p.note,
+                avis: 200 + Math.floor(Math.random() * 80),
+                eleves: 500 + Math.floor(Math.random() * 300),
+                experience: p.experience,
+                prix: p.prix,
+                mode: Math.random() > 0.3 ? 'en-ligne' : 'en-ligne presentiel',
+                niveau: 'universite',
+                avatar: 'a' + (1 + Math.floor(Math.random() * 12)),
+                type: 'professeur'
+            });
+        });
+        
+        // Générer 50 professeurs supplémentaires (4.0 - 4.9⭐)
+        for (let i = 0; i < 50; i++) {
+            const genre = Math.random() > 0.5 ? 'femme' : 'homme';
+            const prenom = genre === 'femme' 
+                ? prenomsFemmes[Math.floor(Math.random() * prenomsFemmes.length)]
+                : prenomsHommes[Math.floor(Math.random() * prenomsHommes.length)];
+            const nom = noms[Math.floor(Math.random() * noms.length)];
+            
+            const nbMatieres = 1 + (Math.random() > 0.4 ? 1 : 0);
+            const matieresChoisies = [];
+            const matieresDispo = [...matieresList];
+            for (let j = 0; j < nbMatieres && matieresDispo.length > 0; j++) {
+                const idx = Math.floor(Math.random() * matieresDispo.length);
+                matieresChoisies.push(matieresDispo[idx]);
+                matieresDispo.splice(idx, 1);
+            }
+            
+            const note = 4.0 + Math.random() * 0.9;
+            const prix = 3500 + Math.floor(Math.random() * 1500);
+            
+            tuteurs.push({
+                nom: prenom + ' ' + nom,
+                genre: genre,
+                matieres: matieresChoisies.map(m => m.nom),
+                matieresShort: matieresChoisies.map(m => m.short),
+                note: Math.round(note * 10) / 10,
+                avis: 100 + Math.floor(Math.random() * 150),
+                eleves: 300 + Math.floor(Math.random() * 300),
+                experience: 5 + Math.floor(Math.random() * 8),
+                prix: Math.round(prix / 100) * 100,
+                mode: Math.random() > 0.3 ? 'en-ligne' : 'en-ligne presentiel',
+                niveau: 'universite',
+                avatar: 'a' + (1 + Math.floor(Math.random() * 12)),
+                type: 'professeur'
+            });
+        }
+        
+        return tuteurs;
+    }
+
+    // ============================================
+    // DONNÉES DES TUTEURS
+    // ============================================
+    let tuteurs = genererTuteurs();
+    let pageActuelle = 1;
+    const tuteursParPage = 8;
+    let tuteursFiltres = [...tuteurs];
+
+    // ============================================
+    // STATISTIQUES
+    // ============================================
+    function mettreAJourStats(tuteursList) {
+        const total = tuteursList.length;
+        document.getElementById('totalStats').textContent = total;
+        document.getElementById('totalTuteurs').textContent = total;
+        
+        const matieres = {
+            maths: 0, informatique: 0, francais: 0, anglais: 0, 
+            physique: 0, svt: 0, web: 0, economie: 0, droit: 0,
+            python: 0, mysql: 0
+        };
+        
+        tuteursList.forEach(t => {
+            t.matieres.forEach(m => {
+                const key = m.toLowerCase();
+                if (key.includes('math')) matieres.maths++;
+                else if (key.includes('informatique')) matieres.informatique++;
+                else if (key.includes('python')) matieres.python++;
+                else if (key.includes('mysql')) matieres.mysql++;
+                else if (key.includes('français')) matieres.francais++;
+                else if (key.includes('anglais')) matieres.anglais++;
+                else if (key.includes('physique')) matieres.physique++;
+                else if (key.includes('svt')) matieres.svt++;
+                else if (key.includes('développement') || key.includes('web')) matieres.web++;
+                else if (key.includes('économie')) matieres.economie++;
+                else if (key.includes('droit')) matieres.droit++;
+            });
+        });
+        
+        document.getElementById('statsMaths').textContent = matieres.maths || 0;
+        document.getElementById('statsInfo').textContent = matieres.informatique || 0;
+        document.getElementById('statsFrancais').textContent = matieres.francais || 0;
+        document.getElementById('statsAnglais').textContent = matieres.anglais || 0;
+        document.getElementById('statsPhysique').textContent = matieres.physique || 0;
+        document.getElementById('statsSVT').textContent = matieres.svt || 0;
+        document.getElementById('statsWeb').textContent = matieres.web || 0;
+    }
+
+    // ============================================
+    // AFFICHER LES TUTEURS
+    // ============================================
+    function afficherTuteurs() {
+        const container = document.getElementById('tuteursContainer');
+        
+        const start = (pageActuelle - 1) * tuteursParPage;
+        const end = Math.min(start + tuteursParPage, tuteursFiltres.length);
+        const pageTuteurs = tuteursFiltres.slice(start, end);
+        
+        mettreAJourStats(tuteursFiltres);
+        
+        if (pageTuteurs.length === 0) {
+            container.innerHTML = `
+                <div style="grid-column: 1 / -1; text-align: center; padding: 3rem; background: white; border-radius: 16px; border: 1px solid #dbeafe;">
+                    <div style="font-size: 3rem; margin-bottom: 1rem;">🔍</div>
+                    <h3 style="color: #0f172a;">Aucun tuteur trouvé</h3>
+                    <p style="color: #475569;">Essayez de modifier vos filtres de recherche.</p>
+                    <button onclick="reinitialiserFiltres()" style="margin-top: 1rem; padding: 0.6rem 1.5rem; background: #2563eb; color: #fff; border: none; border-radius: 60px; cursor: pointer; font-weight: 600;">
+                        Réinitialiser les filtres
+                    </button>
+                </div>
+            `;
+            return;
+        }
+        
+        container.innerHTML = pageTuteurs.map((t, index) => {
+            const initiales = t.nom.split(' ').map(n => n[0]).join('');
+            const matieresHtml = t.matieres.map(m => `<span class="badge-matiere">${m}</span>`).join(' ');
+            const modeIcon = t.mode.includes('presentiel') ? '📍' : '💻';
+            const modeText = t.mode.includes('presentiel') ? 'En ligne / Présentiel' : 'En ligne';
+            
+            let typeIcon = '🎓';
+            let typeLabel = 'Étudiant tuteur';
+            let typeBadge = 'badge-etudiant';
+            
+            if (t.type === 'professeur') {
+                typeIcon = '👨‍🏫';
+                typeLabel = 'Professeur';
+                typeBadge = 'badge-professeur';
+            }
+            
+            const genreIcon = t.genre === 'femme' ? '👩' : '👨';
+            
+            // Étoiles pour la note
+            const etoiles = '⭐'.repeat(Math.floor(t.note)) + (t.note % 1 >= 0.5 ? '⭐' : '');
+            
+            return `
+            <div class="tutor-card" data-matiere="${t.matieresShort ? t.matieresShort.join(' ') : ''}" data-note="${t.note}" data-prix="${t.prix}" data-experience="${t.experience}" data-mode="${t.mode}" data-type="${t.type || 'etudiant'}">
+                <div style="display: flex; justify-content: space-between; align-items: start; flex-wrap: wrap; gap: 0.5rem;">
+                    <div style="display: flex; align-items: center; gap: 0.8rem;">
+                        <div class="avatar ${t.avatar}">${initiales}</div>
+                        <div>
+                            <div style="display: flex; align-items: center; gap: 0.4rem; flex-wrap: wrap;">
+                                <span style="font-weight: 700; font-size: 1.05rem; color: #0f172a;">${t.nom}</span>
+                                <span style="font-size: 1rem;">${genreIcon}</span>
+                                <span class="${typeBadge}">${typeIcon} ${typeLabel}</span>
+                            </div>
+                            <div style="display: flex; flex-wrap: wrap; gap: 0.3rem; margin-top: 0.2rem;">
+                                ${matieresHtml}
+                            </div>
+                        </div>
+                    </div>
+                    <div style="text-align: right;">
+                        <div style="color: #f59e0b;">${etoiles} ${t.note}/5 <span style="color: #475569; font-size: 0.75rem;">(${t.avis} avis)</span></div>
+                        <span class="badge-verified">✔ Vérifié</span>
+                    </div>
+                </div>
+                <div style="display: flex; gap: 0.8rem; margin: 0.5rem 0; font-size: 0.85rem; color: #475569; flex-wrap: wrap;">
+                    <span>👨‍🎓 ${t.eleves} élèves</span>
+                    <span>🎓 ${t.experience} ans exp.</span>
+                    <span>💰 ${t.prix.toLocaleString()} FCFA/h</span>
+                    <span>${modeIcon} ${modeText}</span>
+                </div>
+                <div style="display: flex; gap: 0.5rem; margin-top: 0.8rem;">
+                    <a href="/tuteur/profil" class="btn-profil">Voir le profil</a>
+                    <button onclick="showToast('✅ Réservation effectuée avec ${t.nom} !')" class="btn-reserver">
+                        <i class="fas fa-calendar-plus"></i> Réserver
+                    </button>
+                </div>
+            </div>
+            `;
+        }).join('');
+        
+        afficherPagination();
+    }
+
+    // ============================================
+    // PAGINATION
+    // ============================================
+    function afficherPagination() {
+        const container = document.getElementById('paginationContainer');
+        const totalPages = Math.ceil(tuteursFiltres.length / tuteursParPage);
+        
+        if (totalPages <= 1) {
+            container.innerHTML = '';
+            return;
+        }
+        
+        let html = '';
+        const maxVisible = 7;
+        let startPage = Math.max(1, pageActuelle - 3);
+        let endPage = Math.min(totalPages, pageActuelle + 3);
+        
+        if (endPage - startPage < maxVisible - 1) {
+            if (startPage === 1) endPage = Math.min(totalPages, startPage + maxVisible - 1);
+            else if (endPage === totalPages) startPage = Math.max(1, endPage - maxVisible + 1);
+        }
+        
+        if (startPage > 1) {
+            html += `<button class="page-btn" onclick="goToPage(1)">1</button>`;
+            if (startPage > 2) html += `<span style="color: #475569; padding: 0 0.3rem;">…</span>`;
+        }
+        
+        for (let i = startPage; i <= endPage; i++) {
+            html += `<button class="page-btn ${i === pageActuelle ? 'active' : ''}" onclick="goToPage(${i})">${i}</button>`;
+        }
+        
+        if (endPage < totalPages) {
+            if (endPage < totalPages - 1) html += `<span style="color: #475569; padding: 0 0.3rem;">…</span>`;
+            html += `<button class="page-btn" onclick="goToPage(${totalPages})">${totalPages}</button>`;
+        }
+        
+        container.innerHTML = html;
+    }
+
+    function goToPage(page) {
+        const totalPages = Math.ceil(tuteursFiltres.length / tuteursParPage);
+        if (page < 1 || page > totalPages) return;
+        pageActuelle = page;
+        afficherTuteurs();
+        document.getElementById('tuteursContainer').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    function pagePrecedente() {
+        if (pageActuelle > 1) goToPage(pageActuelle - 1);
+    }
+
+    function pageSuivante() {
+        const totalPages = Math.ceil(tuteursFiltres.length / tuteursParPage);
+        if (pageActuelle < totalPages) goToPage(pageActuelle + 1);
+    }
+
+    // ============================================
+    // FILTRES
+    // ============================================
+    function appliquerFiltres() {
+        const search = document.getElementById('searchTuteur').value.toLowerCase();
+        const matieresChecked = document.querySelectorAll('.matiere-filter:checked');
+        const modeChecked = document.querySelectorAll('.mode-filter:checked');
+        const type = document.querySelector('input[name="type"]:checked');
+        const note = document.querySelector('input[name="note"]:checked');
+        const tarif = document.querySelector('input[name="tarif"]:checked');
+
+        tuteursFiltres = tuteurs.filter(t => {
+            if (search) {
+                const text = t.nom.toLowerCase() + ' ' + t.matieres.join(' ').toLowerCase();
+                if (!text.includes(search)) return false;
+            }
+            
+            if (matieresChecked.length > 0) {
+                let match = false;
+                matieresChecked.forEach(m => {
+                    const matieresStr = t.matieres.join(' ').toLowerCase();
+                    if (matieresStr.includes(m.value)) match = true;
+                });
+                if (!match) return false;
+            }
+            
+            if (modeChecked.length > 0) {
+                let match = false;
+                modeChecked.forEach(m => {
+                    if (t.mode.includes(m.value)) match = true;
+                });
+                if (!match) return false;
+            }
+            
+            if (type && type.value !== 'tous' && t.type !== type.value) return false;
+            
+            if (note && t.note < parseInt(note.value)) return false;
+            
+            if (tarif) {
+                const range = tarif.value;
+                const prix = t.prix / 1000;
+                if (range === '1-1.5' && (prix < 1 || prix > 1.5)) return false;
+                if (range === '1.5-3.5' && (prix < 1.5 || prix > 3.5)) return false;
+                if (range === '3.5-5' && (prix < 3.5 || prix > 5)) return false;
+            }
+            
+            return true;
+        });
+
+        pageActuelle = 1;
+        afficherTuteurs();
+        
+        const total = tuteursFiltres.length;
+        showToast(`🔍 ${total} tuteur${total > 1 ? 's' : ''} trouvé${total > 1 ? 's' : ''}`);
+    }
+
+    function reinitialiserFiltres() {
+        document.getElementById('searchTuteur').value = '';
+        document.querySelectorAll('.matiere-filter').forEach(cb => cb.checked = true);
+        document.querySelectorAll('.mode-filter').forEach(cb => cb.checked = true);
+        document.querySelector('input[name="type"][value="tous"]').checked = true;
+        document.querySelector('input[name="note"][value="4"]').checked = true;
+        document.querySelectorAll('input[name="tarif"]').forEach(r => r.checked = false);
+        appliquerFiltres();
+        showToast('🔄 Filtres réinitialisés');
+    }
+
+    // ============================================
+    // TRI
+    // ============================================
+    function trierTuteurs() {
+        const critere = document.getElementById('triSelect').value;
+        
+        tuteursFiltres.sort((a, b) => {
+            switch (critere) {
+                case 'popularite': return b.eleves - a.eleves;
+                case 'note': return b.note - a.note;
+                case 'prix': return a.prix - b.prix;
+                case 'experience': return b.experience - a.experience;
+                default: return 0;
+            }
+        });
+        
+        pageActuelle = 1;
+        afficherTuteurs();
+        showToast(`📊 Trié par ${critere}`);
+    }
+
+    // ============================================
+    // VUE (Grille / Liste)
+    // ============================================
+    function switchVue(vue) {
+        const container = document.getElementById('tuteursContainer');
+        const btnGrille = document.getElementById('vueGrille');
+        const btnListe = document.getElementById('vueListe');
+
+        if (vue === 'grille') {
+            container.style.gridTemplateColumns = 'repeat(2, 1fr)';
+            container.classList.remove('vue-liste');
+            btnGrille.className = 'active';
+            btnGrille.style.background = '#2563eb';
+            btnGrille.style.color = '#fff';
+            btnListe.className = '';
+            btnListe.style.background = 'transparent';
+            btnListe.style.color = '#475569';
+        } else {
+            container.style.gridTemplateColumns = '1fr';
+            container.classList.add('vue-liste');
+            btnListe.className = 'active';
+            btnListe.style.background = '#2563eb';
+            btnListe.style.color = '#fff';
+            btnGrille.className = '';
+            btnGrille.style.background = 'transparent';
+            btnGrille.style.color = '#475569';
+        }
+        afficherTuteurs();
+    }
+
+    // ============================================
+    // TOAST
+    // ============================================
+    function showToast(msg) {
+        const existing = document.querySelector('.toast-custom');
+        if (existing) existing.remove();
+        
+        const toast = document.createElement('div');
+        toast.className = 'toast-custom';
+        toast.innerHTML = `
+            <div style="position: fixed; bottom: 30px; right: 30px; background: #0f172a; color: white; padding: 14px 24px; border-radius: 14px; box-shadow: 0 8px 40px rgba(0,0,0,0.3); display: flex; align-items: center; gap: 12px; z-index: 9999; font-family: 'Segoe UI', system-ui, sans-serif; animation: fadeInUp 0.4s ease; max-width: 450px;">
+                <span style="font-size: 1.3rem;">${msg.includes('🔍') ? '🔍' : msg.includes('✅') ? '✅' : msg.includes('🔄') ? '🔄' : msg.includes('📊') ? '📊' : '📋'}</span>
+                <div>
+                    <div style="font-weight: 600; font-size: 0.9rem;">${msg.replace(/[🔍✅🔄📊📋]/, '').trim()}</div>
+                </div>
+                <button onclick="this.parentElement.parentElement.remove()" style="background: none; border: none; color: rgba(255,255,255,0.4); cursor: pointer; font-size: 1.2rem; padding: 0 4px;">×</button>
+            </div>
+        `;
+        document.body.appendChild(toast);
+        
+        setTimeout(() => {
+            const el = document.querySelector('.toast-custom');
+            if (el) el.remove();
+        }, 3500);
+    }
+
+    // ============================================
+    // INIT
+    // ============================================
+    document.addEventListener('DOMContentLoaded', function() {
+        appliquerFiltres();
+        
+        document.getElementById('searchTuteur').addEventListener('input', appliquerFiltres);
+        
+        document.querySelectorAll('.matiere-filter, .mode-filter, input[name="type"], input[name="note"], input[name="tarif"]').forEach(el => {
+            el.addEventListener('change', appliquerFiltres);
+        });
+        
+        document.getElementById('triSelect').value = 'popularite';
+        trierTuteurs();
+    });
+</script>
+
+{% endblock %}

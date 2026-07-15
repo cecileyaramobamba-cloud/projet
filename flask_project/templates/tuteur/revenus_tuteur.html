@@ -1,0 +1,160 @@
+
+{% extends "base.html" %}
+
+{% block title %}Mes Revenus - EduSen{% endblock %}
+
+{% block content %}
+
+<style>
+    .chart-bar { transition: height 0.6s ease; }
+</style>
+
+<div style="max-width: 1400px; margin: 0 auto; padding: 1rem 0;">
+
+    <!-- ===== TOPBAR ===== -->
+    <div style="background: white; border-radius: 16px; padding: 0.8rem 1.5rem; box-shadow: 0 4px 24px rgba(37,99,235,0.08); border: 1px solid #dbeafe; margin-bottom: 1.5rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+        <div style="display: flex; align-items: center; gap: 1rem; flex: 1; min-width: 200px;">
+            <a href="{{ url_for('main.accueil') }}" style="font-size: 1.3rem; font-weight: 800; color: #0f172a; text-decoration: none;">
+                Edu<span style="color: #2563eb;">Sen</span>
+            </a>
+            <span style="background: #d1fae5; padding: 0.15rem 0.8rem; border-radius: 40px; font-size: 0.7rem; font-weight: 600; color: #065f46;">Tuteur</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;">
+            <a href="{{ url_for('main.profil_tuteur') }}" style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; text-decoration: none;">
+                <div style="width: 32px; height: 32px; border-radius: 50%; background: #2563eb; color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.8rem;">FD</div>
+                <span style="font-weight: 600; color: #0f172a; font-size: 0.9rem;">Fatou Diop</span>
+            </a>
+        </div>
+    </div>
+
+    <div style="display: flex; gap: 2rem;">
+
+        <!-- ===== SIDEBAR ===== -->
+        <div style="flex: 0 0 220px; min-width: 180px;">
+            <div style="background: white; border-radius: 16px; padding: 1.5rem; box-shadow: 0 4px 24px rgba(37,99,235,0.08); border: 1px solid #dbeafe; position: sticky; top: 90px;">
+                <div style="font-weight: 700; font-size: 0.8rem; text-transform: uppercase; color: #94a3b8; margin-bottom: 1rem; letter-spacing: 0.5px;">📋 Menu</div>
+                <nav style="display: flex; flex-direction: column; gap: 0.2rem;">
+                    <a href="{{ url_for('main.dashboard_tuteur') }}" style="padding: 0.5rem 0.8rem; border-radius: 8px; color: #475569; text-decoration: none; display: flex; align-items: center; gap: 0.8rem; font-size: 0.9rem; transition: 0.3s ease;">
+                        <i class="fas fa-home" style="width: 20px; text-align: center;"></i> Dashboard
+                    </a>
+                    <a href="/tuteur/cours" style="padding: 0.5rem 0.8rem; border-radius: 8px; color: #475569; text-decoration: none; display: flex; align-items: center; gap: 0.8rem; font-size: 0.9rem; transition: 0.3s ease;">
+                        <i class="fas fa-book" style="width: 20px; text-align: center;"></i> Mes cours
+                    </a>
+                    <a href="{{ url_for('main.reservation_tuteur') }}" style="padding: 0.5rem 0.8rem; border-radius: 8px; color: #475569; text-decoration: none; display: flex; align-items: center; gap: 0.8rem; font-size: 0.9rem; transition: 0.3s ease;">
+                        <i class="fas fa-calendar-check" style="width: 20px; text-align: center;"></i> Réservations
+                    </a>
+                    <a href="{{ url_for('main.etudiants_tuteur') }}" style="padding: 0.5rem 0.8rem; border-radius: 8px; color: #475569; text-decoration: none; display: flex; align-items: center; gap: 0.8rem; font-size: 0.9rem; transition: 0.3s ease;">
+                        <i class="fas fa-users" style="width: 20px; text-align: center;"></i> Étudiants
+                    </a>
+                    <a href="/tuteur/messages" style="padding: 0.5rem 0.8rem; border-radius: 8px; color: #475569; text-decoration: none; display: flex; align-items: center; gap: 0.8rem; font-size: 0.9rem; transition: 0.3s ease;">
+                        <i class="fas fa-envelope" style="width: 20px; text-align: center;"></i> Messages
+                    </a>
+                    <a href="/tuteur/revenus" style="padding: 0.5rem 0.8rem; border-radius: 8px; background: #eff6ff; color: #2563eb; text-decoration: none; display: flex; align-items: center; gap: 0.8rem; font-size: 0.9rem; font-weight: 600;">
+                        <i class="fas fa-money-bill-wave" style="width: 20px; text-align: center;"></i> Revenus
+                    </a>
+                    <a href="/tuteur/avis" style="padding: 0.5rem 0.8rem; border-radius: 8px; color: #475569; text-decoration: none; display: flex; align-items: center; gap: 0.8rem; font-size: 0.9rem; transition: 0.3s ease;">
+                        <i class="fas fa-star" style="width: 20px; text-align: center;"></i> Avis
+                    </a>
+                    <a href="{{ url_for('main.disponibilites_tuteur') }}" style="padding: 0.5rem 0.8rem; border-radius: 8px; color: #475569; text-decoration: none; display: flex; align-items: center; gap: 0.8rem; font-size: 0.9rem; transition: 0.3s ease;">
+                        <i class="fas fa-clock" style="width: 20px; text-align: center;"></i> Disponibilités
+                    </a>
+                    <a href="{{ url_for('main.profil_tuteur') }}" style="padding: 0.5rem 0.8rem; border-radius: 8px; color: #475569; text-decoration: none; display: flex; align-items: center; gap: 0.8rem; font-size: 0.9rem; transition: 0.3s ease;">
+                        <i class="fas fa-user" style="width: 20px; text-align: center;"></i> Profil
+                    </a>
+                    <div style="border-top: 1px solid #dbeafe; margin-top: 0.3rem; padding-top: 0.3rem;">
+                        <a href="/auth/deconnexion" style="padding: 0.5rem 0.8rem; border-radius: 8px; color: #dc2626; text-decoration: none; display: flex; align-items: center; gap: 0.8rem; font-size: 0.9rem; transition: 0.3s ease;">
+                            <i class="fas fa-sign-out-alt" style="width: 20px; text-align: center;"></i> Déconnexion
+                        </a>
+                    </div>
+                </nav>
+            </div>
+        </div>
+
+        <!-- ===== CONTENU PRINCIPAL ===== -->
+        <div style="flex: 1; min-width: 0;">
+
+            <div style="margin-bottom: 1.5rem;">
+                <h1 style="font-size: 1.8rem; color: #0f172a; font-weight: 800;">💰 Mes revenus</h1>
+                <p style="color: #475569; font-size: 0.95rem;">Suivez vos gains et l'historique de vos paiements.</p>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 1.5rem;">
+                <div style="background: white; border-radius: 12px; padding: 1.2rem; box-shadow: 0 4px 24px rgba(37,99,235,0.08); border: 1px solid #dbeafe; text-align: center; border-color: #d1fae5;">
+                    <div style="font-size: 1.6rem; font-weight: 800; color: #059669;">{{ "{:,}".format(total_revenus).replace(",", " ") }} FCFA</div>
+                    <div style="color: #475569; font-size: 0.85rem;">Total (6 derniers mois)</div>
+                </div>
+                <div style="background: white; border-radius: 12px; padding: 1.2rem; box-shadow: 0 4px 24px rgba(37,99,235,0.08); border: 1px solid #dbeafe; text-align: center;">
+                    <div style="font-size: 1.6rem; font-weight: 800; color: #2563eb;">{{ "{:,}".format(revenus_mensuels[-1].montant).replace(",", " ") }} FCFA</div>
+                    <div style="color: #475569; font-size: 0.85rem;">Ce mois-ci</div>
+                </div>
+                <div style="background: white; border-radius: 12px; padding: 1.2rem; box-shadow: 0 4px 24px rgba(37,99,235,0.08); border: 1px solid #dbeafe; text-align: center;">
+                    <div style="font-size: 1.6rem; font-weight: 800; color: #d97706;">{{ paiements|selectattr("statut", "equalto", "En attente")|list|length }}</div>
+                    <div style="color: #475569; font-size: 0.85rem;">Paiement(s) en attente</div>
+                </div>
+            </div>
+
+            <div style="background: white; border-radius: 16px; padding: 1.5rem; box-shadow: 0 4px 24px rgba(37,99,235,0.08); border: 1px solid #dbeafe; margin-bottom: 1.5rem;">
+                <h3 style="color: #0f172a; font-size: 1.1rem; margin-bottom: 1rem;">📈 Revenus mensuels</h3>
+                <div style="display: flex; align-items: flex-end; justify-content: space-around; height: 180px; padding: 0.5rem 0;">
+                    {% for r in revenus_mensuels %}
+                    <div style="text-align: center; flex: 1;">
+                        <div class="chart-bar" data-height="{{ (r.montant / 550000 * 170) | round | int }}" style="background: #2563eb; border-radius: 4px 4px 0 0; width: 60%; margin: 0 auto;"></div>
+                        <span style="font-size: 0.7rem; color: #475569;">{{ r.mois }}</span>
+                        <div style="font-size: 0.6rem; color: #475569;">{{ (r.montant // 1000) }}k</div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div style="background: white; border-radius: 16px; padding: 1.5rem; box-shadow: 0 4px 24px rgba(37,99,235,0.08); border: 1px solid #dbeafe;">
+                <h3 style="color: #0f172a; font-size: 1.1rem; margin-bottom: 1rem;">💳 Historique des paiements</h3>
+                <div style="overflow-x: auto;">
+                    <table style="width: 100%; border-collapse: collapse;">
+                        <thead>
+                            <tr style="background: #eff6ff;">
+                                <th style="padding: 0.6rem 0.8rem; text-align: left; font-weight: 600; color: #0f172a; font-size: 0.85rem;">Référence</th>
+                                <th style="padding: 0.6rem 0.8rem; text-align: left; font-weight: 600; color: #0f172a; font-size: 0.85rem;">Élève</th>
+                                <th style="padding: 0.6rem 0.8rem; text-align: left; font-weight: 600; color: #0f172a; font-size: 0.85rem;">Matière</th>
+                                <th style="padding: 0.6rem 0.8rem; text-align: left; font-weight: 600; color: #0f172a; font-size: 0.85rem;">Montant</th>
+                                <th style="padding: 0.6rem 0.8rem; text-align: left; font-weight: 600; color: #0f172a; font-size: 0.85rem;">Date</th>
+                                <th style="padding: 0.6rem 0.8rem; text-align: left; font-weight: 600; color: #0f172a; font-size: 0.85rem;">Statut</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for p in paiements %}
+                            <tr>
+                                <td style="padding: 0.6rem 0.8rem; border-bottom: 1px solid #dbeafe; font-size: 0.85rem;"><strong>{{ p.reference }}</strong></td>
+                                <td style="padding: 0.6rem 0.8rem; border-bottom: 1px solid #dbeafe; font-size: 0.85rem;">{{ p.eleve }}</td>
+                                <td style="padding: 0.6rem 0.8rem; border-bottom: 1px solid #dbeafe; font-size: 0.85rem;">{{ p.matiere }}</td>
+                                <td style="padding: 0.6rem 0.8rem; border-bottom: 1px solid #dbeafe; font-size: 0.85rem;">{{ "{:,}".format(p.montant).replace(",", " ") }} FCFA</td>
+                                <td style="padding: 0.6rem 0.8rem; border-bottom: 1px solid #dbeafe; font-size: 0.85rem;">{{ p.date_paiement.strftime('%d/%m/%Y') }}</td>
+                                <td style="padding: 0.6rem 0.8rem; border-bottom: 1px solid #dbeafe;">
+                                    {% if p.statut == "Payé" %}
+                                    <span style="background: #d1fae5; color: #065f46; padding: 0.1rem 0.6rem; border-radius: 40px; font-size: 0.65rem; font-weight: 600;">✅ Payé</span>
+                                    {% else %}
+                                    <span style="background: #fef3c7; color: #92400e; padding: 0.1rem 0.6rem; border-radius: 40px; font-size: 0.65rem; font-weight: 600;">⏳ En attente</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const bars = document.querySelectorAll('.chart-bar');
+        bars.forEach((bar, index) => {
+            const height = bar.dataset.height + 'px';
+            bar.style.height = '0px';
+            setTimeout(() => { bar.style.height = height; }, 100 + index * 100);
+        });
+    });
+</script>
+
+{% endblock %}

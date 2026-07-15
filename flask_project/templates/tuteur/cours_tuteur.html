@@ -1,0 +1,125 @@
+
+{% extends "base.html" %}
+
+{% block title %}Mes Cours - EduSen{% endblock %}
+
+{% block content %}
+
+<style>
+    .cours-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 32px rgba(37,99,235,0.1);
+    }
+    @keyframes fadeInUp {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    .cours-card {
+        animation: fadeInUp 0.4s ease forwards;
+    }
+</style>
+
+<div style="max-width: 1400px; margin: 0 auto; padding: 1rem 0;">
+
+    <!-- ===== TOPBAR ===== -->
+    <div style="background: white; border-radius: 16px; padding: 0.8rem 1.5rem; box-shadow: 0 4px 24px rgba(37,99,235,0.08); border: 1px solid #dbeafe; margin-bottom: 1.5rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+        <div style="display: flex; align-items: center; gap: 1rem; flex: 1; min-width: 200px;">
+            <a href="{{ url_for('main.accueil') }}" style="font-size: 1.3rem; font-weight: 800; color: #0f172a; text-decoration: none;">
+                Edu<span style="color: #2563eb;">Sen</span>
+            </a>
+            <span style="background: #d1fae5; padding: 0.15rem 0.8rem; border-radius: 40px; font-size: 0.7rem; font-weight: 600; color: #065f46;">Tuteur</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;">
+            <button onclick="window.location.href='/tuteur/messages'" style="background: transparent; border: none; font-size: 1.1rem; cursor: pointer; position: relative; color: #475569;">
+                <i class="fas fa-envelope"></i>
+                <span style="position: absolute; top: -5px; right: -8px; background: #2563eb; color: #fff; font-size: 0.5rem; padding: 0.1rem 0.4rem; border-radius: 50%;">3</span>
+            </button>
+            <a href="{{ url_for('main.profil_tuteur') }}" style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; text-decoration: none;">
+                <div style="width: 32px; height: 32px; border-radius: 50%; background: #2563eb; color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.8rem;">FD</div>
+                <span style="font-weight: 600; color: #0f172a; font-size: 0.9rem;">Fatou Diop</span>
+            </a>
+        </div>
+    </div>
+
+    <div style="display: flex; gap: 2rem;">
+
+        <!-- ===== SIDEBAR ===== -->
+        <div style="flex: 0 0 220px; min-width: 180px;">
+            <div style="background: white; border-radius: 16px; padding: 1.5rem; box-shadow: 0 4px 24px rgba(37,99,235,0.08); border: 1px solid #dbeafe; position: sticky; top: 90px;">
+                <div style="font-weight: 700; font-size: 0.8rem; text-transform: uppercase; color: #94a3b8; margin-bottom: 1rem; letter-spacing: 0.5px;">📋 Menu</div>
+                <nav style="display: flex; flex-direction: column; gap: 0.2rem;">
+                    <a href="{{ url_for('main.dashboard_tuteur') }}" style="padding: 0.5rem 0.8rem; border-radius: 8px; color: #475569; text-decoration: none; display: flex; align-items: center; gap: 0.8rem; font-size: 0.9rem; transition: 0.3s ease;">
+                        <i class="fas fa-home" style="width: 20px; text-align: center;"></i> Dashboard
+                    </a>
+                    <a href="/tuteur/cours" style="padding: 0.5rem 0.8rem; border-radius: 8px; background: #eff6ff; color: #2563eb; text-decoration: none; display: flex; align-items: center; gap: 0.8rem; font-size: 0.9rem; font-weight: 600;">
+                        <i class="fas fa-book" style="width: 20px; text-align: center;"></i> Mes cours
+                    </a>
+                    <a href="{{ url_for('main.reservation_tuteur') }}" style="padding: 0.5rem 0.8rem; border-radius: 8px; color: #475569; text-decoration: none; display: flex; align-items: center; gap: 0.8rem; font-size: 0.9rem; transition: 0.3s ease;">
+                        <i class="fas fa-calendar-check" style="width: 20px; text-align: center;"></i> Réservations
+                    </a>
+                    <a href="{{ url_for('main.etudiants_tuteur') }}" style="padding: 0.5rem 0.8rem; border-radius: 8px; color: #475569; text-decoration: none; display: flex; align-items: center; gap: 0.8rem; font-size: 0.9rem; transition: 0.3s ease;">
+                        <i class="fas fa-users" style="width: 20px; text-align: center;"></i> Étudiants
+                    </a>
+                    <a href="/tuteur/messages" style="padding: 0.5rem 0.8rem; border-radius: 8px; color: #475569; text-decoration: none; display: flex; align-items: center; gap: 0.8rem; font-size: 0.9rem; transition: 0.3s ease;">
+                        <i class="fas fa-envelope" style="width: 20px; text-align: center;"></i> Messages
+                    </a>
+                    <a href="{{ url_for('main.disponibilites_tuteur') }}" style="padding: 0.5rem 0.8rem; border-radius: 8px; color: #475569; text-decoration: none; display: flex; align-items: center; gap: 0.8rem; font-size: 0.9rem; transition: 0.3s ease;">
+                        <i class="fas fa-clock" style="width: 20px; text-align: center;"></i> Disponibilités
+                    </a>
+                    <a href="{{ url_for('main.profil_tuteur') }}" style="padding: 0.5rem 0.8rem; border-radius: 8px; color: #475569; text-decoration: none; display: flex; align-items: center; gap: 0.8rem; font-size: 0.9rem; transition: 0.3s ease;">
+                        <i class="fas fa-user" style="width: 20px; text-align: center;"></i> Profil
+                    </a>
+                    <div style="border-top: 1px solid #dbeafe; margin-top: 0.3rem; padding-top: 0.3rem;">
+                        <a href="/auth/deconnexion" style="padding: 0.5rem 0.8rem; border-radius: 8px; color: #dc2626; text-decoration: none; display: flex; align-items: center; gap: 0.8rem; font-size: 0.9rem; transition: 0.3s ease;">
+                            <i class="fas fa-sign-out-alt" style="width: 20px; text-align: center;"></i> Déconnexion
+                        </a>
+                    </div>
+                </nav>
+            </div>
+        </div>
+
+        <!-- ===== CONTENU PRINCIPAL ===== -->
+        <div style="flex: 1; min-width: 0;">
+
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
+                <div>
+                    <h1 style="font-size: 1.8rem; color: #0f172a; font-weight: 800;">📚 Mes cours</h1>
+                    <p style="color: #475569; font-size: 0.95rem;">Gérez les cours que vous animez.</p>
+                </div>
+            </div>
+
+            <div class="cours-card" style="background: white; border-radius: 16px; padding: 1.2rem 1.5rem; box-shadow: 0 4px 24px rgba(37,99,235,0.08); border: 1px solid #dbeafe; margin-bottom: 1rem;">
+                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem;">
+                    <div>
+                        <div style="font-weight: 700; font-size: 1.05rem; color: #0f172a;">🐍 Python Avancé</div>
+                        <div style="color: #475569; font-size: 0.85rem;">18 étudiants inscrits</div>
+                    </div>
+                    <span style="background: #d1fae5; color: #065f46; padding: 0.15rem 0.7rem; border-radius: 40px; font-size: 0.75rem; font-weight: 600;">🟢 Actif</span>
+                </div>
+            </div>
+
+            <div class="cours-card" style="background: white; border-radius: 16px; padding: 1.2rem 1.5rem; box-shadow: 0 4px 24px rgba(37,99,235,0.08); border: 1px solid #dbeafe; margin-bottom: 1rem;">
+                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem;">
+                    <div>
+                        <div style="font-weight: 700; font-size: 1.05rem; color: #0f172a;">☕ Java Orienté Objet</div>
+                        <div style="color: #475569; font-size: 0.85rem;">12 étudiants inscrits</div>
+                    </div>
+                    <span style="background: #d1fae5; color: #065f46; padding: 0.15rem 0.7rem; border-radius: 40px; font-size: 0.75rem; font-weight: 600;">🟢 Actif</span>
+                </div>
+            </div>
+
+            <div class="cours-card" style="background: white; border-radius: 16px; padding: 1.2rem 1.5rem; box-shadow: 0 4px 24px rgba(37,99,235,0.08); border: 1px solid #dbeafe; margin-bottom: 1rem; opacity: 0.8;">
+                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem;">
+                    <div>
+                        <div style="font-weight: 700; font-size: 1.05rem; color: #0f172a;">🌐 Développement Web (MySQL)</div>
+                        <div style="color: #475569; font-size: 0.85rem;">9 étudiants inscrits</div>
+                    </div>
+                    <span style="background: #e2e8f0; color: #475569; padding: 0.15rem 0.7rem; border-radius: 40px; font-size: 0.75rem; font-weight: 600;">Archivé</span>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+{% endblock %}

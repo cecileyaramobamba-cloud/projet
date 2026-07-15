@@ -1,0 +1,281 @@
+
+{% extends "admin/base_admin.html" %}
+
+{% block admin_content %}
+
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
+    <div>
+        <h1 style="font-size: 2rem; color: #0f172a; font-weight: 800;">👥 Gestion des utilisateurs</h1>
+        <p style="color: #475569; font-size: 1rem;">Gérez tous les utilisateurs de la plateforme.</p>
+    </div>
+    <button onclick="showToast('➕ Ajouter un utilisateur')" style="padding: 0.7rem 1.5rem; background: #2563eb; color: #fff; border: none; border-radius: 60px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 0.5rem;">
+        <i class="fas fa-user-plus"></i> Ajouter
+    </button>
+</div>
+
+<div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 1rem; margin-bottom: 1.5rem;">
+    <div style="background: white; border-radius: 12px; padding: 1rem; box-shadow: 0 4px 24px rgba(37,99,235,0.08); border: 1px solid #dbeafe; text-align: center;">
+        <div style="font-size: 1.5rem; font-weight: 800; color: #2563eb;">1 050</div>
+        <div style="color: #475569; font-size: 0.8rem;">👥 Total</div>
+    </div>
+    <div style="background: white; border-radius: 12px; padding: 1rem; box-shadow: 0 4px 24px rgba(37,99,235,0.08); border: 1px solid #dbeafe; text-align: center;">
+        <div style="font-size: 1.5rem; font-weight: 800; color: #059669;">980</div>
+        <div style="color: #475569; font-size: 0.8rem;">🟢 Actifs</div>
+    </div>
+    <div style="background: white; border-radius: 12px; padding: 1rem; box-shadow: 0 4px 24px rgba(37,99,235,0.08); border: 1px solid #dbeafe; text-align: center;">
+        <div style="font-size: 1.5rem; font-weight: 800; color: #dc2626;">32</div>
+        <div style="color: #475569; font-size: 0.8rem;">🔴 Bloqués</div>
+    </div>
+    <div style="background: white; border-radius: 12px; padding: 1rem; box-shadow: 0 4px 24px rgba(37,99,235,0.08); border: 1px solid #dbeafe; text-align: center;">
+        <div style="font-size: 1.5rem; font-weight: 800; color: #d97706;">38</div>
+        <div style="color: #475569; font-size: 0.8rem;">🟡 En attente</div>
+    </div>
+    <div style="background: white; border-radius: 12px; padding: 1rem; box-shadow: 0 4px 24px rgba(37,99,235,0.08); border: 1px solid #dbeafe; text-align: center;">
+        <div style="font-size: 1.5rem; font-weight: 800; color: #7c3aed;">200</div>
+        <div style="color: #475569; font-size: 0.8rem;">👨‍🏫 Tuteurs</div>
+    </div>
+</div>
+
+<div style="background: white; border-radius: 16px; padding: 1.2rem; box-shadow: 0 4px 24px rgba(37,99,235,0.08); border: 1px solid #dbeafe; margin-bottom: 1.5rem;">
+    <div style="display: flex; flex-wrap: wrap; gap: 0.8rem; align-items: center;">
+        <span style="font-weight: 600; color: #0f172a; font-size: 0.9rem;">🔎 Filtres :</span>
+        <select id="filterRole" style="padding: 0.4rem 1rem; border-radius: 60px; border: 1px solid #dbeafe; background: white; font-size: 0.85rem; outline: none;" onchange="appliquerFiltres()">
+            <option value="tous">Tous les rôles</option>
+            <option value="admin">Administrateur</option>
+            <option value="tuteur">Tuteur</option>
+            <option value="etudiant">Étudiant</option>
+        </select>
+        <select id="filterStatus" style="padding: 0.4rem 1rem; border-radius: 60px; border: 1px solid #dbeafe; background: white; font-size: 0.85rem; outline: none;" onchange="appliquerFiltres()">
+            <option value="tous">Tous les statuts</option>
+            <option value="actif">🟢 Actif</option>
+            <option value="bloque">🔴 Bloqué</option>
+            <option value="attente">🟡 En attente</option>
+        </select>
+        <button onclick="appliquerFiltres()" style="padding: 0.4rem 1.2rem; background: #2563eb; color: #fff; border: none; border-radius: 60px; font-weight: 600; cursor: pointer; font-size: 0.85rem;"><i class="fas fa-check"></i> Appliquer</button>
+        <button onclick="reinitialiserFiltres()" style="padding: 0.4rem 1.2rem; background: transparent; color: #475569; border: 1px solid #dbeafe; border-radius: 60px; font-weight: 600; cursor: pointer; font-size: 0.85rem;"><i class="fas fa-undo"></i> Réinitialiser</button>
+    </div>
+</div>
+
+<div style="background: #f8fafc; border-radius: 16px; padding: 0.8rem 1.2rem; border: 1px solid #dbeafe; margin-bottom: 1.5rem; display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center;">
+    <span style="font-weight: 600; color: #0f172a; font-size: 0.85rem;">☑ Actions en masse :</span>
+    <button onclick="showToast('✅ Utilisateurs activés')" style="padding: 0.3rem 1rem; background: #059669; color: #fff; border: none; border-radius: 40px; font-weight: 600; cursor: pointer; font-size: 0.8rem;"><i class="fas fa-check"></i> Activer</button>
+    <button onclick="showToast('⛔ Utilisateurs bloqués')" style="padding: 0.3rem 1rem; background: #dc2626; color: #fff; border: none; border-radius: 40px; font-weight: 600; cursor: pointer; font-size: 0.8rem;"><i class="fas fa-ban"></i> Bloquer</button>
+    <button onclick="showToast('📧 Email envoyé')" style="padding: 0.3rem 1rem; background: #2563eb; color: #fff; border: none; border-radius: 40px; font-weight: 600; cursor: pointer; font-size: 0.8rem;"><i class="fas fa-envelope"></i> Email</button>
+    <button onclick="showToast('📤 Exporté')" style="padding: 0.3rem 1rem; background: #7c3aed; color: #fff; border: none; border-radius: 40px; font-weight: 600; cursor: pointer; font-size: 0.8rem;"><i class="fas fa-file-export"></i> Exporter</button>
+</div>
+
+<div style="background: white; border-radius: 16px; padding: 1.5rem; box-shadow: 0 4px 24px rgba(37,99,235,0.08); border: 1px solid #dbeafe; margin-bottom: 1.5rem; overflow-x: auto;">
+    <table style="width: 100%; border-collapse: collapse; min-width: 800px;">
+        <thead>
+            <tr style="background: #eff6ff;">
+                <th style="padding: 0.6rem 0.8rem; text-align: left; font-weight: 600; color: #0f172a; font-size: 0.85rem; width: 30px;"><input type="checkbox" onclick="toggleAllCheckbox(this)"></th>
+                <th style="padding: 0.6rem 0.8rem; text-align: left; font-weight: 600; color: #0f172a; font-size: 0.85rem;">Utilisateur</th>
+                <th style="padding: 0.6rem 0.8rem; text-align: left; font-weight: 600; color: #0f172a; font-size: 0.85rem;">Email</th>
+                <th style="padding: 0.6rem 0.8rem; text-align: left; font-weight: 600; color: #0f172a; font-size: 0.85rem;">Rôle</th>
+                <th style="padding: 0.6rem 0.8rem; text-align: left; font-weight: 600; color: #0f172a; font-size: 0.85rem;">Statut</th>
+                <th style="padding: 0.6rem 0.8rem; text-align: left; font-weight: 600; color: #0f172a; font-size: 0.85rem;">Inscrit</th>
+                <th style="padding: 0.6rem 0.8rem; text-align: left; font-weight: 600; color: #0f172a; font-size: 0.85rem;">Actions</th>
+            </tr>
+        </thead>
+        <tbody id="usersTableBody"></tbody>
+    </table>
+</div>
+
+<div style="display: flex; justify-content: center; align-items: center; gap: 0.5rem; padding: 0.5rem 0; flex-wrap: wrap;">
+    <button onclick="pagePrecedente()" style="padding: 0.4rem 1rem; background: transparent; color: #2563eb; border: 1px solid #dbeafe; border-radius: 60px; cursor: pointer; transition: 0.3s ease; font-size: 0.85rem;"><i class="fas fa-chevron-left"></i> Précédent</button>
+    <div id="paginationContainer" style="display: flex; gap: 0.3rem; flex-wrap: wrap;"></div>
+    <button onclick="pageSuivante()" style="padding: 0.4rem 1rem; background: transparent; color: #2563eb; border: 1px solid #dbeafe; border-radius: 60px; cursor: pointer; transition: 0.3s ease; font-size: 0.85rem;">Suivant <i class="fas fa-chevron-right"></i></button>
+</div>
+
+<div style="background: white; border-radius: 16px; padding: 1.5rem; box-shadow: 0 4px 24px rgba(37,99,235,0.08); border: 1px solid #dbeafe; margin-top: 1.5rem;">
+    <h3 style="color: #0f172a; font-size: 1.1rem; margin-bottom: 1rem;">👁 Détails de l'utilisateur sélectionné</h3>
+    <div id="userDetailPanel" style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1.5rem;">
+        <div style="background: #f8fafc; padding: 1rem; border-radius: 12px;">
+            <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 0.5rem;">
+                <div id="detailAvatar" style="width: 60px; height: 60px; border-radius: 50%; background: #2563eb; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; font-weight: 700;">AD</div>
+                <div>
+                    <div id="detailName" style="font-weight: 700; font-size: 1.1rem; color: #0f172a;">Awa Diop</div>
+                    <div id="detailRole" style="color: #475569; font-size: 0.85rem;">Étudiant</div>
+                    <div id="detailStatus" style="color: #059669; font-size: 0.8rem;">🟢 Actif</div>
+                </div>
+            </div>
+            <div style="font-size: 0.85rem; color: #475569; line-height: 1.8;">
+                <div id="detailEmail">📧 awa@email.com</div>
+                <div id="detailPhone">📱 +221 77 123 45 67</div>
+                <div id="detailJoined">📅 Inscrit : 01/07/2026</div>
+                <div id="detailLastLogin">⏰ Dernière connexion : Il y a 2h</div>
+            </div>
+        </div>
+        <div style="background: #f8fafc; padding: 1rem; border-radius: 12px;">
+            <h4 style="color: #0f172a; font-size: 0.9rem; margin-bottom: 0.5rem;">📊 Statistiques</h4>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem;">
+                <div id="detailStats1" style="background: white; padding: 0.5rem; border-radius: 8px; text-align: center;">
+                    <div style="font-weight: 700; color: #2563eb; font-size: 1.1rem;">12</div>
+                    <div style="color: #475569; font-size: 0.7rem;">Cours</div>
+                </div>
+                <div id="detailStats2" style="background: white; padding: 0.5rem; border-radius: 8px; text-align: center;">
+                    <div style="font-weight: 700; color: #2563eb; font-size: 1.1rem;">4.8</div>
+                    <div style="color: #475569; font-size: 0.7rem;">Note</div>
+                </div>
+                <div id="detailStats3" style="background: white; padding: 0.5rem; border-radius: 8px; text-align: center;">
+                    <div style="font-weight: 700; color: #2563eb; font-size: 1.1rem;">25</div>
+                    <div style="color: #475569; font-size: 0.7rem;">Sessions</div>
+                </div>
+                <div id="detailStats4" style="background: white; padding: 0.5rem; border-radius: 8px; text-align: center;">
+                    <div style="font-weight: 700; color: #2563eb; font-size: 1.1rem;">120k</div>
+                    <div style="color: #475569; font-size: 0.7rem;">Revenus</div>
+                </div>
+            </div>
+        </div>
+        <div style="background: #f8fafc; padding: 1rem; border-radius: 12px;">
+            <h4 style="color: #0f172a; font-size: 0.9rem; margin-bottom: 0.5rem;">⚙ Actions</h4>
+            <div style="display: flex; flex-direction: column; gap: 0.3rem;">
+                <button onclick="showToast('✏️ Modifier l\'utilisateur')" style="padding: 0.4rem; background: #2563eb; color: #fff; border: none; border-radius: 40px; font-weight: 600; cursor: pointer; font-size: 0.85rem;"><i class="fas fa-edit"></i> Modifier</button>
+                <button onclick="showToast('🔒 Utilisateur bloqué')" style="padding: 0.4rem; background: #dc2626; color: #fff; border: none; border-radius: 40px; font-weight: 600; cursor: pointer; font-size: 0.85rem;"><i class="fas fa-ban"></i> Bloquer</button>
+                <button onclick="showToast('🔑 Mot de passe réinitialisé')" style="padding: 0.4rem; background: #d97706; color: #fff; border: none; border-radius: 40px; font-weight: 600; cursor: pointer; font-size: 0.85rem;"><i class="fas fa-key"></i> Réinitialiser</button>
+                <button onclick="showToast('📋 Voir les logs')" style="padding: 0.4rem; background: #7c3aed; color: #fff; border: none; border-radius: 40px; font-weight: 600; cursor: pointer; font-size: 0.85rem;"><i class="fas fa-history"></i> Logs</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const utilisateurs = [];
+    const prenoms = ['Awa', 'Mamadou', 'Sokhna', 'Fatou', 'Cheikh', 'Aminata', 'Ibrahima', 'Khady', 'Fallou', 'Rokhaya', 'Moussa', 'Ndeye', 'Oumar', 'Mariama', 'Aliou', 'Aissatou', 'Mor', 'Serigne', 'Adji', 'Coumba'];
+    const noms = ['Diop', 'Ndiaye', 'Fall', 'Sarr', 'Ba', 'Kane', 'Diallo', 'Mbaye', 'Diouf', 'Gueye', 'Thiam', 'Ndao', 'Diagne', 'Sow', 'Faye', 'Niang', 'Dieng', 'Cissé', 'Dione', 'Seck'];
+    const couleurs = ['#2563eb', '#059669', '#dc2626', '#7c3aed', '#d97706', '#0891b2', '#0d9488', '#6d28d9', '#b45309'];
+
+    for (let i = 0; i < 200; i++) {
+        const p = prenoms[Math.floor(Math.random() * prenoms.length)];
+        const n = noms[Math.floor(Math.random() * noms.length)];
+        utilisateurs.push({
+            id: i + 1, nom: p + ' ' + n, email: p.toLowerCase() + '.' + n.toLowerCase() + '@email.com',
+            role: 'Tuteur', status: ['🟢 Actif', '🟡 En attente', '🔴 Bloqué'][Math.floor(Math.random() * 3)],
+            joined: new Date(2026, 5, 1 + Math.floor(Math.random() * 30)).toLocaleDateString('fr-FR'),
+            avatar: p[0] + n[0], color: couleurs[Math.floor(Math.random() * couleurs.length)],
+            phone: '+221 77 ' + String(100000 + Math.floor(Math.random() * 900000)).slice(0, 6),
+            lastLogin: ['Il y a 2h', 'Il y a 5h', 'Il y a 1h', 'Il y a 3j', 'Aujourd\'hui'][Math.floor(Math.random() * 5)],
+            cours: 10 + Math.floor(Math.random() * 50), note: (3.5 + Math.random() * 1.5).toFixed(1),
+            sessions: 20 + Math.floor(Math.random() * 80), revenus: (100 + Math.floor(Math.random() * 500)) + 'k'
+        });
+    }
+    for (let i = 200; i < 1050; i++) {
+        const p = prenoms[Math.floor(Math.random() * prenoms.length)];
+        const n = noms[Math.floor(Math.random() * noms.length)];
+        utilisateurs.push({
+            id: i + 1, nom: p + ' ' + n, email: p.toLowerCase() + '.' + n.toLowerCase() + '@email.com',
+            role: 'Étudiant', status: Math.random() > 0.9 ? '🔴 Bloqué' : (Math.random() > 0.95 ? '🟡 En attente' : '🟢 Actif'),
+            joined: new Date(2026, 5, 1 + Math.floor(Math.random() * 30)).toLocaleDateString('fr-FR'),
+            avatar: p[0] + n[0], color: couleurs[Math.floor(Math.random() * couleurs.length)],
+            phone: '+221 78 ' + String(100000 + Math.floor(Math.random() * 900000)).slice(0, 6),
+            lastLogin: ['Il y a 2h', 'Il y a 5h', 'Il y a 1h', 'Il y a 3j', 'Aujourd\'hui'][Math.floor(Math.random() * 5)],
+            cours: 1 + Math.floor(Math.random() * 20), note: (3.0 + Math.random() * 2.0).toFixed(1),
+            sessions: 5 + Math.floor(Math.random() * 40), revenus: '0'
+        });
+    }
+    utilisateurs.push({ id: 1051, nom: 'Sokhna Ba', email: 'sokhna@email.com', role: 'Administrateur', status: '🟢 Actif', joined: '01/01/2026', avatar: 'SB', color: '#7c3aed', phone: '+221 77 000 00 00', lastLogin: 'Aujourd\'hui', cours: 0, note: '0', sessions: 0, revenus: '0' });
+
+    let pageActuelle = 1, usersParPage = 8, utilisateursFiltres = [...utilisateurs];
+
+    function afficherUtilisateurs() {
+        const tbody = document.getElementById('usersTableBody');
+        const start = (pageActuelle - 1) * usersParPage, end = Math.min(start + usersParPage, utilisateursFiltres.length);
+        const pageUsers = utilisateursFiltres.slice(start, end);
+        if (pageUsers.length === 0) { tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;padding:2rem;color:#475569;">🔍 Aucun utilisateur trouvé</td></tr>`; return; }
+        tbody.innerHTML = pageUsers.map(u => `
+            <tr onclick="showUserDetail(${u.id})" style="cursor:pointer;">
+                <td style="padding:0.6rem 0.8rem;border-bottom:1px solid #dbeafe;"><input type="checkbox" class="user-checkbox" onclick="event.stopPropagation();"></td>
+                <td style="padding:0.6rem 0.8rem;border-bottom:1px solid #dbeafe;"><div style="display:flex;align-items:center;gap:0.5rem;"><span style="width:32px;height:32px;border-radius:50%;background:${u.color};color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.8rem;">${u.avatar}</span><span style="font-weight:600;">${u.nom}</span></div></td>
+                <td style="padding:0.6rem 0.8rem;border-bottom:1px solid #dbeafe;font-size:0.85rem;">${u.email}</td>
+                <td style="padding:0.6rem 0.8rem;border-bottom:1px solid #dbeafe;"><span style="${u.role === 'Tuteur' ? 'background:#d1fae5;color:#065f46;' : u.role === 'Administrateur' ? 'background:#fef3c7;color:#92400e;' : 'background:#dbeafe;color:#1e40af;'} padding:0.15rem 0.6rem;border-radius:40px;font-size:0.7rem;font-weight:600;">${u.role}</span></td>
+                <td style="padding:0.6rem 0.8rem;border-bottom:1px solid #dbeafe;font-size:0.85rem;">${u.status}</td>
+                <td style="padding:0.6rem 0.8rem;border-bottom:1px solid #dbeafe;font-size:0.85rem;">${u.joined}</td>
+                <td style="padding:0.6rem 0.8rem;border-bottom:1px solid #dbeafe;">
+                    <button onclick="event.stopPropagation();showToast('👤 Détails de ${u.nom}')" style="padding:0.2rem 0.6rem;background:#2563eb;color:#fff;border:none;border-radius:40px;cursor:pointer;font-size:0.75rem;margin-right:0.2rem;"><i class="fas fa-eye"></i></button>
+                    <button onclick="event.stopPropagation();showToast('✏️ Modifier ${u.nom}')" style="padding:0.2rem 0.6rem;background:#d97706;color:#fff;border:none;border-radius:40px;cursor:pointer;font-size:0.75rem;margin-right:0.2rem;"><i class="fas fa-edit"></i></button>
+                    <button onclick="event.stopPropagation();showToast('🔒 ${u.nom} bloqué')" style="padding:0.2rem 0.6rem;background:#dc2626;color:#fff;border:none;border-radius:40px;cursor:pointer;font-size:0.75rem;"><i class="fas fa-ban"></i></button>
+                </td>
+            </tr>
+        `).join('');
+        afficherPagination();
+    }
+
+    function showUserDetail(id) {
+        const u = utilisateurs.find(x => x.id === id);
+        if (!u) return;
+        document.getElementById('detailAvatar').textContent = u.avatar;
+        document.getElementById('detailAvatar').style.background = u.color;
+        document.getElementById('detailName').textContent = u.nom;
+        document.getElementById('detailRole').textContent = u.role;
+        document.getElementById('detailStatus').textContent = u.status;
+        document.getElementById('detailStatus').style.color = u.status.includes('Actif') ? '#059669' : (u.status.includes('Bloqué') ? '#dc2626' : '#d97706');
+        document.getElementById('detailEmail').textContent = '📧 ' + u.email;
+        document.getElementById('detailPhone').textContent = '📱 ' + u.phone;
+        document.getElementById('detailJoined').textContent = '📅 Inscrit : ' + u.joined;
+        document.getElementById('detailLastLogin').textContent = '⏰ Dernière connexion : ' + u.lastLogin;
+        document.getElementById('detailStats1').innerHTML = `<div style="font-weight:700;color:#2563eb;font-size:1.1rem;">${u.cours}</div><div style="color:#475569;font-size:0.7rem;">Cours</div>`;
+        document.getElementById('detailStats2').innerHTML = `<div style="font-weight:700;color:#2563eb;font-size:1.1rem;">${u.note}</div><div style="color:#475569;font-size:0.7rem;">Note</div>`;
+        document.getElementById('detailStats3').innerHTML = `<div style="font-weight:700;color:#2563eb;font-size:1.1rem;">${u.sessions}</div><div style="color:#475569;font-size:0.7rem;">Sessions</div>`;
+        document.getElementById('detailStats4').innerHTML = `<div style="font-weight:700;color:#2563eb;font-size:1.1rem;">${u.revenus}</div><div style="color:#475569;font-size:0.7rem;">Revenus</div>`;
+    }
+
+    function afficherPagination() {
+        const container = document.getElementById('paginationContainer');
+        const totalPages = Math.ceil(utilisateursFiltres.length / usersParPage);
+        if (totalPages <= 1) { container.innerHTML = ''; return; }
+        let html = '';
+        let startPage = Math.max(1, pageActuelle - 3), endPage = Math.min(totalPages, pageActuelle + 3);
+        if (startPage > 1) { html += `<button class="page-btn" onclick="goToPage(1)" style="padding:0.3rem 0.8rem;background:transparent;color:#475569;border:1px solid #dbeafe;border-radius:60px;cursor:pointer;font-size:0.85rem;">1</button>`; if (startPage > 2) html += `<span style="color:#475569;padding:0 0.3rem;">…</span>`; }
+        for (let i = startPage; i <= endPage; i++) { html += `<button class="page-btn" onclick="goToPage(${i})" style="padding:0.3rem 0.8rem;${i === pageActuelle ? 'background:#2563eb;color:#fff;' : 'background:transparent;color:#475569;border:1px solid #dbeafe;'} border-radius:60px;cursor:pointer;font-size:0.85rem;">${i}</button>`; }
+        if (endPage < totalPages) { if (endPage < totalPages - 1) html += `<span style="color:#475569;padding:0 0.3rem;">…</span>`; html += `<button class="page-btn" onclick="goToPage(${totalPages})" style="padding:0.3rem 0.8rem;background:transparent;color:#475569;border:1px solid #dbeafe;border-radius:60px;cursor:pointer;font-size:0.85rem;">${totalPages}</button>`; }
+        container.innerHTML = html;
+    }
+
+    function goToPage(p) { const total = Math.ceil(utilisateursFiltres.length / usersParPage); if (p < 1 || p > total) return; pageActuelle = p; afficherUtilisateurs(); }
+    function pagePrecedente() { if (pageActuelle > 1) goToPage(pageActuelle - 1); }
+    function pageSuivante() { const total = Math.ceil(utilisateursFiltres.length / usersParPage); if (pageActuelle < total) goToPage(pageActuelle + 1); }
+
+    function appliquerFiltres() {
+        const search = document.getElementById('searchUser')?.value.toLowerCase() || '';
+        const role = document.getElementById('filterRole').value;
+        const status = document.getElementById('filterStatus').value;
+        const statusMap = { 'actif': '🟢 Actif', 'bloque': '🔴 Bloqué', 'attente': '🟡 En attente' };
+        utilisateursFiltres = utilisateurs.filter(u => {
+            let match = true;
+            if (search) { const text = u.nom.toLowerCase() + ' ' + u.email.toLowerCase(); if (!text.includes(search)) match = false; }
+            if (role !== 'tous' && u.role.toLowerCase() !== role) match = false;
+            if (status !== 'tous' && u.status !== statusMap[status]) match = false;
+            return match;
+        });
+        pageActuelle = 1;
+        afficherUtilisateurs();
+        showToast(`🔍 ${utilisateursFiltres.length} utilisateur${utilisateursFiltres.length > 1 ? 's' : ''} trouvé${utilisateursFiltres.length > 1 ? 's' : ''}`);
+    }
+
+    function reinitialiserFiltres() { document.getElementById('filterRole').value = 'tous'; document.getElementById('filterStatus').value = 'tous'; appliquerFiltres(); showToast('🔄 Filtres réinitialisés'); }
+    function toggleAllCheckbox(master) { document.querySelectorAll('.user-checkbox').forEach(cb => cb.checked = master.checked); }
+
+    function showToast(msg) {
+        const existing = document.querySelector('.toast-custom');
+        if (existing) existing.remove();
+        const toast = document.createElement('div');
+        toast.className = 'toast-custom';
+        toast.innerHTML = `
+            <div style="position:fixed;bottom:30px;right:30px;background:#0f172a;color:white;padding:14px 24px;border-radius:14px;box-shadow:0 8px 40px rgba(0,0,0,0.3);display:flex;align-items:center;gap:12px;z-index:9999;animation:fadeInUp 0.4s ease;max-width:450px;">
+                <span style="font-size:1.3rem;">${msg.includes('🔍') ? '🔍' : msg.includes('✅') ? '✅' : msg.includes('🔄') ? '🔄' : '📋'}</span>
+                <div><div style="font-weight:600;font-size:0.9rem;">${msg.replace(/[🔍✅🔄📋]/, '').trim()}</div></div>
+                <button onclick="this.parentElement.parentElement.remove()" style="background:none;border:none;color:rgba(255,255,255,0.4);cursor:pointer;font-size:1.2rem;padding:0 4px;">×</button>
+            </div>
+        `;
+        document.body.appendChild(toast);
+        setTimeout(() => { const el = document.querySelector('.toast-custom'); if (el) el.remove(); }, 3500);
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        if (utilisateurs.length > 0) showUserDetail(utilisateurs[0].id);
+        afficherUtilisateurs();
+        document.getElementById('searchUser')?.addEventListener('input', appliquerFiltres);
+    });
+</script>
+
+{% endblock %}

@@ -1,0 +1,125 @@
+{% extends "base.html" %}
+
+{% block title %}MySQL - Exemple de cours{% endblock %}
+
+{% block content %}
+
+<div style="max-width: 850px; margin: 0 auto; padding-bottom: 2rem;">
+
+    <a href="{{ url_for('main.matieres') }}" style="display:inline-flex; align-items:center; gap:0.4rem; color:#2563eb; text-decoration:none; font-weight:600; font-size:0.9rem; margin:1.5rem 0 1rem;">
+        <i class="fas fa-arrow-left"></i> Retour aux matières
+    </a>
+
+    <img src="https://placehold.co/850x260/0e7490/ffffff?text=MySQL" alt="MySQL" style="width:100%; border-radius:16px; box-shadow:0 4px 24px rgba(37,99,235,0.08);">
+
+    <div style="text-align:center; padding:1.5rem 0;">
+        <span style="background:#eff6ff; color:#2563eb; padding:0.25rem 0.9rem; border-radius:40px; font-size:0.8rem; font-weight:700;">Licence 2 • Bases de données</span>
+        <h1 style="font-size:2.2rem; color:#0f172a; font-weight:800; margin-top:0.8rem;">🗄️ Les jointures SQL</h1>
+        <p style="color:#475569; font-size:1.05rem; margin-top:0.3rem;">Exemple de cours donné par un tuteur EduSen en MySQL</p>
+    </div>
+
+    <div style="background:white; border-radius:20px; padding:2rem; box-shadow:0 4px 24px rgba(37,99,235,0.08); border:1px solid #dbeafe; margin-bottom:1.5rem;">
+        <h3 style="color:#0f172a;">🎯 Objectifs du cours</h3>
+        <ul style="color:#475569; line-height:2; list-style:none; margin-top:0.5rem;">
+            <li>✅ Comprendre la relation entre deux tables via une clé étrangère</li>
+            <li>✅ Écrire une requête INNER JOIN</li>
+            <li>✅ Écrire une requête LEFT JOIN</li>
+            <li>✅ Savoir choisir la bonne jointure selon le besoin</li>
+        </ul>
+    </div>
+
+    <div style="background:white; border-radius:20px; padding:2rem; box-shadow:0 4px 24px rgba(37,99,235,0.08); border:1px solid #dbeafe; margin-bottom:1.5rem;">
+        <h3 style="color:#0f172a;">1. Les tables de départ</h3>
+        <p style="color:#475569; line-height:1.8; margin-top:0.5rem;">
+            Prenons deux tables : <code>etudiants</code> et <code>reservations</code>, liées par la colonne <code>etudiant_id</code>.
+        </p>
+        <pre style="background:#0f172a; color:#e2e8f0; padding:1rem 1.2rem; border-radius:12px; overflow-x:auto; font-size:0.85rem; line-height:1.6;"><code>CREATE TABLE etudiants (
+    id INT PRIMARY KEY,
+    nom VARCHAR(50)
+);
+
+CREATE TABLE reservations (
+    id INT PRIMARY KEY,
+    etudiant_id INT,
+    matiere VARCHAR(50),
+    FOREIGN KEY (etudiant_id) REFERENCES etudiants(id)
+);
+
+INSERT INTO etudiants VALUES (1, 'Awa'), (2, 'Cheikh'), (3, 'Fatou');
+INSERT INTO reservations VALUES
+    (1, 1, 'Mathématiques'),
+    (2, 1, 'Python'),
+    (3, 2, 'Anglais');
+-- Remarque : Fatou (id 3) n'a encore aucune réservation</code></pre>
+
+        <h3 style="color:#0f172a; margin-top:1.5rem;">2. INNER JOIN : uniquement les correspondances</h3>
+        <p style="color:#475569; line-height:1.8; margin-top:0.5rem;">
+            L'<strong>INNER JOIN</strong> ne retourne que les lignes qui ont une correspondance dans les deux tables.
+        </p>
+        <pre style="background:#0f172a; color:#e2e8f0; padding:1rem 1.2rem; border-radius:12px; overflow-x:auto; font-size:0.85rem; line-height:1.6;"><code>SELECT etudiants.nom, reservations.matiere
+FROM etudiants
+INNER JOIN reservations ON etudiants.id = reservations.etudiant_id;</code></pre>
+        <div style="overflow-x:auto;">
+        <table style="width:100%; border-collapse:collapse; margin-top:0.8rem; font-size:0.9rem;">
+            <thead>
+                <tr style="background:#eff6ff; color:#0f172a;">
+                    <th style="padding:0.6rem; text-align:left; border:1px solid #dbeafe;">nom</th>
+                    <th style="padding:0.6rem; text-align:left; border:1px solid #dbeafe;">matiere</th>
+                </tr>
+            </thead>
+            <tbody style="color:#475569;">
+                <tr><td style="padding:0.6rem; border:1px solid #dbeafe;">Awa</td><td style="padding:0.6rem; border:1px solid #dbeafe;">Mathématiques</td></tr>
+                <tr><td style="padding:0.6rem; border:1px solid #dbeafe;">Awa</td><td style="padding:0.6rem; border:1px solid #dbeafe;">Python</td></tr>
+                <tr><td style="padding:0.6rem; border:1px solid #dbeafe;">Cheikh</td><td style="padding:0.6rem; border:1px solid #dbeafe;">Anglais</td></tr>
+            </tbody>
+        </table>
+        </div>
+        <p style="color:#475569; line-height:1.8; margin-top:0.8rem;">Fatou n'apparaît pas, car elle n'a aucune réservation.</p>
+
+        <h3 style="color:#0f172a; margin-top:1.5rem;">3. LEFT JOIN : toutes les lignes de la table de gauche</h3>
+        <p style="color:#475569; line-height:1.8; margin-top:0.5rem;">
+            Le <strong>LEFT JOIN</strong> retourne toutes les lignes de la table de gauche (<code>etudiants</code>), même sans correspondance dans la table de droite. Les colonnes manquantes sont remplies avec <code>NULL</code>.
+        </p>
+        <pre style="background:#0f172a; color:#e2e8f0; padding:1rem 1.2rem; border-radius:12px; overflow-x:auto; font-size:0.85rem; line-height:1.6;"><code>SELECT etudiants.nom, reservations.matiere
+FROM etudiants
+LEFT JOIN reservations ON etudiants.id = reservations.etudiant_id;</code></pre>
+        <div style="overflow-x:auto;">
+        <table style="width:100%; border-collapse:collapse; margin-top:0.8rem; font-size:0.9rem;">
+            <thead>
+                <tr style="background:#eff6ff; color:#0f172a;">
+                    <th style="padding:0.6rem; text-align:left; border:1px solid #dbeafe;">nom</th>
+                    <th style="padding:0.6rem; text-align:left; border:1px solid #dbeafe;">matiere</th>
+                </tr>
+            </thead>
+            <tbody style="color:#475569;">
+                <tr><td style="padding:0.6rem; border:1px solid #dbeafe;">Awa</td><td style="padding:0.6rem; border:1px solid #dbeafe;">Mathématiques</td></tr>
+                <tr><td style="padding:0.6rem; border:1px solid #dbeafe;">Awa</td><td style="padding:0.6rem; border:1px solid #dbeafe;">Python</td></tr>
+                <tr><td style="padding:0.6rem; border:1px solid #dbeafe;">Cheikh</td><td style="padding:0.6rem; border:1px solid #dbeafe;">Anglais</td></tr>
+                <tr><td style="padding:0.6rem; border:1px solid #dbeafe;">Fatou</td><td style="padding:0.6rem; border:1px solid #dbeafe;">NULL</td></tr>
+            </tbody>
+        </table>
+        </div>
+        <p style="color:#475569; line-height:1.8; margin-top:0.8rem; background:#f8fafc; border-left:4px solid #2563eb; padding:1rem 1.2rem; border-radius:8px;">
+            <strong>Quand utiliser quoi ?</strong> Utilisez INNER JOIN quand vous ne voulez que les données réellement liées entre les deux tables. Utilisez LEFT JOIN quand vous voulez conserver tous les enregistrements d'une table de référence, même sans correspondance (par exemple, lister <em>tous</em> les étudiants, y compris ceux qui n'ont encore rien réservé).
+        </p>
+    </div>
+
+    <div style="background:white; border-radius:20px; padding:2rem; box-shadow:0 4px 24px rgba(37,99,235,0.08); border:1px solid #dbeafe;">
+        <h3 style="color:#0f172a;">📝 Exercice d'application</h3>
+        <p style="color:#475569; line-height:1.8; margin-top:0.5rem;">
+            En utilisant les tables <code>etudiants</code> et <code>reservations</code> ci-dessus, écrivez une requête permettant de lister le <strong>nombre de réservations par étudiant</strong>, y compris ceux qui en ont zéro.
+        </p>
+        <details style="margin-top:1rem;">
+            <summary style="cursor:pointer; color:#2563eb; font-weight:600;">Voir une solution possible</summary>
+            <pre style="background:#0f172a; color:#e2e8f0; padding:1rem 1.2rem; border-radius:12px; overflow-x:auto; font-size:0.85rem; line-height:1.6; margin-top:0.8rem;"><code>SELECT etudiants.nom, COUNT(reservations.id) AS nb_reservations
+FROM etudiants
+LEFT JOIN reservations ON etudiants.id = reservations.etudiant_id
+GROUP BY etudiants.nom;
+
+-- Awa : 2, Cheikh : 1, Fatou : 0</code></pre>
+        </details>
+    </div>
+
+</div>
+
+{% endblock %}

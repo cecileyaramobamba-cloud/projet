@@ -1,0 +1,277 @@
+
+{% extends "base.html" %}
+
+{% block title %}Mon Profil Tuteur - EduSen{% endblock %}
+
+{% block content %}
+
+<style>
+    .info-row {
+        display: flex;
+        padding: 0.5rem 0;
+        border-bottom: 1px solid #f1f5f9;
+    }
+    .info-label {
+        width: 140px;
+        font-weight: 600;
+        color: #475569;
+        font-size: 0.85rem;
+        flex-shrink: 0;
+    }
+    .info-value {
+        color: #0f172a;
+        font-size: 0.9rem;
+    }
+    .skill-tag {
+        display: inline-block;
+        padding: 0.2rem 0.8rem;
+        border-radius: 40px;
+        font-size: 0.8rem;
+        font-weight: 500;
+        margin-right: 0.3rem;
+        margin-bottom: 0.3rem;
+        background: #eff6ff;
+        color: #2563eb;
+        border: 1px solid #dbeafe;
+    }
+    @keyframes fadeInUp {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    .profile-card {
+        animation: fadeInUp 0.4s ease forwards;
+    }
+</style>
+
+<div style="max-width: 1400px; margin: 0 auto; padding: 1rem 0;">
+
+    <!-- ===== TOPBAR ===== -->
+    <div style="background: white; border-radius: 16px; padding: 0.8rem 1.5rem; box-shadow: 0 4px 24px rgba(37,99,235,0.08); border: 1px solid #dbeafe; margin-bottom: 1.5rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+        <div style="display: flex; align-items: center; gap: 1rem; flex: 1; min-width: 200px;">
+            <a href="{{ url_for('main.accueil') }}" style="font-size: 1.3rem; font-weight: 800; color: #0f172a; text-decoration: none;">
+                Edu<span style="color: #2563eb;">Sen</span>
+            </a>
+            <span style="background: #d1fae5; padding: 0.15rem 0.8rem; border-radius: 40px; font-size: 0.7rem; font-weight: 600; color: #065f46;">Tuteur</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;">
+            <button onclick="showToast('🔔 Aucune notification')" style="background: transparent; border: none; font-size: 1.1rem; cursor: pointer; position: relative; color: #475569;">
+                <i class="fas fa-bell"></i>
+                <span style="position: absolute; top: -5px; right: -8px; background: #dc2626; color: #fff; font-size: 0.5rem; padding: 0.1rem 0.4rem; border-radius: 50%;">5</span>
+            </button>
+            <button onclick="window.location.href='/tuteur/messages'" style="background: transparent; border: none; font-size: 1.1rem; cursor: pointer; position: relative; color: #475569;">
+                <i class="fas fa-envelope"></i>
+                <span style="position: absolute; top: -5px; right: -8px; background: #2563eb; color: #fff; font-size: 0.5rem; padding: 0.1rem 0.4rem; border-radius: 50%;">3</span>
+            </button>
+            <a href="{{ url_for('main.profil_tuteur') }}" style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; text-decoration: none;">
+                <div style="width: 32px; height: 32px; border-radius: 50%; background: #2563eb; color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.8rem;">FD</div>
+                <span style="font-weight: 600; color: #0f172a; font-size: 0.9rem;">Fatou Diop</span>
+                <i class="fas fa-chevron-down" style="color: #94a3b8; font-size: 0.6rem;"></i>
+            </a>
+        </div>
+    </div>
+
+    <div style="display: flex; gap: 2rem;">
+
+        <!-- ===== SIDEBAR ===== -->
+        <div style="flex: 0 0 220px; min-width: 180px;">
+            <div style="background: white; border-radius: 16px; padding: 1.5rem; box-shadow: 0 4px 24px rgba(37,99,235,0.08); border: 1px solid #dbeafe; position: sticky; top: 90px;">
+                <div style="font-weight: 700; font-size: 0.8rem; text-transform: uppercase; color: #94a3b8; margin-bottom: 1rem; letter-spacing: 0.5px;">📋 Menu</div>
+                <nav style="display: flex; flex-direction: column; gap: 0.2rem;">
+                    <a href="{{ url_for('main.dashboard_tuteur') }}" style="padding: 0.5rem 0.8rem; border-radius: 8px; color: #475569; text-decoration: none; display: flex; align-items: center; gap: 0.8rem; font-size: 0.9rem; transition: 0.3s ease;">
+                        <i class="fas fa-home" style="width: 20px; text-align: center;"></i> Dashboard
+                    </a>
+                    <a href="/tuteur/cours" style="padding: 0.5rem 0.8rem; border-radius: 8px; color: #475569; text-decoration: none; display: flex; align-items: center; gap: 0.8rem; font-size: 0.9rem; transition: 0.3s ease;">
+                        <i class="fas fa-book" style="width: 20px; text-align: center;"></i> Mes cours
+                    </a>
+                    <a href="{{ url_for('main.reservation_tuteur') }}" style="padding: 0.5rem 0.8rem; border-radius: 8px; color: #475569; text-decoration: none; display: flex; align-items: center; gap: 0.8rem; font-size: 0.9rem; transition: 0.3s ease;">
+                        <i class="fas fa-calendar-check" style="width: 20px; text-align: center;"></i> Réservations
+                    </a>
+                    <a href="{{ url_for('main.etudiants_tuteur') }}" style="padding: 0.5rem 0.8rem; border-radius: 8px; color: #475569; text-decoration: none; display: flex; align-items: center; gap: 0.8rem; font-size: 0.9rem; transition: 0.3s ease;">
+                        <i class="fas fa-users" style="width: 20px; text-align: center;"></i> Étudiants
+                    </a>
+                    <a href="/tuteur/messages" style="padding: 0.5rem 0.8rem; border-radius: 8px; color: #475569; text-decoration: none; display: flex; align-items: center; gap: 0.8rem; font-size: 0.9rem; transition: 0.3s ease;">
+                        <i class="fas fa-envelope" style="width: 20px; text-align: center;"></i> Messages
+                    </a>
+                    <a href="/tuteur/revenus" style="padding: 0.5rem 0.8rem; border-radius: 8px; color: #475569; text-decoration: none; display: flex; align-items: center; gap: 0.8rem; font-size: 0.9rem; transition: 0.3s ease;">
+                        <i class="fas fa-money-bill-wave" style="width: 20px; text-align: center;"></i> Revenus
+                    </a>
+                    <a href="/tuteur/avis" style="padding: 0.5rem 0.8rem; border-radius: 8px; color: #475569; text-decoration: none; display: flex; align-items: center; gap: 0.8rem; font-size: 0.9rem; transition: 0.3s ease;">
+                        <i class="fas fa-star" style="width: 20px; text-align: center;"></i> Avis
+                    </a>
+                    <a href="{{ url_for('main.disponibilites_tuteur') }}" style="padding: 0.5rem 0.8rem; border-radius: 8px; color: #475569; text-decoration: none; display: flex; align-items: center; gap: 0.8rem; font-size: 0.9rem; transition: 0.3s ease;">
+                        <i class="fas fa-clock" style="width: 20px; text-align: center;"></i> Disponibilités
+                    </a>
+                    <a href="{{ url_for('main.profil_tuteur') }}" style="padding: 0.5rem 0.8rem; border-radius: 8px; background: #eff6ff; color: #2563eb; text-decoration: none; display: flex; align-items: center; gap: 0.8rem; font-size: 0.9rem; font-weight: 600;">
+                        <i class="fas fa-user" style="width: 20px; text-align: center;"></i> Profil
+                    </a>
+                    <div style="border-top: 1px solid #dbeafe; margin-top: 0.3rem; padding-top: 0.3rem;">
+                        <a href="/auth/deconnexion" style="padding: 0.5rem 0.8rem; border-radius: 8px; color: #dc2626; text-decoration: none; display: flex; align-items: center; gap: 0.8rem; font-size: 0.9rem; transition: 0.3s ease;">
+                            <i class="fas fa-sign-out-alt" style="width: 20px; text-align: center;"></i> Déconnexion
+                        </a>
+                    </div>
+                </nav>
+            </div>
+        </div>
+
+        <!-- ===== CONTENU PRINCIPAL ===== -->
+        <div style="flex: 1; min-width: 0;">
+
+            <!-- ===== TITRE ===== -->
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
+                <div>
+                    <h1 style="font-size: 1.8rem; color: #0f172a; font-weight: 800;">👤 Mon profil</h1>
+                    <p style="color: #475569; font-size: 0.95rem;">Gérez vos informations personnelles et professionnelles.</p>
+                </div>
+                <button onclick="showToast('✏️ Modification du profil')" style="padding: 0.7rem 1.5rem; background: #2563eb; color: #fff; border: none; border-radius: 60px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 0.5rem;">
+                    <i class="fas fa-edit"></i> Modifier le profil
+                </button>
+            </div>
+
+            <!-- ===== PROFIL ===== -->
+            <div style="background: white; border-radius: 16px; padding: 2rem; box-shadow: 0 4px 24px rgba(37,99,235,0.08); border: 1px solid #dbeafe; margin-bottom: 1.5rem;">
+
+                <div style="display: flex; align-items: center; gap: 2rem; flex-wrap: wrap;">
+
+                    <!-- Photo -->
+                    <div style="text-align: center;">
+                        <div style="width: 100px; height: 100px; border-radius: 50%; background: #2563eb; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; font-weight: 700; margin: 0 auto;">FD</div>
+                        <div style="margin-top: 0.5rem; font-weight: 600; font-size: 1.1rem; color: #0f172a;">Fatou Diop</div>
+                        <div style="color: #475569; font-size: 0.9rem;">Développeuse Python</div>
+                        <div style="color: #475569; font-size: 0.85rem;">📍 Dakar, Sénégal</div>
+                    </div>
+
+                    <!-- Infos -->
+                    <div style="flex: 1; min-width: 200px;">
+                        <div class="info-row">
+                            <span class="info-label">📧 Email</span>
+                            <span class="info-value">fatou@email.com</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">📱 Téléphone</span>
+                            <span class="info-value">+221 XX XXX XX XX</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">💰 Tarif</span>
+                            <span class="info-value" style="font-weight: 700; color: #2563eb;">15 000 FCFA / heure</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">🎓 Expérience</span>
+                            <span class="info-value">6 ans</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">⭐ Note</span>
+                            <span class="info-value" style="color: #f59e0b;">4.9 / 5 (320 avis)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Matières enseignées -->
+                <div style="margin-top: 1.5rem; border-top: 1px solid #dbeafe; padding-top: 1rem;">
+                    <h4 style="color: #0f172a; font-size: 0.95rem; margin-bottom: 0.5rem;">📚 Matières enseignées</h4>
+                    <div>
+                        <span class="skill-tag">✔ Python</span>
+                        <span class="skill-tag">✔ Java</span>
+                        <span class="skill-tag">✔ SQL</span>
+                        <span class="skill-tag" style="background: #d1fae5; color: #065f46; border-color: #d1fae5;">🔄 JavaScript</span>
+                        <span class="skill-tag" style="background: #fef3c7; color: #92400e; border-color: #fef3c7;">📌 HTML/CSS</span>
+                    </div>
+                </div>
+
+                <!-- Biographie -->
+                <div style="margin-top: 1rem; border-top: 1px solid #dbeafe; padding-top: 1rem;">
+                    <h4 style="color: #0f172a; font-size: 0.95rem; margin-bottom: 0.5rem;">📝 Biographie</h4>
+                    <p style="color: #475569; line-height: 1.7; font-size: 0.95rem;">
+                        Passionnée par le développement et l'enseignement, je suis développeuse Python depuis 6 ans. 
+                        J'ai commencé à donner des cours pour partager mes connaissances et aider les étudiants à maîtriser 
+                        la programmation. Ma méthode d'enseignement est interactive et basée sur des projets concrets. 
+                        Je m'adapte au niveau de chaque étudiant pour une progression optimale.
+                    </p>
+                </div>
+            </div>
+
+            <!-- ===== STATISTIQUES ===== -->
+            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 1.5rem;">
+                <div style="background: white; border-radius: 12px; padding: 1rem; box-shadow: 0 4px 24px rgba(37,99,235,0.08); border: 1px solid #dbeafe; text-align: center;">
+                    <div style="font-size: 1.5rem; font-weight: 800; color: #2563eb;">156</div>
+                    <div style="color: #475569; font-size: 0.8rem;">💬 Sessions</div>
+                </div>
+                <div style="background: white; border-radius: 12px; padding: 1rem; box-shadow: 0 4px 24px rgba(37,99,235,0.08); border: 1px solid #dbeafe; text-align: center;">
+                    <div style="font-size: 1.5rem; font-weight: 800; color: #2563eb;">82</div>
+                    <div style="color: #475569; font-size: 0.8rem;">👨‍🎓 Étudiants</div>
+                </div>
+                <div style="background: white; border-radius: 12px; padding: 1rem; box-shadow: 0 4px 24px rgba(37,99,235,0.08); border: 1px solid #dbeafe; text-align: center;">
+                    <div style="font-size: 1.5rem; font-weight: 800; color: #f59e0b;">4.9</div>
+                    <div style="color: #475569; font-size: 0.8rem;">⭐ Note</div>
+                </div>
+                <div style="background: white; border-radius: 12px; padding: 1rem; box-shadow: 0 4px 24px rgba(37,99,235,0.08); border: 1px solid #dbeafe; text-align: center;">
+                    <div style="font-size: 1.5rem; font-weight: 800; color: #059669;">98%</div>
+                    <div style="color: #475569; font-size: 0.8rem;">📊 Taux</div>
+                </div>
+            </div>
+
+            <!-- ===== COMPÉTENCES ===== -->
+            <div style="background: white; border-radius: 16px; padding: 1.5rem; box-shadow: 0 4px 24px rgba(37,99,235,0.08); border: 1px solid #dbeafe;">
+                <h4 style="color: #0f172a; font-size: 1.1rem; margin-bottom: 1rem;">📊 Compétences</h4>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <div>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 0.2rem;">
+                            <span style="color: #0f172a; font-size: 0.9rem;">Python</span>
+                            <span style="color: #2563eb; font-weight: 600; font-size: 0.85rem;">95%</span>
+                        </div>
+                        <div style="width: 100%; height: 6px; background: #e2e8f0; border-radius: 4px; overflow: hidden;">
+                            <div style="width: 95%; height: 100%; background: #2563eb; border-radius: 4px;"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 0.2rem;">
+                            <span style="color: #0f172a; font-size: 0.9rem;">Java</span>
+                            <span style="color: #2563eb; font-weight: 600; font-size: 0.85rem;">85%</span>
+                        </div>
+                        <div style="width: 100%; height: 6px; background: #e2e8f0; border-radius: 4px; overflow: hidden;">
+                            <div style="width: 85%; height: 100%; background: #2563eb; border-radius: 4px;"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 0.2rem;">
+                            <span style="color: #0f172a; font-size: 0.9rem;">SQL</span>
+                            <span style="color: #2563eb; font-weight: 600; font-size: 0.85rem;">80%</span>
+                        </div>
+                        <div style="width: 100%; height: 6px; background: #e2e8f0; border-radius: 4px; overflow: hidden;">
+                            <div style="width: 80%; height: 100%; background: #2563eb; border-radius: 4px;"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 0.2rem;">
+                            <span style="color: #0f172a; font-size: 0.9rem;">JavaScript</span>
+                            <span style="color: #2563eb; font-weight: 600; font-size: 0.85rem;">75%</span>
+                        </div>
+                        <div style="width: 100%; height: 6px; background: #e2e8f0; border-radius: 4px; overflow: hidden;">
+                            <div style="width: 75%; height: 100%; background: #2563eb; border-radius: 4px;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    function showToast(msg) {
+        const existing = document.querySelector('.toast-custom');
+        if (existing) existing.remove();
+        const toast = document.createElement('div');
+        toast.className = 'toast-custom';
+        toast.innerHTML = `
+            <div style="position:fixed;bottom:30px;right:30px;background:#0f172a;color:white;padding:14px 24px;border-radius:14px;box-shadow:0 8px 40px rgba(0,0,0,0.3);display:flex;align-items:center;gap:12px;z-index:9999;max-width:450px;">
+                <span style="font-size:1.3rem;">📋</span>
+                <div><div style="font-weight:600;font-size:0.9rem;">${msg}</div></div>
+                <button onclick="this.parentElement.parentElement.remove()" style="background:none;border:none;color:rgba(255,255,255,0.4);cursor:pointer;font-size:1.2rem;padding:0 4px;">×</button>
+            </div>
+        `;
+        document.body.appendChild(toast);
+        setTimeout(() => { const el = document.querySelector('.toast-custom'); if (el) el.remove(); }, 3500);
+    }
+</script>
+
+{% endblock %}

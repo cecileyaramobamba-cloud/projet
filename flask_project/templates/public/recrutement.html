@@ -1,0 +1,47 @@
+
+{% extends "base.html" %}
+
+{% block title %}Devenir tuteur{% endblock %}
+
+{% block content %}
+
+<div style="max-width: 700px; margin: 0 auto;">
+    <div style="text-align: center; padding: 2rem 0;">
+        <h1 style="font-size: 2.5rem; color: #0f172a; font-weight: 800;">👨‍🏫 Devenir tuteur</h1>
+        <p style="color: #475569; font-size: 1.05rem; margin-top: 0.3rem;">Rejoignez notre communauté de tuteurs passionnés</p>
+    </div>
+    <div style="background: white; border-radius: 20px; padding: 2rem; box-shadow: 0 4px 24px rgba(37,99,235,0.08); border: 1px solid #dbeafe; margin-bottom: 1.5rem;">
+        <h3 style="color: #0f172a;">📝 Pourquoi devenir tuteur ?</h3>
+        <ul style="color: #475569; line-height: 2.2; list-style: none; margin-top: 0.5rem;">
+            <li>✅ <strong>Gagnez de l'argent</strong> en partageant vos connaissances</li>
+            <li>✅ <strong>Renforcez vos compétences</strong> en enseignant</li>
+            <li>✅ <strong>Créez un réseau</strong> d'étudiants et de professionnels</li>
+            <li>✅ <strong>Flexibilité</strong> : gérez vos horaires et vos tarifs</li>
+            <li>✅ <strong>Reconnu</strong> comme tuteur vérifié sur la plateforme</li>
+        </ul>
+    </div>
+    <div style="background: white; border-radius: 20px; padding: 2rem; box-shadow: 0 4px 24px rgba(37,99,235,0.08); border: 1px solid #dbeafe; margin-bottom: 1.5rem;">
+        <h3 style="color: #0f172a;">📋 Prérequis</h3>
+        <ul style="color: #475569; line-height: 2.2; list-style: none;">
+            <li>✅ Être étudiant ou diplômé</li>
+            <li>✅ Avoir un bon niveau dans une matière</li>
+            <li>✅ Aimer partager ses connaissances</li>
+            <li>✅ Être disponible pour donner des cours</li>
+        </ul>
+    </div>
+    <div style="background: white; border-radius: 20px; padding: 2rem; box-shadow: 0 4px 24px rgba(37,99,235,0.08); border: 1px solid #dbeafe;">
+        <h3 style="color: #0f172a;">🚀 Comment ça marche ?</h3>
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; text-align: center; margin-top: 1rem;">
+            <div><div style="width: 50px; height: 50px; border-radius: 50%; background: #2563eb; color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1.2rem; margin: 0 auto;">1</div><div style="font-weight: 600; margin-top: 0.5rem;">Inscrivez-vous</div><div style="color: #475569; font-size: 0.85rem;">Créez votre compte tuteur</div></div>
+            <div><div style="width: 50px; height: 50px; border-radius: 50%; background: #2563eb; color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1.2rem; margin: 0 auto;">2</div><div style="font-weight: 600; margin-top: 0.5rem;">Validez votre niveau</div><div style="color: #475569; font-size: 0.85rem;">Passez le test de vérification</div></div>
+            <div><div style="width: 50px; height: 50px; border-radius: 50%; background: #2563eb; color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1.2rem; margin: 0 auto;">3</div><div style="font-weight: 600; margin-top: 0.5rem;">Commencez à enseigner</div><div style="color: #475569; font-size: 0.85rem;">Gérez vos cours et vos élèves</div></div>
+        </div>
+        <div style="text-align: center; margin-top: 1.5rem;">
+            <a href="{{ url_for('main.register') }}" style="padding: 0.8rem 2.5rem; background: #2563eb; color: #fff; border-radius: 60px; font-weight: 600; text-decoration: none; display: inline-block; transition: 0.3s ease;">
+                <i class="fas fa-user-plus"></i> Devenir tuteur maintenant
+            </a>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

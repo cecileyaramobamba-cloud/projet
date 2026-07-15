@@ -1,0 +1,37 @@
+
+{% extends "admin/base_admin.html" %}
+
+{% block title %}Paramètres - Admin{% endblock %}
+
+{% block admin_content %}
+
+<div style="margin-bottom: 1.5rem;">
+    <h1 style="font-size: 2rem; color: #0f172a; font-weight: 800;">⚙️ Paramètres de la plateforme</h1>
+    <p style="color: #475569; font-size: 1rem;">Gérez les réglages généraux d'EduSen.</p>
+</div>
+
+<div style="background: white; border-radius: 16px; padding: 2rem; box-shadow: 0 4px 24px rgba(37,99,235,0.08); border: 1px solid #dbeafe; max-width: 700px;">
+    <form method="POST" action="{{ url_for('main.parametres_admin') }}">
+        <div style="margin-bottom: 1.2rem;">
+            <label style="display: block; font-weight: 600; color: #0f172a; margin-bottom: 0.4rem; font-size: 0.9rem;">Nom de la plateforme</label>
+            <input type="text" name="nom_plateforme" value="EduSen" style="width: 100%; padding: 0.7rem 1rem; border-radius: 10px; border: 1px solid #dbeafe; font-size: 0.95rem; outline: none; box-sizing: border-box;">
+        </div>
+        <div style="margin-bottom: 1.2rem;">
+            <label style="display: block; font-weight: 600; color: #0f172a; margin-bottom: 0.4rem; font-size: 0.9rem;">Email de contact</label>
+            <input type="email" name="email_contact" value="contact@edusen.sn" style="width: 100%; padding: 0.7rem 1rem; border-radius: 10px; border: 1px solid #dbeafe; font-size: 0.95rem; outline: none; box-sizing: border-box;">
+        </div>
+        <div style="margin-bottom: 1.5rem; max-width: 260px;">
+            <label style="display: block; font-weight: 600; color: #0f172a; margin-bottom: 0.4rem; font-size: 0.9rem;">Commission plateforme (%)</label>
+            <input type="number" name="commission" value="10" min="0" max="100" style="width: 100%; padding: 0.7rem 1rem; border-radius: 10px; border: 1px solid #dbeafe; font-size: 0.95rem; outline: none; box-sizing: border-box;">
+        </div>
+        <div style="margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.6rem;">
+            <input type="checkbox" id="maintenance" name="maintenance" style="width: 18px; height: 18px;">
+            <label for="maintenance" style="font-weight: 600; color: #0f172a; font-size: 0.9rem;">Activer le mode maintenance</label>
+        </div>
+        <button type="submit" style="padding: 0.7rem 2rem; background: #2563eb; color: #fff; border: none; border-radius: 60px; font-weight: 600; cursor: pointer;">
+            <i class="fas fa-save"></i> Enregistrer les paramètres
+        </button>
+    </form>
+</div>
+
+{% endblock %}

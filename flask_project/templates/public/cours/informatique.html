@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+
+{% block title %}Informatique - Exemple de cours{% endblock %}
+
+{% block content %}
+
+<div style="max-width: 850px; margin: 0 auto; padding-bottom: 2rem;">
+
+    <a href="{{ url_for('main.matieres') }}" style="display:inline-flex; align-items:center; gap:0.4rem; color:#2563eb; text-decoration:none; font-weight:600; font-size:0.9rem; margin:1.5rem 0 1rem;">
+        <i class="fas fa-arrow-left"></i> Retour aux matières
+    </a>
+
+    <img src="https://placehold.co/850x260/1d4ed8/ffffff?text=Informatique" alt="Informatique" style="width:100%; border-radius:16px; box-shadow:0 4px 24px rgba(37,99,235,0.08);">
+
+    <div style="text-align:center; padding:1.5rem 0;">
+        <span style="background:#eff6ff; color:#2563eb; padding:0.25rem 0.9rem; border-radius:40px; font-size:0.8rem; font-weight:700;">Licence 1 • Algorithmique</span>
+        <h1 style="font-size:2.2rem; color:#0f172a; font-weight:800; margin-top:0.8rem;">💻 La complexité algorithmique</h1>
+        <p style="color:#475569; font-size:1.05rem; margin-top:0.3rem;">Exemple de cours donné par un tuteur EduSen en Informatique</p>
+    </div>
+
+    <div style="background:white; border-radius:20px; padding:2rem; box-shadow:0 4px 24px rgba(37,99,235,0.08); border:1px solid #dbeafe; margin-bottom:1.5rem;">
+        <h3 style="color:#0f172a;">🎯 Objectifs du cours</h3>
+        <ul style="color:#475569; line-height:2; list-style:none; margin-top:0.5rem;">
+            <li>✅ Comprendre ce qu'est la complexité d'un algorithme</li>
+            <li>✅ Savoir utiliser la notation grand O</li>
+            <li>✅ Comparer deux algorithmes résolvant le même problème</li>
+            <li>✅ Analyser un algorithme de recherche simple</li>
+        </ul>
+    </div>
+
+    <div style="background:white; border-radius:20px; padding:2rem; box-shadow:0 4px 24px rgba(37,99,235,0.08); border:1px solid #dbeafe; margin-bottom:1.5rem;">
+        <h3 style="color:#0f172a;">1. Pourquoi mesurer la complexité ?</h3>
+        <p style="color:#475569; line-height:1.8; margin-top:0.5rem;">
+            Un algorithme est une suite finie d'instructions permettant de résoudre un problème. Plusieurs algorithmes peuvent résoudre le même problème, mais certains sont plus rapides ou consomment moins de mémoire que d'autres. La <strong>complexité algorithmique</strong> permet d'estimer le temps d'exécution (complexité temporelle) ou la mémoire utilisée (complexité spatiale) en fonction de la taille <em>n</em> des données en entrée.
+        </p>
+
+        <h3 style="color:#0f172a; margin-top:1.5rem;">2. La notation grand O</h3>
+        <p style="color:#475569; line-height:1.8; margin-top:0.5rem;">
+            On exprime la complexité par un ordre de grandeur, noté O(...), qui décrit comment le temps d'exécution évolue quand <em>n</em> augmente :
+        </p>
+        <div style="overflow-x:auto;">
+        <table style="width:100%; border-collapse:collapse; margin-top:1rem; font-size:0.9rem;">
+            <thead>
+                <tr style="background:#eff6ff; color:#0f172a;">
+                    <th style="padding:0.6rem; text-align:left; border:1px solid #dbeafe;">Notation</th>
+                    <th style="padding:0.6rem; text-align:left; border:1px solid #dbeafe;">Nom</th>
+                    <th style="padding:0.6rem; text-align:left; border:1px solid #dbeafe;">Exemple</th>
+                </tr>
+            </thead>
+            <tbody style="color:#475569;">
+                <tr><td style="padding:0.6rem; border:1px solid #dbeafe;">O(1)</td><td style="padding:0.6rem; border:1px solid #dbeafe;">Constante</td><td style="padding:0.6rem; border:1px solid #dbeafe;">Accéder à un élément d'un tableau par son index</td></tr>
+                <tr><td style="padding:0.6rem; border:1px solid #dbeafe;">O(log n)</td><td style="padding:0.6rem; border:1px solid #dbeafe;">Logarithmique</td><td style="padding:0.6rem; border:1px solid #dbeafe;">Recherche dichotomique (binaire)</td></tr>
+                <tr><td style="padding:0.6rem; border:1px solid #dbeafe;">O(n)</td><td style="padding:0.6rem; border:1px solid #dbeafe;">Linéaire</td><td style="padding:0.6rem; border:1px solid #dbeafe;">Recherche séquentielle</td></tr>
+                <tr><td style="padding:0.6rem; border:1px solid #dbeafe;">O(n log n)</td><td style="padding:0.6rem; border:1px solid #dbeafe;">Quasi-linéaire</td><td style="padding:0.6rem; border:1px solid #dbeafe;">Tri fusion, tri rapide</td></tr>
+                <tr><td style="padding:0.6rem; border:1px solid #dbeafe;">O(n²)</td><td style="padding:0.6rem; border:1px solid #dbeafe;">Quadratique</td><td style="padding:0.6rem; border:1px solid #dbeafe;">Tri à bulles, boucles imbriquées</td></tr>
+            </tbody>
+        </table>
+        </div>
+
+        <h3 style="color:#0f172a; margin-top:1.5rem;">3. Étude de cas : recherche séquentielle vs recherche dichotomique</h3>
+        <p style="color:#475569; line-height:1.8; margin-top:0.5rem;">
+            La <strong>recherche séquentielle</strong> parcourt chaque élément un par un jusqu'à trouver la valeur recherchée :
+        </p>
+        <pre style="background:#0f172a; color:#e2e8f0; padding:1rem 1.2rem; border-radius:12px; overflow-x:auto; font-size:0.85rem; line-height:1.6;"><code>fonction recherche_sequentielle(tableau, cible):
+    pour i de 0 à longueur(tableau) - 1:
+        si tableau[i] == cible:
+            retourner i
+    retourner -1
+# Complexité : O(n) — dans le pire cas, on parcourt tout le tableau</code></pre>
+
+        <p style="color:#475569; line-height:1.8; margin-top:1rem;">
+            La <strong>recherche dichotomique</strong> exige un tableau trié : elle divise l'intervalle de recherche par deux à chaque étape.
+        </p>
+        <pre style="background:#0f172a; color:#e2e8f0; padding:1rem 1.2rem; border-radius:12px; overflow-x:auto; font-size:0.85rem; line-height:1.6;"><code>fonction recherche_dichotomique(tableau, cible):
+    debut, fin = 0, longueur(tableau) - 1
+    tant que debut &lt;= fin:
+        milieu = (debut + fin) // 2
+        si tableau[milieu] == cible:
+            retourner milieu
+        sinon si tableau[milieu] &lt; cible:
+            debut = milieu + 1
+        sinon:
+            fin = milieu - 1
+    retourner -1
+# Complexité : O(log n) — l'intervalle est divisé par 2 à chaque itération</code></pre>
+
+        <p style="color:#475569; line-height:1.8; background:#f8fafc; border-left:4px solid #2563eb; padding:1rem 1.2rem; border-radius:8px; margin-top:1rem;">
+            <strong>Exemple concret :</strong> pour un tableau trié de 1 000 000 d'éléments, la recherche séquentielle peut nécessiter jusqu'à 1 000 000 comparaisons, alors que la recherche dichotomique n'en nécessite que <strong>log₂(1 000 000) ≈ 20</strong> !
+        </p>
+    </div>
+
+    <div style="background:white; border-radius:20px; padding:2rem; box-shadow:0 4px 24px rgba(37,99,235,0.08); border:1px solid #dbeafe;">
+        <h3 style="color:#0f172a;">📝 Exercice d'application</h3>
+        <p style="color:#475569; line-height:1.8; margin-top:0.5rem;">
+            Un algorithme compare chaque élément d'un tableau de taille <em>n</em> avec tous les autres éléments du tableau (double boucle imbriquée).
+        </p>
+        <ol style="color:#475569; line-height:2;">
+            <li>Quelle est la complexité de cet algorithme ?</li>
+            <li>Si n = 1 000, combien de comparaisons seront effectuées au maximum ?</li>
+        </ol>
+        <details style="margin-top:1rem;">
+            <summary style="cursor:pointer; color:#2563eb; font-weight:600;">Voir la correction</summary>
+            <p style="color:#475569; line-height:1.8; margin-top:0.8rem;">
+                1) Une boucle imbriquée dans une autre boucle donne une complexité <strong>O(n²)</strong>.<br>
+                2) Pour n = 1 000, on obtient environ 1 000 × 1 000 = <strong>1 000 000 comparaisons</strong>.
+            </p>
+        </details>
+    </div>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,38 @@
+
+{% extends "admin/base_admin.html" %}
+
+{% block title %}Ajouter un tuteur - Admin{% endblock %}
+
+{% block admin_content %}
+
+<div style="margin-bottom: 1.5rem;">
+    <h1 style="font-size: 2rem; color: #0f172a; font-weight: 800;">➕ Ajouter un tuteur</h1>
+    <p style="color: #475569; font-size: 1rem;">Créez une fiche pour un nouveau tuteur de la plateforme.</p>
+</div>
+
+<div style="background: white; border-radius: 16px; padding: 2rem; box-shadow: 0 4px 24px rgba(37,99,235,0.08); border: 1px solid #dbeafe; max-width: 600px;">
+    <form method="POST" action="{{ url_for('main.ajouter_tuteur_admin') }}">
+        <div style="margin-bottom: 1.2rem;">
+            <label style="display: block; font-weight: 600; color: #0f172a; margin-bottom: 0.4rem; font-size: 0.9rem;">Nom complet</label>
+            <input type="text" name="nom" required placeholder="Ex : Awa Ndiaye" style="width: 100%; padding: 0.7rem 1rem; border-radius: 10px; border: 1px solid #dbeafe; font-size: 0.95rem; outline: none; box-sizing: border-box;">
+        </div>
+        <div style="margin-bottom: 1.2rem;">
+            <label style="display: block; font-weight: 600; color: #0f172a; margin-bottom: 0.4rem; font-size: 0.9rem;">Email</label>
+            <input type="email" name="email" required placeholder="Ex : awa.ndiaye@email.com" style="width: 100%; padding: 0.7rem 1rem; border-radius: 10px; border: 1px solid #dbeafe; font-size: 0.95rem; outline: none; box-sizing: border-box;">
+        </div>
+        <div style="margin-bottom: 1.5rem;">
+            <label style="display: block; font-weight: 600; color: #0f172a; margin-bottom: 0.4rem; font-size: 0.9rem;">Matière enseignée</label>
+            <input type="text" name="matiere" required placeholder="Ex : Mathématiques" style="width: 100%; padding: 0.7rem 1rem; border-radius: 10px; border: 1px solid #dbeafe; font-size: 0.95rem; outline: none; box-sizing: border-box;">
+        </div>
+        <div style="display: flex; gap: 1rem;">
+            <button type="submit" style="padding: 0.7rem 2rem; background: #2563eb; color: #fff; border: none; border-radius: 60px; font-weight: 600; cursor: pointer;">
+                <i class="fas fa-check"></i> Ajouter le tuteur
+            </button>
+            <a href="{{ url_for('main.tuteurs_admin') }}" style="padding: 0.7rem 2rem; background: transparent; color: #475569; border: 1px solid #dbeafe; border-radius: 60px; text-decoration: none; font-weight: 600;">
+                Annuler
+            </a>
+        </div>
+    </form>
+</div>
+
+{% endblock %}

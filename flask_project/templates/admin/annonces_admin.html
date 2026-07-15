@@ -1,0 +1,58 @@
+
+{% extends "admin/base_admin.html" %}
+
+{% block title %}Annonces - Admin{% endblock %}
+
+{% block admin_content %}
+
+<div style="margin-bottom: 1.5rem;">
+    <h1 style="font-size: 2rem; color: #0f172a; font-weight: 800;">📢 Annonces</h1>
+    <p style="color: #475569; font-size: 1rem;">Publiez une annonce visible par les utilisateurs de la plateforme.</p>
+</div>
+
+<div style="background: white; border-radius: 16px; padding: 2rem; box-shadow: 0 4px 24px rgba(37,99,235,0.08); border: 1px solid #dbeafe; margin-bottom: 2rem;">
+    <h3 style="color: #0f172a; font-size: 1.1rem; margin-bottom: 1rem;">✏️ Nouvelle annonce</h3>
+    <form method="POST" action="{{ url_for('main.annonces_admin') }}">
+        <div style="margin-bottom: 1.2rem;">
+            <label style="display: block; font-weight: 600; color: #0f172a; margin-bottom: 0.4rem; font-size: 0.9rem;">Titre</label>
+            <input type="text" name="titre" required placeholder="Ex : Maintenance prévue" style="width: 100%; padding: 0.7rem 1rem; border-radius: 10px; border: 1px solid #dbeafe; font-size: 0.95rem; outline: none; box-sizing: border-box;">
+        </div>
+        <div style="margin-bottom: 1.2rem;">
+            <label style="display: block; font-weight: 600; color: #0f172a; margin-bottom: 0.4rem; font-size: 0.9rem;">Contenu</label>
+            <textarea name="contenu" rows="4" required placeholder="Détails de l'annonce" style="width: 100%; padding: 0.7rem 1rem; border-radius: 10px; border: 1px solid #dbeafe; font-size: 0.95rem; outline: none; box-sizing: border-box; resize: vertical;"></textarea>
+        </div>
+        <div style="margin-bottom: 1.5rem; max-width: 260px;">
+            <label style="display: block; font-weight: 600; color: #0f172a; margin-bottom: 0.4rem; font-size: 0.9rem;">Public visé</label>
+            <select name="public" style="width: 100%; padding: 0.7rem 1rem; border-radius: 10px; border: 1px solid #dbeafe; font-size: 0.95rem; outline: none; background: white;">
+                <option value="Tous">Tous les utilisateurs</option>
+                <option value="Tuteurs">Tuteurs uniquement</option>
+                <option value="Étudiants">Étudiants uniquement</option>
+            </select>
+        </div>
+        <button type="submit" style="padding: 0.7rem 2rem; background: #d97706; color: #fff; border: none; border-radius: 60px; font-weight: 600; cursor: pointer;">
+            <i class="fas fa-bullhorn"></i> Publier l'annonce
+        </button>
+    </form>
+</div>
+
+<div style="background: white; border-radius: 16px; padding: 1.5rem; box-shadow: 0 4px 24px rgba(37,99,235,0.08); border: 1px solid #dbeafe;">
+    <h3 style="color: #0f172a; font-size: 1.1rem; margin-bottom: 1rem;">📋 Annonces publiées</h3>
+    <div style="display: flex; flex-direction: column; gap: 1rem;">
+        {% for annonce in annonces %}
+        <div style="background: #f8fafc; border-radius: 12px; padding: 1rem 1.2rem; border-left: 3px solid #d97706;">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem;">
+                <strong style="color: #0f172a; font-size: 1rem;">{{ annonce.titre }}</strong>
+                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                    <span style="background: #eff6ff; color: #2563eb; padding: 0.1rem 0.6rem; border-radius: 40px; font-size: 0.7rem; font-weight: 600;">{{ annonce.public }}</span>
+                    <span style="color: #475569; font-size: 0.75rem;">{{ annonce.date_publication.strftime('%d/%m/%Y %H:%M') }}</span>
+                </div>
+            </div>
+            <p style="color: #475569; font-size: 0.9rem; margin-top: 0.4rem;">{{ annonce.contenu }}</p>
+        </div>
+        {% else %}
+        <p style="color: #475569;">Aucune annonce publiée pour le moment.</p>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}

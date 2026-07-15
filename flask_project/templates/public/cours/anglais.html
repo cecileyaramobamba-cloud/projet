@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+
+{% block title %}Anglais - Exemple de cours{% endblock %}
+
+{% block content %}
+
+<div style="max-width: 850px; margin: 0 auto; padding-bottom: 2rem;">
+
+    <a href="{{ url_for('main.matieres') }}" style="display:inline-flex; align-items:center; gap:0.4rem; color:#2563eb; text-decoration:none; font-weight:600; font-size:0.9rem; margin:1.5rem 0 1rem;">
+        <i class="fas fa-arrow-left"></i> Retour aux matières
+    </a>
+
+    <img src="https://placehold.co/850x260/1e40af/ffffff?text=English" alt="Anglais" style="width:100%; border-radius:16px; box-shadow:0 4px 24px rgba(37,99,235,0.08);">
+
+    <div style="text-align:center; padding:1.5rem 0;">
+        <span style="background:#eff6ff; color:#2563eb; padding:0.25rem 0.9rem; border-radius:40px; font-size:0.8rem; font-weight:700;">Intermediate • Grammar</span>
+        <h1 style="font-size:2.2rem; color:#0f172a; font-weight:800; margin-top:0.8rem;">🇬🇧 Present Perfect vs Past Simple</h1>
+        <p style="color:#475569; font-size:1.05rem; margin-top:0.3rem;">Exemple de cours donné par un tuteur EduSen en Anglais</p>
+    </div>
+
+    <div style="background:white; border-radius:20px; padding:2rem; box-shadow:0 4px 24px rgba(37,99,235,0.08); border:1px solid #dbeafe; margin-bottom:1.5rem;">
+        <h3 style="color:#0f172a;">🎯 Objectifs du cours</h3>
+        <ul style="color:#475569; line-height:2; list-style:none; margin-top:0.5rem;">
+            <li>✅ Comprendre la différence entre Present Perfect et Past Simple</li>
+            <li>✅ Reconnaître les mots-clés associés à chaque temps</li>
+            <li>✅ Construire correctement des phrases aux deux temps</li>
+            <li>✅ S'entraîner à travers des exercices pratiques</li>
+        </ul>
+    </div>
+
+    <div style="background:white; border-radius:20px; padding:2rem; box-shadow:0 4px 24px rgba(37,99,235,0.08); border:1px solid #dbeafe; margin-bottom:1.5rem;">
+        <h3 style="color:#0f172a;">1. Past Simple : une action terminée à un moment précis</h3>
+        <p style="color:#475569; line-height:1.8; margin-top:0.5rem;">
+            On utilise le <strong>Past Simple</strong> pour parler d'une action terminée dans le passé, à un moment précis et daté.
+        </p>
+        <div style="background:#eff6ff; border-radius:12px; padding:1rem 1.5rem; margin:1rem 0; color:#0f172a;">
+            <strong>Structure :</strong> sujet + verbe au prétérit (+ed ou forme irrégulière)<br>
+            <em>I visited Dakar last year. / She went to school yesterday.</em>
+        </div>
+        <p style="color:#475569; line-height:1.8;">
+            Mots-clés associés : <em>yesterday, last week, last year, in 2020, ago, when I was young.</em>
+        </p>
+
+        <h3 style="color:#0f172a; margin-top:1.5rem;">2. Present Perfect : un lien avec le présent</h3>
+        <p style="color:#475569; line-height:1.8; margin-top:0.5rem;">
+            On utilise le <strong>Present Perfect</strong> pour parler d'une action passée dont le moment précis n'est pas précisé, ou qui a une conséquence dans le présent.
+        </p>
+        <div style="background:#eff6ff; border-radius:12px; padding:1rem 1.5rem; margin:1rem 0; color:#0f172a;">
+            <strong>Structure :</strong> sujet + have/has + participe passé<br>
+            <em>I have visited Dakar. / She has already finished her homework.</em>
+        </div>
+        <p style="color:#475569; line-height:1.8;">
+            Mots-clés associés : <em>ever, never, already, yet, just, since, for, so far.</em>
+        </p>
+
+        <h3 style="color:#0f172a; margin-top:1.5rem;">3. Tableau comparatif</h3>
+        <div style="overflow-x:auto;">
+        <table style="width:100%; border-collapse:collapse; margin-top:0.8rem; font-size:0.9rem;">
+            <thead>
+                <tr style="background:#eff6ff; color:#0f172a;">
+                    <th style="padding:0.6rem; text-align:left; border:1px solid #dbeafe;">Past Simple</th>
+                    <th style="padding:0.6rem; text-align:left; border:1px solid #dbeafe;">Present Perfect</th>
+                </tr>
+            </thead>
+            <tbody style="color:#475569;">
+                <tr><td style="padding:0.6rem; border:1px solid #dbeafe;">I <strong>ate</strong> rice yesterday.</td><td style="padding:0.6rem; border:1px solid #dbeafe;">I <strong>have</strong> already <strong>eaten</strong>.</td></tr>
+                <tr><td style="padding:0.6rem; border:1px solid #dbeafe;">She <strong>lived</strong> in Dakar in 2015.</td><td style="padding:0.6rem; border:1px solid #dbeafe;">She <strong>has lived</strong> in Dakar since 2015.</td></tr>
+                <tr><td style="padding:0.6rem; border:1px solid #dbeafe;">They <strong>went</strong> to Paris last summer.</td><td style="padding:0.6rem; border:1px solid #dbeafe;">They <strong>have</strong> never <strong>been</strong> to Paris.</td></tr>
+            </tbody>
+        </table>
+        </div>
+    </div>
+
+    <div style="background:white; border-radius:20px; padding:2rem; box-shadow:0 4px 24px rgba(37,99,235,0.08); border:1px solid #dbeafe;">
+        <h3 style="color:#0f172a;">📝 Practice exercise</h3>
+        <p style="color:#475569; line-height:1.8; margin-top:0.5rem;">Complétez avec le temps qui convient (Past Simple ou Present Perfect) :</p>
+        <ol style="color:#475569; line-height:2;">
+            <li>She ______ (visit) Senegal three times.</li>
+            <li>I ______ (see) that movie last night.</li>
+            <li>We ______ (not finish) the project yet.</li>
+            <li>He ______ (move) to Dakar in 2019 and he still lives there.</li>
+        </ol>
+        <details style="margin-top:1rem;">
+            <summary style="cursor:pointer; color:#2563eb; font-weight:600;">Voir les réponses</summary>
+            <p style="color:#475569; line-height:1.8; margin-top:0.8rem;">
+                1. has visited &nbsp;|&nbsp; 2. saw &nbsp;|&nbsp; 3. haven't finished &nbsp;|&nbsp; 4. moved (avec « has lived » aussi acceptable pour la suite de la phrase)
+            </p>
+        </details>
+    </div>
+
+</div>
+
+{% endblock %}

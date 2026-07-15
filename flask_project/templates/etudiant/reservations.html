@@ -1,0 +1,262 @@
+
+{% extends "base.html" %}
+
+{% block title %}Mes Réservations - EduSen{% endblock %}
+
+{% block content %}
+
+<style>
+    .reservation-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 32px rgba(37,99,235,0.1);
+    }
+    .filter-btn {
+        padding: 0.3rem 1rem;
+        border-radius: 40px;
+        border: 1px solid #dbeafe;
+        background: transparent;
+        color: #475569;
+        cursor: pointer;
+        transition: 0.3s ease;
+        font-size: 0.85rem;
+        font-weight: 500;
+    }
+    .filter-btn:hover {
+        background: #eff6ff;
+        color: #2563eb;
+    }
+    .filter-btn.active {
+        background: #2563eb;
+        color: #fff;
+        border-color: #2563eb;
+    }
+    @keyframes fadeInUp {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    .reservation-card {
+        animation: fadeInUp 0.4s ease forwards;
+    }
+    .reservation-card[data-status="termine"] {
+        opacity: 0.8;
+    }
+    .reservation-card[data-status="annule"] {
+        opacity: 0.6;
+    }
+</style>
+
+<div style="max-width: 1400px; margin: 0 auto; padding: 1rem 0;">
+
+    <!-- ===== TOPBAR ===== -->
+    <div style="background: white; border-radius: 16px; padding: 0.8rem 1.5rem; box-shadow: 0 4px 24px rgba(37,99,235,0.08); border: 1px solid #dbeafe; margin-bottom: 1.5rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+        <div style="display: flex; align-items: center; gap: 1rem; flex: 1; min-width: 200px;">
+            <a href="/" style="font-size: 1.3rem; font-weight: 800; color: #0f172a; text-decoration: none;">
+                Edu<span style="color: #2563eb;">Sen</span>
+            </a>
+            <span style="background: #dbeafe; padding: 0.15rem 0.8rem; border-radius: 40px; font-size: 0.7rem; font-weight: 600; color: #2563eb;">Étudiant</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;">
+            <div style="display: flex; align-items: center; background: #f8fafc; border-radius: 60px; padding: 0.2rem 0.2rem 0.2rem 1rem; border: 1px solid #e2e8f0; max-width: 250px;">
+                <i class="fas fa-search" style="color: #94a3b8; font-size: 0.8rem;"></i>
+                <input type="text" placeholder="Rechercher un tuteur..." style="border: none; padding: 0.4rem 0.6rem; flex: 1; background: transparent; font-size: 0.85rem; outline: none; min-width: 80px;">
+            </div>
+            <button onclick="showToast('🔔 Aucune notification')" style="background: transparent; border: none; font-size: 1.1rem; cursor: pointer; position: relative; color: #475569;">
+                <i class="fas fa-bell"></i>
+                <span style="position: absolute; top: -5px; right: -8px; background: #dc2626; color: #fff; font-size: 0.5rem; padding: 0.1rem 0.4rem; border-radius: 50%;">3</span>
+            </button>
+            <button onclick="window.location.href='/etudiant/messages'" style="background: transparent; border: none; font-size: 1.1rem; cursor: pointer; position: relative; color: #475569;">
+                <i class="fas fa-envelope"></i>
+                <span style="position: absolute; top: -5px; right: -8px; background: #2563eb; color: #fff; font-size: 0.5rem; padding: 0.1rem 0.4rem; border-radius: 50%;">2</span>
+            </button>
+            <div style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;" onclick="window.location.href='/etudiant/dashboard'">
+                <div style="width: 32px; height: 32px; border-radius: 50%; background: #2563eb; color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.8rem;">SK</div>
+                <span style="font-weight: 600; color: #0f172a; font-size: 0.9rem;">Soukeyna</span>
+                <i class="fas fa-chevron-down" style="color: #94a3b8; font-size: 0.6rem;"></i>
+            </div>
+        </div>
+    </div>
+
+    <div style="display: flex; gap: 2rem;">
+
+        <!-- ===== SIDEBAR ===== -->
+        <div style="flex: 0 0 220px; min-width: 180px;">
+            <div style="background: white; border-radius: 16px; padding: 1.5rem; box-shadow: 0 4px 24px rgba(37,99,235,0.08); border: 1px solid #dbeafe; position: sticky; top: 90px;">
+                <div style="font-weight: 700; font-size: 0.8rem; text-transform: uppercase; color: #94a3b8; margin-bottom: 1rem; letter-spacing: 0.5px;">📋 Menu</div>
+                <nav style="display: flex; flex-direction: column; gap: 0.2rem;">
+                    <a href="/etudiant/dashboard" style="padding: 0.5rem 0.8rem; border-radius: 8px; color: #475569; text-decoration: none; display: flex; align-items: center; gap: 0.8rem; font-size: 0.9rem; transition: 0.3s ease;">
+                        <i class="fas fa-home" style="width: 20px; text-align: center;"></i> Tableau de bord
+                    </a>
+                    <a href="/etudiant/cours" style="padding: 0.5rem 0.8rem; border-radius: 8px; color: #475569; text-decoration: none; display: flex; align-items: center; gap: 0.8rem; font-size: 0.9rem; transition: 0.3s ease;">
+                        <i class="fas fa-book" style="width: 20px; text-align: center;"></i> Mes cours
+                    </a>
+                    <a href="/accueil/liste_tuteurs" style="padding: 0.5rem 0.8rem; border-radius: 8px; color: #475569; text-decoration: none; display: flex; align-items: center; gap: 0.8rem; font-size: 0.9rem; transition: 0.3s ease;">
+                        <i class="fas fa-search" style="width: 20px; text-align: center;"></i> Trouver un tuteur
+                    </a>
+                    <a href="/etudiant/reservations" style="padding: 0.5rem 0.8rem; border-radius: 8px; background: #eff6ff; color: #2563eb; text-decoration: none; display: flex; align-items: center; gap: 0.8rem; font-size: 0.9rem; font-weight: 600;">
+                        <i class="fas fa-calendar-check" style="width: 20px; text-align: center;"></i> Réservations
+                    </a>
+                    <a href="/etudiant/messages" style="padding: 0.5rem 0.8rem; border-radius: 8px; color: #475569; text-decoration: none; display: flex; align-items: center; gap: 0.8rem; font-size: 0.9rem; transition: 0.3s ease;">
+                        <i class="fas fa-envelope" style="width: 20px; text-align: center;"></i> Messages
+                    </a>
+                    <a href="/etudiant/devoirs" style="padding: 0.5rem 0.8rem; border-radius: 8px; color: #475569; text-decoration: none; display: flex; align-items: center; gap: 0.8rem; font-size: 0.9rem; transition: 0.3s ease;">
+                        <i class="fas fa-file-alt" style="width: 20px; text-align: center;"></i> Devoirs
+                    </a>
+                    <a href="/etudiant/examens" style="padding: 0.5rem 0.8rem; border-radius: 8px; color: #475569; text-decoration: none; display: flex; align-items: center; gap: 0.8rem; font-size: 0.9rem; transition: 0.3s ease;">
+                        <i class="fas fa-pencil-alt" style="width: 20px; text-align: center;"></i> Examens
+                    </a>
+                    <a href="/etudiant/certificats" style="padding: 0.5rem 0.8rem; border-radius: 8px; color: #475569; text-decoration: none; display: flex; align-items: center; gap: 0.8rem; font-size: 0.9rem; transition: 0.3s ease;">
+                        <i class="fas fa-award" style="width: 20px; text-align: center;"></i> Certificats
+                    </a>
+                    <div style="border-top: 1px solid #dbeafe; margin-top: 0.3rem; padding-top: 0.3rem;">
+                        <a href="/auth/deconnexion" style="padding: 0.5rem 0.8rem; border-radius: 8px; color: #dc2626; text-decoration: none; display: flex; align-items: center; gap: 0.8rem; font-size: 0.9rem; transition: 0.3s ease;">
+                            <i class="fas fa-sign-out-alt" style="width: 20px; text-align: center;"></i> Déconnexion
+                        </a>
+                    </div>
+                </nav>
+            </div>
+        </div>
+
+        <!-- ===== CONTENU PRINCIPAL ===== -->
+        <div style="flex: 1; min-width: 0;">
+
+            <!-- ===== TITRE ===== -->
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
+                <div>
+                    <h1 style="font-size: 1.8rem; color: #0f172a; font-weight: 800;">📅 Mes réservations</h1>
+                    <p style="color: #475569; font-size: 0.95rem;">Gérez toutes vos réservations de cours.</p>
+                </div>
+                <button onclick="window.location.href='/accueil/liste_tuteurs'" style="padding: 0.7rem 1.5rem; background: #2563eb; color: #fff; border: none; border-radius: 60px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 0.5rem;">
+                    <i class="fas fa-plus"></i> Nouvelle réservation
+                </button>
+            </div>
+
+            <!-- ===== RECHERCHE ===== -->
+            <div style="background: white; border-radius: 16px; padding: 1rem; box-shadow: 0 4px 24px rgba(37,99,235,0.08); border: 1px solid #dbeafe; margin-bottom: 1.5rem; display: flex; flex-wrap: wrap; gap: 1rem; align-items: center;">
+                <div style="flex: 1; min-width: 200px; display: flex; align-items: center; background: #f8fafc; border-radius: 60px; padding: 0 1rem; border: 1px solid #e2e8f0;">
+                    <i class="fas fa-search" style="color: #94a3b8;"></i>
+                    <input type="text" placeholder="Rechercher une réservation..." style="border: none; padding: 0.6rem 0.8rem; flex: 1; background: transparent; font-size: 0.9rem; outline: none;">
+                </div>
+                <button onclick="showToast('🔍 Recherche')" style="padding: 0.5rem 1.5rem; background: #2563eb; color: #fff; border: none; border-radius: 60px; font-weight: 600; cursor: pointer; font-size: 0.9rem;">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
+
+            <!-- ===== FILTRES ===== -->
+            <div style="display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1.5rem;">
+                <button class="filter-btn active" onclick="filtrerReservations('tous', this)">📌 Tous</button>
+                <button class="filter-btn" onclick="filtrerReservations('avenir', this)">📅 À venir</button>
+                <button class="filter-btn" onclick="filtrerReservations('termine', this)">✅ Terminées</button>
+                <button class="filter-btn" onclick="filtrerReservations('annule', this)">❌ Annulées</button>
+            </div>
+
+            {% set statut_slugs = {"Confirmée": "confirme", "En attente": "attente", "Terminée": "termine", "Annulée": "annule"} %}
+            {% set statut_badges = {
+                "Confirmée": ("#d1fae5", "#065f46", "🟢 Confirmée"),
+                "En attente": ("#fef3c7", "#92400e", "🟡 En attente"),
+                "Terminée": ("#d1fae5", "#065f46", "✅ Terminée"),
+                "Annulée": ("#fecaca", "#991b1b", "❌ Annulée")
+            } %}
+            {% for reservation in reservations %}
+            {% set bg, fg, label = statut_badges[reservation.statut] %}
+            <div class="reservation-card" data-status="{{ statut_slugs[reservation.statut] }}" style="background: white; border-radius: 16px; padding: 1.2rem 1.5rem; box-shadow: 0 4px 24px rgba(37,99,235,0.08); border: 1px solid #dbeafe; margin-bottom: 1rem; transition: 0.3s ease;">
+                <div style="display: flex; justify-content: space-between; align-items: start; flex-wrap: wrap; gap: 0.5rem;">
+                    <div>
+                        <div style="display: flex; align-items: center; gap: 0.8rem;">
+                            <div style="width: 44px; height: 44px; border-radius: 50%; background: #2563eb; color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1rem;">{{ reservation.tuteur.nom.split(" ")|map("first")|join("")|upper }}</div>
+                            <div>
+                                <div style="font-weight: 700; font-size: 1.05rem; color: #0f172a;">👨‍🏫 {{ reservation.tuteur.nom }}</div>
+                            </div>
+                        </div>
+                        <div style="margin-top: 0.3rem; color: #475569; font-size: 0.95rem;">
+                            <strong>{{ reservation.matiere }}</strong>
+                        </div>
+                        <div style="display: flex; flex-wrap: wrap; gap: 1rem; margin-top: 0.3rem; color: #475569; font-size: 0.85rem;">
+                            <span>📅 {{ reservation.date_seance.strftime('%d/%m/%Y') }}</span>
+                            <span>🕒 {{ reservation.heure_debut }} - {{ reservation.heure_fin }}</span>
+                            <span>📍 {{ reservation.lieu }}</span>
+                        </div>
+                    </div>
+                    <div style="text-align: right;">
+                        <span class="js-badge" data-bg="{{ bg }}" data-fg="{{ fg }}" style="padding: 0.15rem 0.7rem; border-radius: 40px; font-size: 0.75rem; font-weight: 600;">{{ label }}</span>
+                    </div>
+                </div>
+                <div style="display: flex; gap: 0.5rem; margin-top: 1rem; flex-wrap: wrap; border-top: 1px solid #f1f5f9; padding-top: 0.8rem;">
+                    <button onclick="showToast('👤 Détails de la réservation')" style="padding: 0.4rem 1.2rem; background: #2563eb; color: #fff; border: none; border-radius: 40px; font-weight: 600; cursor: pointer; font-size: 0.85rem;">
+                        <i class="fas fa-eye"></i> Voir
+                    </button>
+                    {% if reservation.statut in ("Confirmée", "En attente") %}
+                    <form method="POST" action="{{ url_for('main.annuler_reservation_etudiant', reservation_id=reservation.id) }}" style="display: inline;">
+                        <button type="submit" style="padding: 0.4rem 1.2rem; background: #dc2626; color: #fff; border: none; border-radius: 40px; font-weight: 600; cursor: pointer; font-size: 0.85rem;">
+                            <i class="fas fa-times"></i> Annuler
+                        </button>
+                    </form>
+                    {% elif reservation.statut == "Terminée" %}
+                    <button onclick="showToast('⭐ Donner un avis')" style="padding: 0.4rem 1.2rem; background: #f59e0b; color: #0f172a; border: none; border-radius: 40px; font-weight: 600; cursor: pointer; font-size: 0.85rem;">
+                        <i class="fas fa-star"></i> Évaluer
+                    </button>
+                    {% endif %}
+                </div>
+            </div>
+            {% else %}
+            <p style="color: #475569;">Aucune réservation pour le moment.</p>
+            {% endfor %}
+
+            <!-- ===== PAGINATION ===== -->
+            <div style="display: flex; justify-content: center; align-items: center; gap: 0.5rem; padding: 1.5rem 0; flex-wrap: wrap;">
+                <button onclick="showToast('Page précédente')" style="padding: 0.4rem 1rem; background: transparent; color: #2563eb; border: 1px solid #dbeafe; border-radius: 60px; cursor: pointer; transition: 0.3s ease; font-size: 0.85rem;">
+                    <i class="fas fa-chevron-left"></i> Précédent
+                </button>
+                <button onclick="showToast('Page 1')" style="padding: 0.4rem 0.9rem; background: #2563eb; color: #fff; border: none; border-radius: 60px; cursor: pointer; font-weight: 600; font-size: 0.85rem;">1</button>
+                <button onclick="showToast('Page 2')" style="padding: 0.4rem 0.9rem; background: transparent; color: #475569; border: 1px solid #dbeafe; border-radius: 60px; cursor: pointer; transition: 0.3s ease; font-size: 0.85rem;">2</button>
+                <button onclick="showToast('Page 3')" style="padding: 0.4rem 0.9rem; background: transparent; color: #475569; border: 1px solid #dbeafe; border-radius: 60px; cursor: pointer; transition: 0.3s ease; font-size: 0.85rem;">3</button>
+                <button onclick="showToast('Page suivante')" style="padding: 0.4rem 1rem; background: transparent; color: #2563eb; border: 1px solid #dbeafe; border-radius: 60px; cursor: pointer; transition: 0.3s ease; font-size: 0.85rem;">
+                    Suivant <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    function filtrerReservations(type, btn) {
+        const cards = document.querySelectorAll('.reservation-card');
+        const btns = document.querySelectorAll('.filter-btn');
+        
+        btns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+
+        cards.forEach(card => {
+            const status = card.dataset.status;
+            let show = false;
+            if (type === 'tous') show = true;
+            else if (type === 'avenir' && status === 'confirme') show = true;
+            else if (type === 'termine' && status === 'termine') show = true;
+            else if (type === 'annule' && status === 'annule') show = true;
+            card.style.display = show ? 'block' : 'none';
+        });
+    }
+
+    document.querySelectorAll('.js-badge').forEach(function (el) {
+        el.style.background = el.dataset.bg;
+        el.style.color = el.dataset.fg;
+    });
+
+    function showToast(msg) {
+        const existing = document.querySelector('.toast-custom');
+        if (existing) existing.remove();
+        const toast = document.createElement('div');
+        toast.className = 'toast-custom';
+        toast.innerHTML = `
+            <div style="position:fixed;bottom:30px;right:30px;background:#0f172a;color:white;padding:14px 24px;border-radius:14px;box-shadow:0 8px 40px rgba(0,0,0,0.3);display:flex;align-items:center;gap:12px;z-index:9999;max-width:450px;">
+                <span style="font-size:1.3rem;">📋</span>
+                <div><div style="font-weight:600;font-size:0.9rem;">${msg}</div></div>
+                <button onclick="this.parentElement.parentElement.remove()" style="background:none;border:none;color:rgba(255,255,255,0.4);cursor:pointer;font-size:1.2rem;padding:0 4px;">×</button>
+            </div>
+        `;
+        document.body.appendChild(toast);
+        setTimeout(() => { const el = document.querySelector('.toast-custom'); if (el) el.remove(); }, 3500);
+    }
+</script>
+
+{% endblock %}

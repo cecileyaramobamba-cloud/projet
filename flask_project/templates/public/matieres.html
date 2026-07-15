@@ -1,0 +1,161 @@
+
+{% extends "base.html" %}
+
+{% block title %}Matières{% endblock %}
+
+{% block content %}
+
+<div style="max-width: 1000px; margin: 0 auto;">
+    <div style="text-align: center; padding: 2rem 0;">
+        <h1 style="font-size: 2.5rem; color: #0f172a; font-weight: 800;">📚 Toutes les matières</h1>
+        <p style="color: #475569; font-size: 1.05rem; margin-top: 0.3rem;">Des tuteurs disponibles dans plus de 10 matières</p>
+    </div>
+    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 1.5rem; padding-bottom: 2rem;">
+
+        <div style="background: white; border-radius: 16px; overflow: hidden; text-align: center; box-shadow: 0 4px 24px rgba(37,99,235,0.08); border: 1px solid #dbeafe; transition: all 0.3s ease;">
+            <img src="https://placehold.co/300x150/2563eb/ffffff?text=Mathematiques" alt="Mathématiques" style="width: 100%; height: 120px; object-fit: cover;">
+            <div style="padding: 1rem 1.2rem;">
+                <div style="font-size: 1.8rem;">📘</div>
+                <h4 style="font-weight: 600; margin: 0.3rem 0 0.2rem;">Mathématiques</h4>
+                <small style="color: #475569;">200+ tuteurs</small>
+                <div style="display: flex; flex-direction: column; gap: 0.5rem; margin-top: 0.8rem;">
+                    <a href="/accueil/liste_tuteurs?matiere=maths" style="padding: 0.4rem; background: #2563eb; color: #fff; border-radius: 40px; font-size: 0.8rem; font-weight: 600; text-decoration: none;">Trouver un tuteur</a>
+                    <a href="{{ url_for('main.cours_matiere', slug='maths') }}" style="padding: 0.4rem; border: 1px solid #dbeafe; color: #2563eb; border-radius: 40px; font-size: 0.8rem; font-weight: 600; text-decoration: none;">Exemple de cours</a>
+                </div>
+            </div>
+        </div>
+
+        <div style="background: white; border-radius: 16px; overflow: hidden; text-align: center; box-shadow: 0 4px 24px rgba(37,99,235,0.08); border: 1px solid #dbeafe; transition: all 0.3s ease;">
+            <img src="https://placehold.co/300x150/1d4ed8/ffffff?text=Informatique" alt="Informatique" style="width: 100%; height: 120px; object-fit: cover;">
+            <div style="padding: 1rem 1.2rem;">
+                <div style="font-size: 1.8rem;">💻</div>
+                <h4 style="font-weight: 600; margin: 0.3rem 0 0.2rem;">Informatique</h4>
+                <small style="color: #475569;">180+ tuteurs</small>
+                <div style="display: flex; flex-direction: column; gap: 0.5rem; margin-top: 0.8rem;">
+                    <a href="/accueil/liste_tuteurs?matiere=informatique" style="padding: 0.4rem; background: #2563eb; color: #fff; border-radius: 40px; font-size: 0.8rem; font-weight: 600; text-decoration: none;">Trouver un tuteur</a>
+                    <a href="{{ url_for('main.cours_matiere', slug='informatique') }}" style="padding: 0.4rem; border: 1px solid #dbeafe; color: #2563eb; border-radius: 40px; font-size: 0.8rem; font-weight: 600; text-decoration: none;">Exemple de cours</a>
+                </div>
+            </div>
+        </div>
+
+        <div style="background: white; border-radius: 16px; overflow: hidden; text-align: center; box-shadow: 0 4px 24px rgba(37,99,235,0.08); border: 1px solid #dbeafe; transition: all 0.3s ease;">
+            <img src="https://placehold.co/300x150/2563eb/ffffff?text=Francais" alt="Français" style="width: 100%; height: 120px; object-fit: cover;">
+            <div style="padding: 1rem 1.2rem;">
+                <div style="font-size: 1.8rem;">🇫🇷</div>
+                <h4 style="font-weight: 600; margin: 0.3rem 0 0.2rem;">Français</h4>
+                <small style="color: #475569;">150+ tuteurs</small>
+                <div style="display: flex; flex-direction: column; gap: 0.5rem; margin-top: 0.8rem;">
+                    <a href="/accueil/liste_tuteurs?matiere=francais" style="padding: 0.4rem; background: #2563eb; color: #fff; border-radius: 40px; font-size: 0.8rem; font-weight: 600; text-decoration: none;">Trouver un tuteur</a>
+                    <a href="{{ url_for('main.cours_matiere', slug='francais') }}" style="padding: 0.4rem; border: 1px solid #dbeafe; color: #2563eb; border-radius: 40px; font-size: 0.8rem; font-weight: 600; text-decoration: none;">Exemple de cours</a>
+                </div>
+            </div>
+        </div>
+
+        <div style="background: white; border-radius: 16px; overflow: hidden; text-align: center; box-shadow: 0 4px 24px rgba(37,99,235,0.08); border: 1px solid #dbeafe; transition: all 0.3s ease;">
+            <img src="https://placehold.co/300x150/1e40af/ffffff?text=English" alt="Anglais" style="width: 100%; height: 120px; object-fit: cover;">
+            <div style="padding: 1rem 1.2rem;">
+                <div style="font-size: 1.8rem;">🇬🇧</div>
+                <h4 style="font-weight: 600; margin: 0.3rem 0 0.2rem;">Anglais</h4>
+                <small style="color: #475569;">140+ tuteurs</small>
+                <div style="display: flex; flex-direction: column; gap: 0.5rem; margin-top: 0.8rem;">
+                    <a href="/accueil/liste_tuteurs?matiere=anglais" style="padding: 0.4rem; background: #2563eb; color: #fff; border-radius: 40px; font-size: 0.8rem; font-weight: 600; text-decoration: none;">Trouver un tuteur</a>
+                    <a href="{{ url_for('main.cours_matiere', slug='anglais') }}" style="padding: 0.4rem; border: 1px solid #dbeafe; color: #2563eb; border-radius: 40px; font-size: 0.8rem; font-weight: 600; text-decoration: none;">Exemple de cours</a>
+                </div>
+            </div>
+        </div>
+
+        <div style="background: white; border-radius: 16px; overflow: hidden; text-align: center; box-shadow: 0 4px 24px rgba(37,99,235,0.08); border: 1px solid #dbeafe; transition: all 0.3s ease;">
+            <img src="https://placehold.co/300x150/3730a3/ffffff?text=Physique" alt="Physique" style="width: 100%; height: 120px; object-fit: cover;">
+            <div style="padding: 1rem 1.2rem;">
+                <div style="font-size: 1.8rem;">⚛️</div>
+                <h4 style="font-weight: 600; margin: 0.3rem 0 0.2rem;">Physique</h4>
+                <small style="color: #475569;">130+ tuteurs</small>
+                <div style="display: flex; flex-direction: column; gap: 0.5rem; margin-top: 0.8rem;">
+                    <a href="/accueil/liste_tuteurs?matiere=physique" style="padding: 0.4rem; background: #2563eb; color: #fff; border-radius: 40px; font-size: 0.8rem; font-weight: 600; text-decoration: none;">Trouver un tuteur</a>
+                    <a href="{{ url_for('main.cours_matiere', slug='physique') }}" style="padding: 0.4rem; border: 1px solid #dbeafe; color: #2563eb; border-radius: 40px; font-size: 0.8rem; font-weight: 600; text-decoration: none;">Exemple de cours</a>
+                </div>
+            </div>
+        </div>
+
+        <div style="background: white; border-radius: 16px; overflow: hidden; text-align: center; box-shadow: 0 4px 24px rgba(37,99,235,0.08); border: 1px solid #dbeafe; transition: all 0.3s ease;">
+            <img src="https://placehold.co/300x150/059669/ffffff?text=SVT" alt="SVT" style="width: 100%; height: 120px; object-fit: cover;">
+            <div style="padding: 1rem 1.2rem;">
+                <div style="font-size: 1.8rem;">🧬</div>
+                <h4 style="font-weight: 600; margin: 0.3rem 0 0.2rem;">SVT</h4>
+                <small style="color: #475569;">110+ tuteurs</small>
+                <div style="display: flex; flex-direction: column; gap: 0.5rem; margin-top: 0.8rem;">
+                    <a href="/accueil/liste_tuteurs?matiere=svt" style="padding: 0.4rem; background: #2563eb; color: #fff; border-radius: 40px; font-size: 0.8rem; font-weight: 600; text-decoration: none;">Trouver un tuteur</a>
+                    <a href="{{ url_for('main.cours_matiere', slug='svt') }}" style="padding: 0.4rem; border: 1px solid #dbeafe; color: #2563eb; border-radius: 40px; font-size: 0.8rem; font-weight: 600; text-decoration: none;">Exemple de cours</a>
+                </div>
+            </div>
+        </div>
+
+        <div style="background: white; border-radius: 16px; overflow: hidden; text-align: center; box-shadow: 0 4px 24px rgba(37,99,235,0.08); border: 1px solid #dbeafe; transition: all 0.3s ease;">
+            <img src="https://placehold.co/300x150/0369a1/ffffff?text=Web" alt="Développement Web" style="width: 100%; height: 120px; object-fit: cover;">
+            <div style="padding: 1rem 1.2rem;">
+                <div style="font-size: 1.8rem;">🌐</div>
+                <h4 style="font-weight: 600; margin: 0.3rem 0 0.2rem;">Développement Web</h4>
+                <small style="color: #475569;">120+ tuteurs</small>
+                <div style="display: flex; flex-direction: column; gap: 0.5rem; margin-top: 0.8rem;">
+                    <a href="/accueil/liste_tuteurs?matiere=web" style="padding: 0.4rem; background: #2563eb; color: #fff; border-radius: 40px; font-size: 0.8rem; font-weight: 600; text-decoration: none;">Trouver un tuteur</a>
+                    <a href="{{ url_for('main.cours_matiere', slug='web') }}" style="padding: 0.4rem; border: 1px solid #dbeafe; color: #2563eb; border-radius: 40px; font-size: 0.8rem; font-weight: 600; text-decoration: none;">Exemple de cours</a>
+                </div>
+            </div>
+        </div>
+
+        <div style="background: white; border-radius: 16px; overflow: hidden; text-align: center; box-shadow: 0 4px 24px rgba(37,99,235,0.08); border: 1px solid #dbeafe; transition: all 0.3s ease;">
+            <img src="https://placehold.co/300x150/b45309/ffffff?text=Economie" alt="Économie" style="width: 100%; height: 120px; object-fit: cover;">
+            <div style="padding: 1rem 1.2rem;">
+                <div style="font-size: 1.8rem;">📊</div>
+                <h4 style="font-weight: 600; margin: 0.3rem 0 0.2rem;">Économie</h4>
+                <small style="color: #475569;">100+ tuteurs</small>
+                <div style="display: flex; flex-direction: column; gap: 0.5rem; margin-top: 0.8rem;">
+                    <a href="/accueil/liste_tuteurs?matiere=economie" style="padding: 0.4rem; background: #2563eb; color: #fff; border-radius: 40px; font-size: 0.8rem; font-weight: 600; text-decoration: none;">Trouver un tuteur</a>
+                    <a href="{{ url_for('main.cours_matiere', slug='economie') }}" style="padding: 0.4rem; border: 1px solid #dbeafe; color: #2563eb; border-radius: 40px; font-size: 0.8rem; font-weight: 600; text-decoration: none;">Exemple de cours</a>
+                </div>
+            </div>
+        </div>
+
+        <div style="background: white; border-radius: 16px; overflow: hidden; text-align: center; box-shadow: 0 4px 24px rgba(37,99,235,0.08); border: 1px solid #dbeafe; transition: all 0.3s ease;">
+            <img src="https://placehold.co/300x150/4338ca/ffffff?text=Droit" alt="Droit" style="width: 100%; height: 120px; object-fit: cover;">
+            <div style="padding: 1rem 1.2rem;">
+                <div style="font-size: 1.8rem;">⚖️</div>
+                <h4 style="font-weight: 600; margin: 0.3rem 0 0.2rem;">Droit</h4>
+                <small style="color: #475569;">90+ tuteurs</small>
+                <div style="display: flex; flex-direction: column; gap: 0.5rem; margin-top: 0.8rem;">
+                    <a href="/accueil/liste_tuteurs?matiere=droit" style="padding: 0.4rem; background: #2563eb; color: #fff; border-radius: 40px; font-size: 0.8rem; font-weight: 600; text-decoration: none;">Trouver un tuteur</a>
+                    <a href="{{ url_for('main.cours_matiere', slug='droit') }}" style="padding: 0.4rem; border: 1px solid #dbeafe; color: #2563eb; border-radius: 40px; font-size: 0.8rem; font-weight: 600; text-decoration: none;">Exemple de cours</a>
+                </div>
+            </div>
+        </div>
+
+        <div style="background: white; border-radius: 16px; overflow: hidden; text-align: center; box-shadow: 0 4px 24px rgba(37,99,235,0.08); border: 1px solid #dbeafe; transition: all 0.3s ease;">
+            <img src="https://placehold.co/300x150/1e3a8a/ffffff?text=Python" alt="Python" style="width: 100%; height: 120px; object-fit: cover;">
+            <div style="padding: 1rem 1.2rem;">
+                <div style="font-size: 1.8rem;">🐍</div>
+                <h4 style="font-weight: 600; margin: 0.3rem 0 0.2rem;">Python</h4>
+                <small style="color: #475569;">100+ tuteurs</small>
+                <div style="display: flex; flex-direction: column; gap: 0.5rem; margin-top: 0.8rem;">
+                    <a href="/accueil/liste_tuteurs?matiere=python" style="padding: 0.4rem; background: #2563eb; color: #fff; border-radius: 40px; font-size: 0.8rem; font-weight: 600; text-decoration: none;">Trouver un tuteur</a>
+                    <a href="{{ url_for('main.cours_matiere', slug='python') }}" style="padding: 0.4rem; border: 1px solid #dbeafe; color: #2563eb; border-radius: 40px; font-size: 0.8rem; font-weight: 600; text-decoration: none;">Exemple de cours</a>
+                </div>
+            </div>
+        </div>
+
+        <div style="background: white; border-radius: 16px; overflow: hidden; text-align: center; box-shadow: 0 4px 24px rgba(37,99,235,0.08); border: 1px solid #dbeafe; transition: all 0.3s ease;">
+            <img src="https://placehold.co/300x150/0e7490/ffffff?text=MySQL" alt="MySQL" style="width: 100%; height: 120px; object-fit: cover;">
+            <div style="padding: 1rem 1.2rem;">
+                <div style="font-size: 1.8rem;">🗄️</div>
+                <h4 style="font-weight: 600; margin: 0.3rem 0 0.2rem;">MySQL</h4>
+                <small style="color: #475569;">85+ tuteurs</small>
+                <div style="display: flex; flex-direction: column; gap: 0.5rem; margin-top: 0.8rem;">
+                    <a href="/accueil/liste_tuteurs?matiere=mysql" style="padding: 0.4rem; background: #2563eb; color: #fff; border-radius: 40px; font-size: 0.8rem; font-weight: 600; text-decoration: none;">Trouver un tuteur</a>
+                    <a href="{{ url_for('main.cours_matiere', slug='mysql') }}" style="padding: 0.4rem; border: 1px solid #dbeafe; color: #2563eb; border-radius: 40px; font-size: 0.8rem; font-weight: 600; text-decoration: none;">Exemple de cours</a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}

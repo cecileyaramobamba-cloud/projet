@@ -1,0 +1,290 @@
+
+{% extends "base.html" %}
+
+{% block title %}Dashboard Admin{% endblock %}
+
+{% block content %}
+
+<div style="max-width: 1400px; margin: 0 auto; padding: 1rem 0;">
+
+    <!-- ===== EN-TÊTE ===== -->
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
+        <div>
+            <h1 style="font-size: 2rem; color: #0f172a; font-weight: 800;">
+                🏠 Dashboard Admin
+            </h1>
+            <p style="color: #475569; font-size: 1rem;">
+                Bonjour cecile👋 Voici un aperçu de l'activité de la plateforme aujourd'hui.
+            </p>
+        </div>
+        <div style="display: flex; align-items: center; gap: 1rem;">
+            <span style="background: #dbeafe; padding: 0.3rem 1rem; border-radius: 40px; color: #2563eb; font-weight: 600; font-size: 0.85rem;">
+                👤 Admin
+            </span>
+            <a href="/auth/deconnexion" style="padding: 0.3rem 1rem; background: #dc2626; color: #fff; border-radius: 40px; text-decoration: none; font-weight: 600; font-size: 0.85rem;">
+                <i class="fas fa-sign-out-alt"></i> Déconnexion
+            </a>
+        </div>
+    </div>
+
+    <!-- ===== STATISTIQUES ===== -->
+    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; margin-bottom: 2rem;">
+        <div style="background: white; border-radius: 16px; padding: 1.5rem; box-shadow: 0 4px 24px rgba(37,99,235,0.08); border: 1px solid #dbeafe; text-align: center;">
+            <div style="font-size: 2rem; font-weight: 800; color: #2563eb;">{{ nb_tuteurs }}</div>
+            <div style="color: #475569; font-size: 0.9rem;">👨‍🏫 Tuteurs</div>
+        </div>
+        <div style="background: white; border-radius: 16px; padding: 1.5rem; box-shadow: 0 4px 24px rgba(37,99,235,0.08); border: 1px solid #dbeafe; text-align: center;">
+            <div style="font-size: 2rem; font-weight: 800; color: #2563eb;">{{ nb_etudiants }}</div>
+            <div style="color: #475569; font-size: 0.9rem;">👨‍🎓 Étudiants</div>
+        </div>
+        <div style="background: white; border-radius: 16px; padding: 1.5rem; box-shadow: 0 4px 24px rgba(37,99,235,0.08); border: 1px solid #dbeafe; text-align: center;">
+            <div style="font-size: 2rem; font-weight: 800; color: #2563eb;">{{ nb_reservations }}</div>
+            <div style="color: #475569; font-size: 0.9rem;">📅 Réservations</div>
+        </div>
+        <div style="background: white; border-radius: 16px; padding: 1.5rem; box-shadow: 0 4px 24px rgba(37,99,235,0.08); border: 1px solid #dbeafe; text-align: center; border-color: #d1fae5;">
+            <div style="font-size: 2rem; font-weight: 800; color: #059669;">{{ "{:,}".format(revenus_payes).replace(",", " ") }} FCFA</div>
+            <div style="color: #475569; font-size: 0.9rem;">💰 Revenus (payés)</div>
+        </div>
+    </div>
+
+    <!-- ===== STATISTIQUES LIGNE 2 ===== -->
+    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; margin-bottom: 2rem;">
+        <div style="background: white; border-radius: 16px; padding: 1.5rem; box-shadow: 0 4px 24px rgba(37,99,235,0.08); border: 1px solid #dbeafe; text-align: center;">
+            <div style="font-size: 2rem; font-weight: 800; color: #2563eb;">{{ nb_matieres }}</div>
+            <div style="color: #475569; font-size: 0.9rem;">📚 Matières</div>
+        </div>
+        <div style="background: white; border-radius: 16px; padding: 1.5rem; box-shadow: 0 4px 24px rgba(37,99,235,0.08); border: 1px solid #dbeafe; text-align: center;">
+            <div style="font-size: 2rem; font-weight: 800; color: #f59e0b;">{{ nb_avis }}</div>
+            <div style="color: #475569; font-size: 0.9rem;">⭐ Avis</div>
+        </div>
+        <div style="background: white; border-radius: 16px; padding: 1.5rem; box-shadow: 0 4px 24px rgba(37,99,235,0.08); border: 1px solid #dbeafe; text-align: center;">
+            <div style="font-size: 2rem; font-weight: 800; color: #d97706;">{{ nb_en_attente }}</div>
+            <div style="color: #475569; font-size: 0.9rem;">⏳ Tuteurs en attente</div>
+        </div>
+        <div style="background: white; border-radius: 16px; padding: 1.5rem; box-shadow: 0 4px 24px rgba(37,99,235,0.08); border: 1px solid #dbeafe; text-align: center;">
+            <div style="font-size: 2rem; font-weight: 800; color: #dc2626;">0</div>
+            <div style="color: #475569; font-size: 0.9rem;">🚨 Signalements</div>
+        </div>
+    </div>
+
+    <!-- ===== TUTEURS EN ATTENTE ===== -->
+    <div style="background: white; border-radius: 16px; padding: 1.5rem; box-shadow: 0 4px 24px rgba(37,99,235,0.08); border: 1px solid #dbeafe; margin-bottom: 2rem;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+            <h3 style="color: #0f172a; font-size: 1.2rem;">👨‍🏫 Tuteurs en attente de validation</h3>
+            <a href="/admin/tuteurs" style="color: #2563eb; font-weight: 600; font-size: 0.9rem;">Voir tout →</a>
+        </div>
+        <div style="overflow-x: auto;">
+            <table style="width: 100%; border-collapse: collapse;">
+                <thead>
+                    <tr style="background: #eff6ff; border-radius: 8px;">
+                        <th style="padding: 0.75rem 1rem; text-align: left; font-weight: 600; color: #0f172a;">Nom</th>
+                        <th style="padding: 0.75rem 1rem; text-align: left; font-weight: 600; color: #0f172a;">Matière</th>
+                        <th style="padding: 0.75rem 1rem; text-align: left; font-weight: 600; color: #0f172a;">Date d'inscription</th>
+                        <th style="padding: 0.75rem 1rem; text-align: left; font-weight: 600; color: #0f172a;">Statut</th>
+                        <th style="padding: 0.75rem 1rem; text-align: left; font-weight: 600; color: #0f172a;">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for tuteur in tuteurs_en_attente %}
+                    <tr>
+                        <td style="padding: 0.75rem 1rem; border-bottom: 1px solid #dbeafe;"><strong>{{ tuteur.nom }}</strong></td>
+                        <td style="padding: 0.75rem 1rem; border-bottom: 1px solid #dbeafe;">{{ tuteur.matiere }}</td>
+                        <td style="padding: 0.75rem 1rem; border-bottom: 1px solid #dbeafe;">{{ tuteur.date_inscription.strftime('%d/%m/%Y') }}</td>
+                        <td style="padding: 0.75rem 1rem; border-bottom: 1px solid #dbeafe;"><span style="background: #fef3c7; color: #92400e; padding: 0.15rem 0.7rem; border-radius: 40px; font-size: 0.7rem; font-weight: 600;">En attente</span></td>
+                        <td style="padding: 0.75rem 1rem; border-bottom: 1px solid #dbeafe;">
+                            <form method="POST" action="{{ url_for('main.valider_tuteur_admin', tuteur_id=tuteur.id) }}" style="display: inline;">
+                                <button type="submit" style="padding: 0.3rem 0.8rem; background: #059669; color: #fff; border: none; border-radius: 40px; cursor: pointer; font-size: 0.8rem; margin-right: 0.3rem;"><i class="fas fa-check"></i></button>
+                            </form>
+                            <form method="POST" action="{{ url_for('main.refuser_tuteur_admin', tuteur_id=tuteur.id) }}" style="display: inline;">
+                                <button type="submit" style="padding: 0.3rem 0.8rem; background: #dc2626; color: #fff; border: none; border-radius: 40px; cursor: pointer; font-size: 0.8rem;"><i class="fas fa-times"></i></button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="5" style="text-align: center; padding: 2rem; color: #475569;">Aucun tuteur en attente de validation.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- ===== DERNIÈRES RÉSERVATIONS ===== -->
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 2rem;">
+
+        <div style="background: white; border-radius: 16px; padding: 1.5rem; box-shadow: 0 4px 24px rgba(37,99,235,0.08); border: 1px solid #dbeafe;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                <h3 style="color: #0f172a; font-size: 1.2rem;">📅 Dernières réservations</h3>
+                <a href="/admin/reservations" style="color: #2563eb; font-weight: 600; font-size: 0.9rem;">Voir tout →</a>
+            </div>
+            <div style="overflow-x: auto;">
+                <table style="width: 100%; border-collapse: collapse;">
+                    <thead>
+                        <tr style="background: #eff6ff;">
+                            <th style="padding: 0.5rem 0.8rem; text-align: left; font-weight: 600; color: #0f172a; font-size: 0.8rem;">Élève</th>
+                            <th style="padding: 0.5rem 0.8rem; text-align: left; font-weight: 600; color: #0f172a; font-size: 0.8rem;">Tuteur</th>
+                            <th style="padding: 0.5rem 0.8rem; text-align: left; font-weight: 600; color: #0f172a; font-size: 0.8rem;">Matière</th>
+                            <th style="padding: 0.5rem 0.8rem; text-align: left; font-weight: 600; color: #0f172a; font-size: 0.8rem;">Statut</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for reservation in dernieres_reservations %}
+                        <tr>
+                            <td style="padding: 0.5rem 0.8rem; border-bottom: 1px solid #dbeafe; font-size: 0.85rem;">{{ reservation.etudiant.nom }}</td>
+                            <td style="padding: 0.5rem 0.8rem; border-bottom: 1px solid #dbeafe; font-size: 0.85rem;">{{ reservation.tuteur.nom }}</td>
+                            <td style="padding: 0.5rem 0.8rem; border-bottom: 1px solid #dbeafe; font-size: 0.85rem;">{{ reservation.matiere }}</td>
+                            <td style="padding: 0.5rem 0.8rem; border-bottom: 1px solid #dbeafe; font-size: 0.85rem;">
+                                {% if reservation.statut == "Confirmée" %}
+                                <span style="background: #d1fae5; color: #065f46; padding: 0.1rem 0.6rem; border-radius: 40px; font-size: 0.65rem; font-weight: 600;">✅ Confirmée</span>
+                                {% elif reservation.statut == "Terminée" %}
+                                <span style="background: #d1fae5; color: #065f46; padding: 0.1rem 0.6rem; border-radius: 40px; font-size: 0.65rem; font-weight: 600;">✅ Terminée</span>
+                                {% elif reservation.statut == "Annulée" %}
+                                <span style="background: #fecaca; color: #991b1b; padding: 0.1rem 0.6rem; border-radius: 40px; font-size: 0.65rem; font-weight: 600;">❌ Annulée</span>
+                                {% else %}
+                                <span style="background: #fef3c7; color: #92400e; padding: 0.1rem 0.6rem; border-radius: 40px; font-size: 0.65rem; font-weight: 600;">⏳ En attente</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% else %}
+                        <tr>
+                            <td colspan="4" style="text-align: center; padding: 1.5rem; color: #475569; font-size: 0.85rem;">Aucune réservation pour le moment.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- ===== DERNIERS PAIEMENTS ===== -->
+        <div style="background: white; border-radius: 16px; padding: 1.5rem; box-shadow: 0 4px 24px rgba(37,99,235,0.08); border: 1px solid #dbeafe;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                <h3 style="color: #0f172a; font-size: 1.2rem;">💳 Derniers paiements</h3>
+                <a href="/admin/paiements" style="color: #2563eb; font-weight: 600; font-size: 0.9rem;">Voir tout →</a>
+            </div>
+            <div style="overflow-x: auto;">
+                <table style="width: 100%; border-collapse: collapse;">
+                    <thead>
+                        <tr style="background: #eff6ff;">
+                            <th style="padding: 0.5rem 0.8rem; text-align: left; font-weight: 600; color: #0f172a; font-size: 0.8rem;">Référence</th>
+                            <th style="padding: 0.5rem 0.8rem; text-align: left; font-weight: 600; color: #0f172a; font-size: 0.8rem;">Élève</th>
+                            <th style="padding: 0.5rem 0.8rem; text-align: left; font-weight: 600; color: #0f172a; font-size: 0.8rem;">Montant</th>
+                            <th style="padding: 0.5rem 0.8rem; text-align: left; font-weight: 600; color: #0f172a; font-size: 0.8rem;">Statut</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for paiement in derniers_paiements %}
+                        <tr>
+                            <td style="padding: 0.5rem 0.8rem; border-bottom: 1px solid #dbeafe; font-size: 0.85rem;">{{ paiement.reference }}</td>
+                            <td style="padding: 0.5rem 0.8rem; border-bottom: 1px solid #dbeafe; font-size: 0.85rem;">{{ paiement.eleve }}</td>
+                            <td style="padding: 0.5rem 0.8rem; border-bottom: 1px solid #dbeafe; font-size: 0.85rem;">{{ "{:,}".format(paiement.montant).replace(",", " ") }} FCFA</td>
+                            <td style="padding: 0.5rem 0.8rem; border-bottom: 1px solid #dbeafe; font-size: 0.85rem;">
+                                {% if paiement.statut == "Payé" %}
+                                <span style="background: #d1fae5; color: #065f46; padding: 0.1rem 0.6rem; border-radius: 40px; font-size: 0.65rem; font-weight: 600;">✅ Payé</span>
+                                {% else %}
+                                <span style="background: #fef3c7; color: #92400e; padding: 0.1rem 0.6rem; border-radius: 40px; font-size: 0.65rem; font-weight: 600;">⏳ En attente</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% else %}
+                        <tr>
+                            <td colspan="4" style="text-align: center; padding: 1.5rem; color: #475569; font-size: 0.85rem;">Aucun paiement pour le moment.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== ACTIVITÉS RÉCENTES ===== -->
+    <div style="background: white; border-radius: 16px; padding: 1.5rem; box-shadow: 0 4px 24px rgba(37,99,235,0.08); border: 1px solid #dbeafe; margin-bottom: 2rem;">
+        <h3 style="color: #0f172a; font-size: 1.2rem; margin-bottom: 1rem;">📋 Activités récentes</h3>
+        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 0.8rem;">
+            {% for activite in activites %}
+            <div style="background: #f8fafc; padding: 0.6rem 1rem; border-radius: 8px; display: flex; align-items: center; gap: 0.5rem; font-size: 0.9rem; color: #0f172a;">
+                <span>{{ activite.icone }}</span> {{ activite.texte }}
+            </div>
+            {% else %}
+            <p style="color: #475569;">Aucune activité récente.</p>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- ===== GRAPHIQUES / RÉPARTITION ===== -->
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+
+        <div style="background: white; border-radius: 16px; padding: 1.5rem; box-shadow: 0 4px 24px rgba(37,99,235,0.08); border: 1px solid #dbeafe;">
+            <h3 style="color: #0f172a; font-size: 1.1rem; margin-bottom: 1rem;">📊 Répartition des matières (par nombre de tuteurs)</h3>
+            <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                {% for nom, compte in repartition_matieres %}
+                <div>
+                    <span style="font-size: 0.9rem;">{{ nom }} ({{ compte }})</span>
+                    <div style="width: 100%; height: 8px; background: #e2e8f0; border-radius: 4px; margin-top: 0.2rem;">
+                        <div class="js-bar-fill" data-pct="{{ (compte / nb_tuteurs * 100) if nb_tuteurs else 0 }}" style="height: 100%; background: #2563eb; border-radius: 4px;"></div>
+                    </div>
+                </div>
+                {% else %}
+                <p style="color: #475569;">Aucune donnée disponible.</p>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div style="background: white; border-radius: 16px; padding: 1.5rem; box-shadow: 0 4px 24px rgba(37,99,235,0.08); border: 1px solid #dbeafe;">
+            <h3 style="color: #0f172a; font-size: 1.1rem; margin-bottom: 1rem;">📈 Paiements par mois</h3>
+            {% if paiements_par_mois %}
+            <div style="display: flex; align-items: flex-end; justify-content: space-around; height: 150px; padding: 0.5rem 0;">
+                {% set max_montant = paiements_par_mois | map(attribute="montant") | max %}
+                {% for p in paiements_par_mois %}
+                <div style="text-align: center; flex: 1;">
+                    <div class="js-bar-chart-fill" data-height="{{ (p.montant / max_montant * 130) if max_montant else 0 }}" style="background: #2563eb; border-radius: 4px 4px 0 0; width: 70%; margin: 0 auto;"></div>
+                    <span style="font-size: 0.7rem; color: #475569;">{{ p.mois }}</span>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <p style="color: #475569;">Aucun paiement enregistré pour le moment.</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- ===== ACCÈS RAPIDE ===== -->
+    <div style="background: white; border-radius: 16px; padding: 1.5rem; box-shadow: 0 4px 24px rgba(37,99,235,0.08); border: 1px solid #dbeafe; margin-top: 2rem;">
+        <h3 style="color: #0f172a; font-size: 1.1rem; margin-bottom: 1rem;">⚡ Accès rapide</h3>
+        <div style="display: flex; flex-wrap: wrap; gap: 1rem;">
+            <a href="/admin/tuteurs/ajouter" style="padding: 0.6rem 1.5rem; background: #2563eb; color: #fff; border-radius: 60px; text-decoration: none; font-weight: 600; font-size: 0.9rem; transition: 0.3s ease;">
+                <i class="fas fa-plus"></i> Ajouter un tuteur
+            </a>
+            <a href="/admin/matieres/ajouter" style="padding: 0.6rem 1.5rem; background: #059669; color: #fff; border-radius: 60px; text-decoration: none; font-weight: 600; font-size: 0.9rem; transition: 0.3s ease;">
+                <i class="fas fa-plus"></i> Ajouter une matière
+            </a>
+            <a href="/admin/annonces" style="padding: 0.6rem 1.5rem; background: #d97706; color: #fff; border-radius: 60px; text-decoration: none; font-weight: 600; font-size: 0.9rem; transition: 0.3s ease;">
+                <i class="fas fa-bullhorn"></i> Publier une annonce
+            </a>
+            <a href="/admin/statistiques" style="padding: 0.6rem 1.5rem; background: #7c3aed; color: #fff; border-radius: 60px; text-decoration: none; font-weight: 600; font-size: 0.9rem; transition: 0.3s ease;">
+                <i class="fas fa-chart-bar"></i> Voir les statistiques
+            </a>
+        </div>
+    </div>
+
+</div>
+
+<style>
+    .stat-card {
+        transition: transform 0.3s ease;
+    }
+    .stat-card:hover {
+        transform: translateY(-4px);
+    }
+</style>
+
+<script>
+    document.querySelectorAll('.js-bar-fill').forEach(function (el) {
+        el.style.width = el.dataset.pct + '%';
+    });
+    document.querySelectorAll('.js-bar-chart-fill').forEach(function (el) {
+        el.style.height = el.dataset.height + 'px';
+    });
+</script>
+
+{% endblock %}

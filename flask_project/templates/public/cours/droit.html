@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+
+{% block title %}Droit - Exemple de cours{% endblock %}
+
+{% block content %}
+
+<div style="max-width: 850px; margin: 0 auto; padding-bottom: 2rem;">
+
+    <a href="{{ url_for('main.matieres') }}" style="display:inline-flex; align-items:center; gap:0.4rem; color:#2563eb; text-decoration:none; font-weight:600; font-size:0.9rem; margin:1.5rem 0 1rem;">
+        <i class="fas fa-arrow-left"></i> Retour aux matières
+    </a>
+
+    <img src="https://placehold.co/850x260/4338ca/ffffff?text=Droit" alt="Droit" style="width:100%; border-radius:16px; box-shadow:0 4px 24px rgba(37,99,235,0.08);">
+
+    <div style="text-align:center; padding:1.5rem 0;">
+        <span style="background:#eff6ff; color:#2563eb; padding:0.25rem 0.9rem; border-radius:40px; font-size:0.8rem; font-weight:700;">Licence 1 • Droit des obligations</span>
+        <h1 style="font-size:2.2rem; color:#0f172a; font-weight:800; margin-top:0.8rem;">⚖️ Introduction au droit des contrats</h1>
+        <p style="color:#475569; font-size:1.05rem; margin-top:0.3rem;">Exemple de cours donné par un tuteur EduSen en Droit</p>
+    </div>
+
+    <div style="background:white; border-radius:20px; padding:2rem; box-shadow:0 4px 24px rgba(37,99,235,0.08); border:1px solid #dbeafe; margin-bottom:1.5rem;">
+        <h3 style="color:#0f172a;">🎯 Objectifs du cours</h3>
+        <ul style="color:#475569; line-height:2; list-style:none; margin-top:0.5rem;">
+            <li>✅ Définir la notion de contrat</li>
+            <li>✅ Connaître les conditions de validité d'un contrat</li>
+            <li>✅ Comprendre les conséquences de leur non-respect</li>
+            <li>✅ Analyser un exemple de contrat de vente</li>
+        </ul>
+    </div>
+
+    <div style="background:white; border-radius:20px; padding:2rem; box-shadow:0 4px 24px rgba(37,99,235,0.08); border:1px solid #dbeafe; margin-bottom:1.5rem;">
+        <h3 style="color:#0f172a;">1. Qu'est-ce qu'un contrat ?</h3>
+        <p style="color:#475569; line-height:1.8; margin-top:0.5rem;">
+            Un <strong>contrat</strong> est un accord de volontés entre deux ou plusieurs personnes, destiné à créer des obligations juridiques : obligation de donner, de faire ou de ne pas faire quelque chose. Au Sénégal, le droit des contrats est notamment encadré par le <strong>Code des Obligations Civiles et Commerciales (COCC)</strong>.
+        </p>
+
+        <h3 style="color:#0f172a; margin-top:1.5rem;">2. Les conditions de validité d'un contrat</h3>
+        <p style="color:#475569; line-height:1.8; margin-top:0.5rem;">
+            Pour qu'un contrat soit valable, quatre conditions essentielles doivent être réunies :
+        </p>
+        <ul style="color:#475569; line-height:2; margin-top:0.5rem;">
+            <li><strong>Le consentement</strong> : les parties doivent accepter librement et sans vice (erreur, dol, violence).</li>
+            <li><strong>La capacité</strong> : les parties doivent être juridiquement aptes à contracter (être majeures et ne pas être sous tutelle, par exemple).</li>
+            <li><strong>Un objet certain</strong> : la prestation prévue doit être déterminée ou déterminable, et licite.</li>
+            <li><strong>Une cause licite</strong> : le motif du contrat ne doit pas être contraire à la loi ou à l'ordre public.</li>
+        </ul>
+
+        <h3 style="color:#0f172a; margin-top:1.5rem;">3. Exemple : le contrat de vente</h3>
+        <p style="color:#475569; line-height:1.8; margin-top:0.5rem; background:#f8fafc; border-left:4px solid #2563eb; padding:1rem 1.2rem; border-radius:8px;">
+            Amadou vend son ordinateur portable à Fatou pour 200 000 FCFA. Amadou s'engage à livrer l'ordinateur (obligation de donner), et Fatou s'engage à payer le prix convenu. Le consentement des deux parties, leur capacité juridique, l'objet (l'ordinateur) et la cause (l'échange bien contre prix) sont réunis : <strong>le contrat est valable</strong>.
+        </p>
+
+        <h3 style="color:#0f172a; margin-top:1.5rem;">4. Les conséquences d'un vice du contrat</h3>
+        <p style="color:#475569; line-height:1.8; margin-top:0.5rem;">
+            Si l'une des conditions de validité fait défaut, le contrat peut être frappé de <strong>nullité</strong> :
+        </p>
+        <ul style="color:#475569; line-height:2;">
+            <li><strong>Nullité absolue</strong> : lorsque l'ordre public est en cause (objet illicite, incapacité totale). Elle peut être invoquée par toute personne intéressée.</li>
+            <li><strong>Nullité relative</strong> : lorsque seul l'intérêt d'une partie est en cause (vice du consentement). Seule la victime peut agir en nullité.</li>
+        </ul>
+    </div>
+
+    <div style="background:white; border-radius:20px; padding:2rem; box-shadow:0 4px 24px rgba(37,99,235,0.08); border:1px solid #dbeafe;">
+        <h3 style="color:#0f172a;">📝 Cas pratique</h3>
+        <p style="color:#475569; line-height:1.8; margin-top:0.5rem;">
+            Moussa, âgé de 16 ans, signe seul un contrat de location d'appartement sans l'accord de ses parents.
+        </p>
+        <ol style="color:#475569; line-height:2;">
+            <li>Quelle condition de validité du contrat fait défaut ?</li>
+            <li>Quelle est la conséquence juridique probable ?</li>
+        </ol>
+        <details style="margin-top:1rem;">
+            <summary style="cursor:pointer; color:#2563eb; font-weight:600;">Voir la correction</summary>
+            <p style="color:#475569; line-height:1.8; margin-top:0.8rem;">
+                1) Moussa est mineur : la condition de <strong>capacité juridique</strong> fait défaut.<br>
+                2) Le contrat encourt une <strong>nullité relative</strong>, qui pourra être invoquée par Moussa lui-même (ou son représentant légal) pour protéger ses intérêts.
+            </p>
+        </details>
+    </div>
+
+</div>
+
+{% endblock %}

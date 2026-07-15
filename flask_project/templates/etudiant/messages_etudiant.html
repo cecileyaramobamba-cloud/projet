@@ -1,0 +1,176 @@
+
+{% extends "base.html" %}
+
+{% block title %}Messages - EduSen{% endblock %}
+
+{% block content %}
+
+<style>
+    @keyframes fadeInUp {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    .chat-panel {
+        animation: fadeInUp 0.4s ease forwards;
+    }
+</style>
+
+<div style="max-width: 1400px; margin: 0 auto; padding: 1rem 0;">
+
+    <!-- ===== TOPBAR ===== -->
+    <div style="background: white; border-radius: 16px; padding: 0.8rem 1.5rem; box-shadow: 0 4px 24px rgba(37,99,235,0.08); border: 1px solid #dbeafe; margin-bottom: 1.5rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+        <div style="display: flex; align-items: center; gap: 1rem; flex: 1; min-width: 200px;">
+            <a href="/" style="font-size: 1.3rem; font-weight: 800; color: #0f172a; text-decoration: none;">
+                Edu<span style="color: #2563eb;">Sen</span>
+            </a>
+            <span style="background: #dbeafe; padding: 0.15rem 0.8rem; border-radius: 40px; font-size: 0.7rem; font-weight: 600; color: #2563eb;">Étudiant</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;">
+            <div style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;" onclick="window.location.href='/etudiant/dashboard'">
+                <div style="width: 32px; height: 32px; border-radius: 50%; background: #2563eb; color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.8rem;">SK</div>
+                <span style="font-weight: 600; color: #0f172a; font-size: 0.9rem;">Soukeyna</span>
+            </div>
+        </div>
+    </div>
+
+    <div style="display: flex; gap: 2rem;">
+
+        <!-- ===== SIDEBAR ===== -->
+        <div style="flex: 0 0 220px; min-width: 180px;">
+            <div style="background: white; border-radius: 16px; padding: 1.5rem; box-shadow: 0 4px 24px rgba(37,99,235,0.08); border: 1px solid #dbeafe; position: sticky; top: 90px;">
+                <div style="font-weight: 700; font-size: 0.8rem; text-transform: uppercase; color: #94a3b8; margin-bottom: 1rem; letter-spacing: 0.5px;">📋 Menu</div>
+                <nav style="display: flex; flex-direction: column; gap: 0.2rem;">
+                    <a href="/etudiant/dashboard" style="padding: 0.5rem 0.8rem; border-radius: 8px; color: #475569; text-decoration: none; display: flex; align-items: center; gap: 0.8rem; font-size: 0.9rem; transition: 0.3s ease;">
+                        <i class="fas fa-home" style="width: 20px; text-align: center;"></i> Tableau de bord
+                    </a>
+                    <a href="/etudiant/cours" style="padding: 0.5rem 0.8rem; border-radius: 8px; color: #475569; text-decoration: none; display: flex; align-items: center; gap: 0.8rem; font-size: 0.9rem; transition: 0.3s ease;">
+                        <i class="fas fa-book" style="width: 20px; text-align: center;"></i> Mes cours
+                    </a>
+                    <a href="/etudiant/reservations" style="padding: 0.5rem 0.8rem; border-radius: 8px; color: #475569; text-decoration: none; display: flex; align-items: center; gap: 0.8rem; font-size: 0.9rem; transition: 0.3s ease;">
+                        <i class="fas fa-calendar-check" style="width: 20px; text-align: center;"></i> Réservations
+                    </a>
+                    <a href="/etudiant/messages" style="padding: 0.5rem 0.8rem; border-radius: 8px; background: #eff6ff; color: #2563eb; text-decoration: none; display: flex; align-items: center; gap: 0.8rem; font-size: 0.9rem; font-weight: 600;">
+                        <i class="fas fa-comment-dots" style="width: 20px; text-align: center;"></i> Messages
+                    </a>
+                    <a href="/etudiant/devoirs" style="padding: 0.5rem 0.8rem; border-radius: 8px; color: #475569; text-decoration: none; display: flex; align-items: center; gap: 0.8rem; font-size: 0.9rem; transition: 0.3s ease;">
+                        <i class="fas fa-file-alt" style="width: 20px; text-align: center;"></i> Devoirs
+                    </a>
+                    <a href="/etudiant/profil" style="padding: 0.5rem 0.8rem; border-radius: 8px; color: #475569; text-decoration: none; display: flex; align-items: center; gap: 0.8rem; font-size: 0.9rem; transition: 0.3s ease;">
+                        <i class="fas fa-user" style="width: 20px; text-align: center;"></i> Mon profil
+                    </a>
+                    <div style="border-top: 1px solid #dbeafe; margin-top: 0.3rem; padding-top: 0.3rem;">
+                        <a href="/auth/deconnexion" style="padding: 0.5rem 0.8rem; border-radius: 8px; color: #dc2626; text-decoration: none; display: flex; align-items: center; gap: 0.8rem; font-size: 0.9rem; transition: 0.3s ease;">
+                            <i class="fas fa-sign-out-alt" style="width: 20px; text-align: center;"></i> Déconnexion
+                        </a>
+                    </div>
+                </nav>
+            </div>
+        </div>
+
+        <!-- ===== CONTENU PRINCIPAL ===== -->
+        <div style="flex: 1; min-width: 0;">
+
+            <div style="margin-bottom: 1.5rem;">
+                <h1 style="font-size: 1.8rem; color: #0f172a; font-weight: 800;">💬 Messages</h1>
+                <p style="color: #475569; font-size: 0.95rem;">Discutez avec vos tuteurs ou posez vos questions à l'assistant IA.</p>
+            </div>
+
+            <!-- ===== DISCUSSION AVEC LE TUTEUR ===== -->
+            <div class="chat-panel" style="background: white; border-radius: 16px; box-shadow: 0 4px 24px rgba(37,99,235,0.08); border: 1px solid #dbeafe; overflow: hidden; margin-bottom: 1.5rem;">
+                <div style="background: #2563eb; color: white; padding: 15px 20px; font-weight: 700; display: flex; align-items: center; gap: 0.6rem;">
+                    <i class="fas fa-chalkboard-teacher"></i> Discussion avec Moussa Ndiaye (Tuteur)
+                </div>
+                <div style="padding: 20px; height: 250px; overflow-y: auto; background: #f8fafc; display: flex; flex-direction: column; gap: 15px;">
+                    <div style="align-self: flex-end; background: #2563eb; color: white; padding: 10px 15px; border-radius: 14px; max-width: 70%; font-size: 0.95rem;">
+                        Bonjour Moussa, le lien pour la session d'Algorithmique de 17h est toujours le même ?
+                    </div>
+                    <div style="align-self: flex-start; background: white; border: 1px solid #dbeafe; padding: 10px 15px; border-radius: 14px; max-width: 70%; font-size: 0.95rem;">
+                        Bonjour Fatou ! Oui, on utilise le même lien Google Meet. À tout de suite.
+                    </div>
+                </div>
+                <div style="padding: 15px; display: flex; gap: 10px; border-top: 1px solid #dbeafe;">
+                    <input type="text" placeholder="Écris ton message ici..." style="margin-bottom: 0; flex: 1; border: 1px solid #e2e8f0; border-radius: 40px; padding: 0.6rem 1rem; outline: none;">
+                    <button type="button" onclick="showToast('💬 Message envoyé')" style="background: #2563eb; color: #fff; border: none; border-radius: 50%; width: 42px; height: 42px; cursor: pointer;"><i class="fas fa-paper-plane"></i></button>
+                </div>
+            </div>
+
+            <!-- ===== CHATBOT IA ===== -->
+            <div class="chat-panel" style="background: white; border-radius: 16px; box-shadow: 0 4px 24px rgba(37,99,235,0.08); border: 1px solid #dbeafe; overflow: hidden;">
+                <div style="background: #059669; color: white; padding: 15px 20px; font-weight: 700; display: flex; align-items: center; gap: 0.6rem;">
+                    <i class="fas fa-robot"></i> Chatbot IA EduSen
+                </div>
+                <div id="chatbot-log" style="padding: 20px; height: 250px; overflow-y: auto; background: #f8fafc; display: flex; flex-direction: column; gap: 15px;">
+                    <div style="align-self: flex-start; background: white; border: 1px solid #dbeafe; padding: 10px 15px; border-radius: 14px; max-width: 70%; font-size: 0.95rem;">
+                        Bonjour Soukeyna 👋 Je suis l'assistant IA d'EduSen. Pose-moi une question sur tes cours, tes réservations ou tes devoirs !
+                    </div>
+                </div>
+                <div style="padding: 15px; display: flex; gap: 10px; border-top: 1px solid #dbeafe;">
+                    <input type="text" id="chatbot-input" placeholder="Pose ta question à l'assistant IA..." style="margin-bottom: 0; flex: 1; border: 1px solid #e2e8f0; border-radius: 40px; padding: 0.6rem 1rem; outline: none;" onkeypress="if (event.key === 'Enter') { envoyerMessageChatbot(); }">
+                    <button type="button" onclick="envoyerMessageChatbot()" style="background: #059669; color: #fff; border: none; border-radius: 50%; width: 42px; height: 42px; cursor: pointer;"><i class="fas fa-paper-plane"></i></button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    function showToast(msg) {
+        const existing = document.querySelector('.toast-custom');
+        if (existing) existing.remove();
+        const toast = document.createElement('div');
+        toast.className = 'toast-custom';
+        toast.innerHTML = `
+            <div style="position:fixed;bottom:30px;right:30px;background:#0f172a;color:white;padding:14px 24px;border-radius:14px;box-shadow:0 8px 40px rgba(0,0,0,0.3);display:flex;align-items:center;gap:12px;z-index:9999;max-width:450px;">
+                <span style="font-size:1.3rem;">📋</span>
+                <div><div style="font-weight:600;font-size:0.9rem;">${msg}</div></div>
+                <button onclick="this.parentElement.parentElement.remove()" style="background:none;border:none;color:rgba(255,255,255,0.4);cursor:pointer;font-size:1.2rem;padding:0 4px;">×</button>
+            </div>
+        `;
+        document.body.appendChild(toast);
+        setTimeout(() => { const el = document.querySelector('.toast-custom'); if (el) el.remove(); }, 3500);
+    }
+
+    function ajouterMessageChatbot(texte, expediteur) {
+        const log = document.getElementById('chatbot-log');
+        const bulle = document.createElement('div');
+        bulle.style.cssText = expediteur === 'user'
+            ? 'align-self:flex-end; background:#059669; color:white; padding:10px 15px; border-radius:14px; max-width:70%; font-size:0.95rem;'
+            : 'align-self:flex-start; background:white; border:1px solid #dbeafe; padding:10px 15px; border-radius:14px; max-width:70%; font-size:0.95rem;';
+        bulle.textContent = texte;
+        log.appendChild(bulle);
+        log.scrollTop = log.scrollHeight;
+    }
+
+    async function envoyerMessageChatbot() {
+        const input = document.getElementById('chatbot-input');
+        const message = input.value.trim();
+        if (!message) return;
+
+        ajouterMessageChatbot(message, 'user');
+        input.value = '';
+
+        const log = document.getElementById('chatbot-log');
+        const indicateur = document.createElement('div');
+        indicateur.style.cssText = 'align-self:flex-start; color:#94a3b8; font-size:0.85rem; font-style:italic;';
+        indicateur.textContent = "L'assistant IA écrit...";
+        log.appendChild(indicateur);
+        log.scrollTop = log.scrollHeight;
+
+        try {
+            const reponse = await fetch('/api/chatbot', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ message: message })
+            });
+            const donnees = await reponse.json();
+            indicateur.remove();
+            ajouterMessageChatbot(donnees.reponse, 'bot');
+        } catch (erreur) {
+            indicateur.remove();
+            ajouterMessageChatbot("Désolé, une erreur est survenue. Réessaie plus tard.", 'bot');
+        }
+    }
+</script>
+
+{% endblock %}

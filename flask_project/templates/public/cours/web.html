@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+
+{% block title %}Développement Web - Exemple de cours{% endblock %}
+
+{% block content %}
+
+<div style="max-width: 850px; margin: 0 auto; padding-bottom: 2rem;">
+
+    <a href="{{ url_for('main.matieres') }}" style="display:inline-flex; align-items:center; gap:0.4rem; color:#2563eb; text-decoration:none; font-weight:600; font-size:0.9rem; margin:1.5rem 0 1rem;">
+        <i class="fas fa-arrow-left"></i> Retour aux matières
+    </a>
+
+    <img src="https://placehold.co/850x260/0369a1/ffffff?text=Developpement+Web" alt="Développement Web" style="width:100%; border-radius:16px; box-shadow:0 4px 24px rgba(37,99,235,0.08);">
+
+    <div style="text-align:center; padding:1.5rem 0;">
+        <span style="background:#eff6ff; color:#2563eb; padding:0.25rem 0.9rem; border-radius:40px; font-size:0.8rem; font-weight:700;">Débutant • HTML / CSS / JS</span>
+        <h1 style="font-size:2.2rem; color:#0f172a; font-weight:800; margin-top:0.8rem;">🌐 Créer une page web responsive</h1>
+        <p style="color:#475569; font-size:1.05rem; margin-top:0.3rem;">Exemple de cours donné par un tuteur EduSen en Développement Web</p>
+    </div>
+
+    <div style="background:white; border-radius:20px; padding:2rem; box-shadow:0 4px 24px rgba(37,99,235,0.08); border:1px solid #dbeafe; margin-bottom:1.5rem;">
+        <h3 style="color:#0f172a;">🎯 Objectifs du cours</h3>
+        <ul style="color:#475569; line-height:2; list-style:none; margin-top:0.5rem;">
+            <li>✅ Structurer une page avec HTML sémantique</li>
+            <li>✅ Mettre en page avec Flexbox en CSS</li>
+            <li>✅ Rendre un menu interactif avec JavaScript</li>
+            <li>✅ Adapter l'affichage aux petits écrans (responsive)</li>
+        </ul>
+    </div>
+
+    <div style="background:white; border-radius:20px; padding:2rem; box-shadow:0 4px 24px rgba(37,99,235,0.08); border:1px solid #dbeafe; margin-bottom:1.5rem;">
+        <h3 style="color:#0f172a;">1. La structure HTML</h3>
+        <p style="color:#475569; line-height:1.8; margin-top:0.5rem;">
+            On commence par une structure sémantique claire, avec des balises qui décrivent le rôle de chaque section :
+        </p>
+        <pre style="background:#0f172a; color:#e2e8f0; padding:1rem 1.2rem; border-radius:12px; overflow-x:auto; font-size:0.85rem; line-height:1.6;"><code>&lt;header&gt;
+  &lt;nav class="navbar"&gt;
+    &lt;div class="logo"&gt;EduSen&lt;/div&gt;
+    &lt;button id="menu-toggle"&gt;☰&lt;/button&gt;
+    &lt;ul class="nav-links"&gt;
+      &lt;li&gt;&lt;a href="#accueil"&gt;Accueil&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href="#cours"&gt;Cours&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href="#contact"&gt;Contact&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/nav&gt;
+&lt;/header&gt;</code></pre>
+
+        <h3 style="color:#0f172a; margin-top:1.5rem;">2. La mise en page avec Flexbox</h3>
+        <p style="color:#475569; line-height:1.8; margin-top:0.5rem;">
+            Flexbox permet d'aligner et de répartir facilement les éléments d'une barre de navigation :
+        </p>
+        <pre style="background:#0f172a; color:#e2e8f0; padding:1rem 1.2rem; border-radius:12px; overflow-x:auto; font-size:0.85rem; line-height:1.6;"><code>.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+}
+
+.nav-links {
+  display: flex;
+  gap: 1.5rem;
+  list-style: none;
+}
+
+/* Version mobile : le menu devient vertical sous 768px */
+@media (max-width: 768px) {
+  .nav-links {
+    flex-direction: column;
+    display: none;
+  }
+  .nav-links.active {
+    display: flex;
+  }
+}</code></pre>
+
+        <h3 style="color:#0f172a; margin-top:1.5rem;">3. L'interactivité avec JavaScript</h3>
+        <p style="color:#475569; line-height:1.8; margin-top:0.5rem;">
+            Un peu de JavaScript permet d'ouvrir et fermer le menu sur mobile au clic sur le bouton ☰ :
+        </p>
+        <pre style="background:#0f172a; color:#e2e8f0; padding:1rem 1.2rem; border-radius:12px; overflow-x:auto; font-size:0.85rem; line-height:1.6;"><code>const toggle = document.getElementById('menu-toggle');
+const links = document.querySelector('.nav-links');
+
+toggle.addEventListener('click', () => {
+  links.classList.toggle('active');
+});</code></pre>
+
+        <p style="color:#475569; line-height:1.8; background:#f8fafc; border-left:4px solid #2563eb; padding:1rem 1.2rem; border-radius:8px; margin-top:1rem;">
+            <strong>Principe clé du responsive design :</strong> on conçoit d'abord pour mobile (<em>mobile first</em>), puis on ajoute des règles CSS via des <code>@media queries</code> pour adapter la mise en page aux écrans plus larges.
+        </p>
+    </div>
+
+    <div style="background:white; border-radius:20px; padding:2rem; box-shadow:0 4px 24px rgba(37,99,235,0.08); border:1px solid #dbeafe;">
+        <h3 style="color:#0f172a;">📝 Exercice d'application</h3>
+        <p style="color:#475569; line-height:1.8; margin-top:0.5rem;">
+            Créez une carte (« card ») affichant le nom d'un tuteur, sa matière et un bouton « Réserver », centrée horizontalement et verticalement dans la page grâce à Flexbox.
+        </p>
+        <details style="margin-top:1rem;">
+            <summary style="cursor:pointer; color:#2563eb; font-weight:600;">Voir une solution possible</summary>
+            <pre style="background:#0f172a; color:#e2e8f0; padding:1rem 1.2rem; border-radius:12px; overflow-x:auto; font-size:0.85rem; line-height:1.6; margin-top:0.8rem;"><code>body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.tutor-card {
+  border: 1px solid #dbeafe;
+  border-radius: 16px;
+  padding: 1.5rem;
+  text-align: center;
+  box-shadow: 0 4px 24px rgba(37,99,235,0.08);
+}</code></pre>
+        </details>
+    </div>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+
+{% block title %}Physique - Exemple de cours{% endblock %}
+
+{% block content %}
+
+<div style="max-width: 850px; margin: 0 auto; padding-bottom: 2rem;">
+
+    <a href="{{ url_for('main.matieres') }}" style="display:inline-flex; align-items:center; gap:0.4rem; color:#2563eb; text-decoration:none; font-weight:600; font-size:0.9rem; margin:1.5rem 0 1rem;">
+        <i class="fas fa-arrow-left"></i> Retour aux matières
+    </a>
+
+    <img src="https://placehold.co/850x260/3730a3/ffffff?text=Physique" alt="Physique" style="width:100%; border-radius:16px; box-shadow:0 4px 24px rgba(37,99,235,0.08);">
+
+    <div style="text-align:center; padding:1.5rem 0;">
+        <span style="background:#eff6ff; color:#2563eb; padding:0.25rem 0.9rem; border-radius:40px; font-size:0.8rem; font-weight:700;">Terminale S • Mécanique</span>
+        <h1 style="font-size:2.2rem; color:#0f172a; font-weight:800; margin-top:0.8rem;">⚛️ Les trois lois de Newton</h1>
+        <p style="color:#475569; font-size:1.05rem; margin-top:0.3rem;">Exemple de cours donné par un tuteur EduSen en Physique</p>
+    </div>
+
+    <div style="background:white; border-radius:20px; padding:2rem; box-shadow:0 4px 24px rgba(37,99,235,0.08); border:1px solid #dbeafe; margin-bottom:1.5rem;">
+        <h3 style="color:#0f172a;">🎯 Objectifs du cours</h3>
+        <ul style="color:#475569; line-height:2; list-style:none; margin-top:0.5rem;">
+            <li>✅ Énoncer les trois lois de Newton</li>
+            <li>✅ Appliquer la relation fondamentale de la dynamique</li>
+            <li>✅ Résoudre un exercice de mécanique simple</li>
+        </ul>
+    </div>
+
+    <div style="background:white; border-radius:20px; padding:2rem; box-shadow:0 4px 24px rgba(37,99,235,0.08); border:1px solid #dbeafe; margin-bottom:1.5rem;">
+        <h3 style="color:#0f172a;">1. Première loi de Newton : le principe d'inertie</h3>
+        <p style="color:#475569; line-height:1.8; margin-top:0.5rem;">
+            Dans un référentiel galiléen, un objet sur lequel ne s'exerce aucune force (ou dont les forces se compensent) reste au repos ou se déplace en ligne droite à vitesse constante.
+        </p>
+        <p style="color:#475569; line-height:1.8; background:#f8fafc; border-left:4px solid #2563eb; padding:1rem 1.2rem; border-radius:8px;">
+            <strong>Exemple :</strong> une bille posée sur une table plane et immobile reste au repos tant qu'aucune force extérieure ne la déplace.
+        </p>
+
+        <h3 style="color:#0f172a; margin-top:1.5rem;">2. Deuxième loi de Newton : la relation fondamentale de la dynamique (RFD)</h3>
+        <p style="color:#475569; line-height:1.8; margin-top:0.5rem;">
+            La somme des forces extérieures appliquées à un objet est égale au produit de sa masse par son accélération :
+        </p>
+        <div style="background:#eff6ff; border-radius:12px; padding:1rem 1.5rem; margin:1rem 0; font-weight:600; color:#0f172a; text-align:center; font-size:1.1rem;">
+            ΣF = m × a
+        </div>
+        <p style="color:#475569; line-height:1.8;">
+            Avec ΣF la somme des forces (en newtons, N), m la masse (en kg) et a l'accélération (en m/s²).
+        </p>
+        <p style="color:#475569; line-height:1.8; background:#f8fafc; border-left:4px solid #2563eb; padding:1rem 1.2rem; border-radius:8px; margin-top:1rem;">
+            <strong>Exemple :</strong> une force de 50 N est appliquée sur un chariot de masse 10 kg. Son accélération vaut :<br>
+            a = F / m = 50 / 10 = <strong>5 m/s²</strong>
+        </p>
+
+        <h3 style="color:#0f172a; margin-top:1.5rem;">3. Troisième loi de Newton : principe des actions réciproques</h3>
+        <p style="color:#475569; line-height:1.8; margin-top:0.5rem;">
+            Lorsqu'un corps A exerce une force sur un corps B, le corps B exerce sur A une force de même intensité, même direction, mais de sens opposé :
+        </p>
+        <div style="background:#eff6ff; border-radius:12px; padding:1rem 1.5rem; margin:1rem 0; font-weight:600; color:#0f172a; text-align:center;">
+            F<sub>A→B</sub> = − F<sub>B→A</sub>
+        </div>
+        <p style="color:#475569; line-height:1.8; background:#f8fafc; border-left:4px solid #2563eb; padding:1rem 1.2rem; border-radius:8px;">
+            <strong>Exemple :</strong> lorsqu'un nageur pousse l'eau vers l'arrière avec ses bras, l'eau le propulse vers l'avant avec une force égale et opposée.
+        </p>
+    </div>
+
+    <div style="background:white; border-radius:20px; padding:2rem; box-shadow:0 4px 24px rgba(37,99,235,0.08); border:1px solid #dbeafe;">
+        <h3 style="color:#0f172a;">📝 Exercice d'application</h3>
+        <p style="color:#475569; line-height:1.8; margin-top:0.5rem;">
+            Une voiture de masse 900 kg part du repos et atteint une vitesse de 20 m/s en 8 secondes, en ligne droite.
+        </p>
+        <ol style="color:#475569; line-height:2;">
+            <li>Calculer l'accélération moyenne de la voiture.</li>
+            <li>En déduire la force motrice moyenne nécessaire (on néglige les frottements).</li>
+        </ol>
+        <details style="margin-top:1rem;">
+            <summary style="cursor:pointer; color:#2563eb; font-weight:600;">Voir la correction</summary>
+            <p style="color:#475569; line-height:1.8; margin-top:0.8rem;">
+                1) a = Δv / Δt = 20 / 8 = <strong>2,5 m/s²</strong><br>
+                2) F = m × a = 900 × 2,5 = <strong>2 250 N</strong>
+            </p>
+        </details>
+    </div>
+
+</div>
+
+{% endblock %}

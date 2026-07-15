@@ -1,0 +1,308 @@
+
+{% extends "base.html" %}
+
+{% block title %}Mes Disponibilités - EduSen{% endblock %}
+
+{% block content %}
+
+<style>
+    .day-btn {
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        border: 2px solid #dbeafe;
+        background: white;
+        cursor: pointer;
+        transition: 0.3s ease;
+        font-weight: 600;
+        font-size: 0.8rem;
+        color: #475569;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .day-btn:hover {
+        border-color: #2563eb;
+        background: #eff6ff;
+    }
+    .day-btn.active {
+        background: #2563eb;
+        color: #fff;
+        border-color: #2563eb;
+    }
+    .day-label {
+        font-size: 0.7rem;
+        color: #94a3b8;
+        text-align: center;
+        margin-top: 0.2rem;
+    }
+    @keyframes fadeInUp {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    .card-animated {
+        animation: fadeInUp 0.4s ease forwards;
+    }
+</style>
+
+<div style="max-width: 1400px; margin: 0 auto; padding: 1rem 0;">
+
+    <!-- ===== TOPBAR ===== -->
+    <div style="background: white; border-radius: 16px; padding: 0.8rem 1.5rem; box-shadow: 0 4px 24px rgba(37,99,235,0.08); border: 1px solid #dbeafe; margin-bottom: 1.5rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+        <div style="display: flex; align-items: center; gap: 1rem; flex: 1; min-width: 200px;">
+            <a href="{{ url_for('main.accueil') }}" style="font-size: 1.3rem; font-weight: 800; color: #0f172a; text-decoration: none;">
+                Edu<span style="color: #2563eb;">Sen</span>
+            </a>
+            <span style="background: #d1fae5; padding: 0.15rem 0.8rem; border-radius: 40px; font-size: 0.7rem; font-weight: 600; color: #065f46;">Tuteur</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;">
+            <button onclick="showToast('🔔 Aucune notification')" style="background: transparent; border: none; font-size: 1.1rem; cursor: pointer; position: relative; color: #475569;">
+                <i class="fas fa-bell"></i>
+                <span style="position: absolute; top: -5px; right: -8px; background: #dc2626; color: #fff; font-size: 0.5rem; padding: 0.1rem 0.4rem; border-radius: 50%;">5</span>
+            </button>
+            <button onclick="window.location.href='/tuteur/messages'" style="background: transparent; border: none; font-size: 1.1rem; cursor: pointer; position: relative; color: #475569;">
+                <i class="fas fa-envelope"></i>
+                <span style="position: absolute; top: -5px; right: -8px; background: #2563eb; color: #fff; font-size: 0.5rem; padding: 0.1rem 0.4rem; border-radius: 50%;">3</span>
+            </button>
+            <a href="{{ url_for('main.profil_tuteur') }}" style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; text-decoration: none;">
+                <div style="width: 32px; height: 32px; border-radius: 50%; background: #2563eb; color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.8rem;">FD</div>
+                <span style="font-weight: 600; color: #0f172a; font-size: 0.9rem;">Fatou Diop</span>
+                <i class="fas fa-chevron-down" style="color: #94a3b8; font-size: 0.6rem;"></i>
+            </a>
+        </div>
+    </div>
+
+    <div style="display: flex; gap: 2rem;">
+
+        <!-- ===== SIDEBAR ===== -->
+        <div style="flex: 0 0 220px; min-width: 180px;">
+            <div style="background: white; border-radius: 16px; padding: 1.5rem; box-shadow: 0 4px 24px rgba(37,99,235,0.08); border: 1px solid #dbeafe; position: sticky; top: 90px;">
+                <div style="font-weight: 700; font-size: 0.8rem; text-transform: uppercase; color: #94a3b8; margin-bottom: 1rem; letter-spacing: 0.5px;">📋 Menu</div>
+                <nav style="display: flex; flex-direction: column; gap: 0.2rem;">
+                    <a href="{{ url_for('main.dashboard_tuteur') }}" style="padding: 0.5rem 0.8rem; border-radius: 8px; color: #475569; text-decoration: none; display: flex; align-items: center; gap: 0.8rem; font-size: 0.9rem; transition: 0.3s ease;">
+                        <i class="fas fa-home" style="width: 20px; text-align: center;"></i> Dashboard
+                    </a>
+                    <a href="{{ url_for('main.disponibilites_tuteur') }}" style="padding: 0.5rem 0.8rem; border-radius: 8px; background: #eff6ff; color: #2563eb; text-decoration: none; display: flex; align-items: center; gap: 0.8rem; font-size: 0.9rem; font-weight: 600;">
+                        <i class="fas fa-clock" style="width: 20px; text-align: center;"></i> Disponibilités
+                    </a>
+                    <a href="/tuteur/cours" style="padding: 0.5rem 0.8rem; border-radius: 8px; color: #475569; text-decoration: none; display: flex; align-items: center; gap: 0.8rem; font-size: 0.9rem; transition: 0.3s ease;">
+                        <i class="fas fa-book" style="width: 20px; text-align: center;"></i> Cours
+                    </a>
+                    <a href="{{ url_for('main.reservation_tuteur') }}" style="padding: 0.5rem 0.8rem; border-radius: 8px; color: #475569; text-decoration: none; display: flex; align-items: center; gap: 0.8rem; font-size: 0.9rem; transition: 0.3s ease;">
+                        <i class="fas fa-calendar-check" style="width: 20px; text-align: center;"></i> Réservations
+                    </a>
+                    <a href="{{ url_for('main.etudiants_tuteur') }}" style="padding: 0.5rem 0.8rem; border-radius: 8px; color: #475569; text-decoration: none; display: flex; align-items: center; gap: 0.8rem; font-size: 0.9rem; transition: 0.3s ease;">
+                        <i class="fas fa-users" style="width: 20px; text-align: center;"></i> Étudiants
+                    </a>
+                    <a href="/tuteur/messages" style="padding: 0.5rem 0.8rem; border-radius: 8px; color: #475569; text-decoration: none; display: flex; align-items: center; gap: 0.8rem; font-size: 0.9rem; transition: 0.3s ease;">
+                        <i class="fas fa-envelope" style="width: 20px; text-align: center;"></i> Messages
+                    </a>
+                    <a href="/tuteur/revenus" style="padding: 0.5rem 0.8rem; border-radius: 8px; color: #475569; text-decoration: none; display: flex; align-items: center; gap: 0.8rem; font-size: 0.9rem; transition: 0.3s ease;">
+                        <i class="fas fa-money-bill-wave" style="width: 20px; text-align: center;"></i> Revenus
+                    </a>
+                    <a href="/tuteur/avis" style="padding: 0.5rem 0.8rem; border-radius: 8px; color: #475569; text-decoration: none; display: flex; align-items: center; gap: 0.8rem; font-size: 0.9rem; transition: 0.3s ease;">
+                        <i class="fas fa-star" style="width: 20px; text-align: center;"></i> Avis
+                    </a>
+                    <a href="{{ url_for('main.profil_tuteur') }}" style="padding: 0.5rem 0.8rem; border-radius: 8px; color: #475569; text-decoration: none; display: flex; align-items: center; gap: 0.8rem; font-size: 0.9rem; transition: 0.3s ease;">
+                        <i class="fas fa-user" style="width: 20px; text-align: center;"></i> Profil
+                    </a>
+                    <div style="border-top: 1px solid #dbeafe; margin-top: 0.3rem; padding-top: 0.3rem;">
+                        <a href="/auth/deconnexion" style="padding: 0.5rem 0.8rem; border-radius: 8px; color: #dc2626; text-decoration: none; display: flex; align-items: center; gap: 0.8rem; font-size: 0.9rem; transition: 0.3s ease;">
+                            <i class="fas fa-sign-out-alt" style="width: 20px; text-align: center;"></i> Déconnexion
+                        </a>
+                    </div>
+                </nav>
+            </div>
+        </div>
+
+        <!-- ===== CONTENU PRINCIPAL ===== -->
+        <div style="flex: 1; min-width: 0;">
+
+            <!-- ===== TITRE ===== -->
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
+                <div>
+                    <h1 style="font-size: 1.8rem; color: #0f172a; font-weight: 800;">🕐 Gestion des disponibilités</h1>
+                    <p style="color: #475569; font-size: 0.95rem;">Définissez vos créneaux horaires disponibles pour les cours.</p>
+                </div>
+                <button onclick="showToast('✅ Disponibilités enregistrées')" style="padding: 0.7rem 1.5rem; background: #2563eb; color: #fff; border: none; border-radius: 60px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 0.5rem;">
+                    <i class="fas fa-save"></i> Enregistrer
+                </button>
+            </div>
+
+            <!-- ===== CALENDRIER ===== -->
+            <div class="card-animated" style="background: white; border-radius: 16px; padding: 1.5rem; box-shadow: 0 4px 24px rgba(37,99,235,0.08); border: 1px solid #dbeafe; margin-bottom: 1.5rem;">
+                <h3 style="color: #0f172a; font-size: 1.1rem; margin-bottom: 1rem;">📅 Calendrier hebdomadaire</h3>
+                
+                <div style="display: flex; justify-content: space-around; align-items: center; padding: 0.5rem 0; flex-wrap: wrap; gap: 0.5rem;">
+                    <div style="text-align: center;">
+                        <button class="day-btn" onclick="toggleDay(this)" style="background: #dbeafe; border-color: #2563eb; color: #2563eb;">L</button>
+                        <div class="day-label">Lun</div>
+                    </div>
+                    <div style="text-align: center;">
+                        <button class="day-btn active" onclick="toggleDay(this)">M</button>
+                        <div class="day-label">Mar</div>
+                    </div>
+                    <div style="text-align: center;">
+                        <button class="day-btn" onclick="toggleDay(this)">M</button>
+                        <div class="day-label">Mer</div>
+                    </div>
+                    <div style="text-align: center;">
+                        <button class="day-btn active" onclick="toggleDay(this)">J</button>
+                        <div class="day-label">Jeu</div>
+                    </div>
+                    <div style="text-align: center;">
+                        <button class="day-btn active" onclick="toggleDay(this)">V</button>
+                        <div class="day-label">Ven</div>
+                    </div>
+                    <div style="text-align: center;">
+                        <button class="day-btn" onclick="toggleDay(this)">S</button>
+                        <div class="day-label">Sam</div>
+                    </div>
+                    <div style="text-align: center;">
+                        <button class="day-btn" onclick="toggleDay(this)">D</button>
+                        <div class="day-label">Dim</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===== PARAMÈTRES ===== -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+
+                <!-- Heures -->
+                <div class="card-animated" style="background: white; border-radius: 16px; padding: 1.5rem; box-shadow: 0 4px 24px rgba(37,99,235,0.08); border: 1px solid #dbeafe;">
+                    <h3 style="color: #0f172a; font-size: 1.1rem; margin-bottom: 1rem;">⏰ Plages horaires</h3>
+                    
+                    <div style="margin-bottom: 1rem;">
+                        <label style="display: block; font-weight: 600; font-size: 0.85rem; color: #0f172a; margin-bottom: 0.3rem;">Heure de début</label>
+                        <select style="width: 100%; padding: 0.6rem 1rem; border-radius: 10px; border: 1px solid #dbeafe; font-size: 0.95rem; outline: none; background: white;">
+                            <option>08:00</option>
+                            <option>09:00</option>
+                            <option>10:00</option>
+                            <option>11:00</option>
+                            <option>12:00</option>
+                            <option>13:00</option>
+                            <option selected>14:00</option>
+                            <option>15:00</option>
+                            <option>16:00</option>
+                            <option>17:00</option>
+                        </select>
+                    </div>
+
+                    <div style="margin-bottom: 1rem;">
+                        <label style="display: block; font-weight: 600; font-size: 0.85rem; color: #0f172a; margin-bottom: 0.3rem;">Heure de fin</label>
+                        <select style="width: 100%; padding: 0.6rem 1rem; border-radius: 10px; border: 1px solid #dbeafe; font-size: 0.95rem; outline: none; background: white;">
+                            <option>08:00</option>
+                            <option>09:00</option>
+                            <option>10:00</option>
+                            <option>11:00</option>
+                            <option>12:00</option>
+                            <option>13:00</option>
+                            <option>14:00</option>
+                            <option>15:00</option>
+                            <option>16:00</option>
+                            <option selected>17:00</option>
+                            <option>18:00</option>
+                            <option>19:00</option>
+                            <option>20:00</option>
+                        </select>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem;">
+                        <div>
+                            <label style="display: block; font-weight: 600; font-size: 0.85rem; color: #0f172a; margin-bottom: 0.3rem;">Durée (min)</label>
+                            <select style="width: 100%; padding: 0.6rem 1rem; border-radius: 10px; border: 1px solid #dbeafe; font-size: 0.95rem; outline: none; background: white;">
+                                <option>30</option>
+                                <option selected>45</option>
+                                <option>60</option>
+                                <option>90</option>
+                                <option>120</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label style="display: block; font-weight: 600; font-size: 0.85rem; color: #0f172a; margin-bottom: 0.3rem;">Pause (min)</label>
+                            <select style="width: 100%; padding: 0.6rem 1rem; border-radius: 10px; border: 1px solid #dbeafe; font-size: 0.95rem; outline: none; background: white;">
+                                <option selected>0</option>
+                                <option>5</option>
+                                <option>10</option>
+                                <option>15</option>
+                                <option>30</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Mode et fuseau -->
+                <div class="card-animated" style="background: white; border-radius: 16px; padding: 1.5rem; box-shadow: 0 4px 24px rgba(37,99,235,0.08); border: 1px solid #dbeafe;">
+                    <h3 style="color: #0f172a; font-size: 1.1rem; margin-bottom: 1rem;">🌍 Mode et fuseau</h3>
+
+                    <div style="margin-bottom: 1.2rem;">
+                        <label style="display: block; font-weight: 600; font-size: 0.85rem; color: #0f172a; margin-bottom: 0.5rem;">Mode d'enseignement</label>
+                        <div style="display: flex; gap: 1.5rem; flex-wrap: wrap;">
+                            <label style="display: flex; align-items: center; gap: 0.4rem; font-size: 0.95rem; cursor: pointer;">
+                                <input type="checkbox" checked style="width: 18px; height: 18px; accent-color: #2563eb;"> En ligne
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 0.4rem; font-size: 0.95rem; cursor: pointer;">
+                                <input type="checkbox" checked style="width: 18px; height: 18px; accent-color: #2563eb;"> Présentiel
+                            </label>
+                        </div>
+                    </div>
+
+                    <div style="margin-bottom: 1.2rem;">
+                        <label style="display: block; font-weight: 600; font-size: 0.85rem; color: #0f172a; margin-bottom: 0.3rem;">Fuseau horaire</label>
+                        <select style="width: 100%; padding: 0.6rem 1rem; border-radius: 10px; border: 1px solid #dbeafe; font-size: 0.95rem; outline: none; background: white;">
+                            <option selected>GMT +0 (UTC)</option>
+                            <option>GMT +1</option>
+                            <option>GMT +2</option>
+                            <option>GMT -1</option>
+                            <option>GMT -2</option>
+                            <option>GMT -3</option>
+                            <option>GMT -4</option>
+                            <option>GMT -5</option>
+                        </select>
+                    </div>
+
+                    <div style="background: #eff6ff; border-radius: 10px; padding: 0.8rem 1rem; border-left: 3px solid #2563eb;">
+                        <div style="font-weight: 600; color: #0f172a; font-size: 0.9rem;">ℹ️ Résumé</div>
+                        <div style="color: #475569; font-size: 0.85rem; margin-top: 0.3rem;">
+                            Vous êtes disponible <strong>3 jours</strong> par semaine<br>
+                            de <strong>14h00</strong> à <strong>17h00</strong>
+                        </div>
+                    </div>
+
+                    <button onclick="showToast('✅ Disponibilités enregistrées')" style="margin-top: 1.2rem; width: 100%; padding: 0.7rem; background: #2563eb; color: #fff; border: none; border-radius: 60px; font-weight: 600; font-size: 1rem; cursor: pointer; transition: 0.3s ease; display: flex; align-items: center; justify-content: center; gap: 0.5rem;">
+                        <i class="fas fa-save"></i> Enregistrer les disponibilités
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    function toggleDay(btn) {
+        btn.classList.toggle('active');
+        const isActive = btn.classList.contains('active');
+        btn.style.background = isActive ? '#2563eb' : 'white';
+        btn.style.color = isActive ? '#fff' : '#475569';
+        btn.style.borderColor = isActive ? '#2563eb' : '#dbeafe';
+    }
+
+    function showToast(msg) {
+        const existing = document.querySelector('.toast-custom');
+        if (existing) existing.remove();
+        const toast = document.createElement('div');
+        toast.className = 'toast-custom';
+        toast.innerHTML = `
+            <div style="position:fixed;bottom:30px;right:30px;background:#0f172a;color:white;padding:14px 24px;border-radius:14px;box-shadow:0 8px 40px rgba(0,0,0,0.3);display:flex;align-items:center;gap:12px;z-index:9999;max-width:450px;">
+                <span style="font-size:1.3rem;">📋</span>
+                <div><div style="font-weight:600;font-size:0.9rem;">${msg}</div></div>
+                <button onclick="this.parentElement.parentElement.remove()" style="background:none;border:none;color:rgba(255,255,255,0.4);cursor:pointer;font-size:1.2rem;padding:0 4px;">×</button>
+            </div>
+        `;
+        document.body.appendChild(toast);
+        setTimeout(() => { const el = document.querySelector('.toast-custom'); if (el) el.remove(); }, 3500);
+    }
+</script>
+
+{% endblock %}

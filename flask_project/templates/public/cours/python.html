@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+
+{% block title %}Python - Exemple de cours{% endblock %}
+
+{% block content %}
+
+<div style="max-width: 850px; margin: 0 auto; padding-bottom: 2rem;">
+
+    <a href="{{ url_for('main.matieres') }}" style="display:inline-flex; align-items:center; gap:0.4rem; color:#2563eb; text-decoration:none; font-weight:600; font-size:0.9rem; margin:1.5rem 0 1rem;">
+        <i class="fas fa-arrow-left"></i> Retour aux matières
+    </a>
+
+    <img src="https://placehold.co/850x260/1e3a8a/ffffff?text=Python" alt="Python" style="width:100%; border-radius:16px; box-shadow:0 4px 24px rgba(37,99,235,0.08);">
+
+    <div style="text-align:center; padding:1.5rem 0;">
+        <span style="background:#eff6ff; color:#2563eb; padding:0.25rem 0.9rem; border-radius:40px; font-size:0.8rem; font-weight:700;">Débutant • Programmation</span>
+        <h1 style="font-size:2.2rem; color:#0f172a; font-weight:800; margin-top:0.8rem;">🐍 Listes, tuples et dictionnaires</h1>
+        <p style="color:#475569; font-size:1.05rem; margin-top:0.3rem;">Exemple de cours donné par un tuteur EduSen en Python</p>
+    </div>
+
+    <div style="background:white; border-radius:20px; padding:2rem; box-shadow:0 4px 24px rgba(37,99,235,0.08); border:1px solid #dbeafe; margin-bottom:1.5rem;">
+        <h3 style="color:#0f172a;">🎯 Objectifs du cours</h3>
+        <ul style="color:#475569; line-height:2; list-style:none; margin-top:0.5rem;">
+            <li>✅ Manipuler des listes (ajout, suppression, tri)</li>
+            <li>✅ Comprendre l'immutabilité des tuples</li>
+            <li>✅ Utiliser des dictionnaires clé-valeur</li>
+            <li>✅ Combiner ces structures dans un mini-programme</li>
+        </ul>
+    </div>
+
+    <div style="background:white; border-radius:20px; padding:2rem; box-shadow:0 4px 24px rgba(37,99,235,0.08); border:1px solid #dbeafe; margin-bottom:1.5rem;">
+        <h3 style="color:#0f172a;">1. Les listes</h3>
+        <p style="color:#475569; line-height:1.8; margin-top:0.5rem;">
+            Une <strong>liste</strong> est une collection ordonnée et modifiable d'éléments.
+        </p>
+        <pre style="background:#0f172a; color:#e2e8f0; padding:1rem 1.2rem; border-radius:12px; overflow-x:auto; font-size:0.85rem; line-height:1.6;"><code>matieres = ["Mathématiques", "Python", "Anglais"]
+
+matieres.append("MySQL")          # ajoute un élément à la fin
+matieres.remove("Anglais")        # retire un élément précis
+matieres.sort()                   # trie la liste par ordre alphabétique
+
+print(matieres)
+# ['MySQL', 'Mathématiques', 'Python']</code></pre>
+
+        <h3 style="color:#0f172a; margin-top:1.5rem;">2. Les tuples</h3>
+        <p style="color:#475569; line-height:1.8; margin-top:0.5rem;">
+            Un <strong>tuple</strong> ressemble à une liste, mais il est <strong>immuable</strong> : une fois créé, il ne peut plus être modifié. On l'utilise pour des données qui ne doivent pas changer (coordonnées, jours de la semaine…).
+        </p>
+        <pre style="background:#0f172a; color:#e2e8f0; padding:1rem 1.2rem; border-radius:12px; overflow-x:auto; font-size:0.85rem; line-height:1.6;"><code>coordonnees = (14.6928, -17.4467)  # latitude, longitude de Dakar
+
+# coordonnees[0] = 15.0   -> provoquerait une erreur TypeError
+print(coordonnees[0])  # 14.6928</code></pre>
+
+        <h3 style="color:#0f172a; margin-top:1.5rem;">3. Les dictionnaires</h3>
+        <p style="color:#475569; line-height:1.8; margin-top:0.5rem;">
+            Un <strong>dictionnaire</strong> associe des clés uniques à des valeurs, ce qui permet un accès rapide par nom plutôt que par position.
+        </p>
+        <pre style="background:#0f172a; color:#e2e8f0; padding:1rem 1.2rem; border-radius:12px; overflow-x:auto; font-size:0.85rem; line-height:1.6;"><code>etudiant = {
+    "nom": "Awa Ndiaye",
+    "niveau": "Licence 3",
+    "matieres": ["Python", "Mathématiques"]
+}
+
+print(etudiant["nom"])            # Awa Ndiaye
+etudiant["age"] = 21               # ajoute une nouvelle clé
+print(etudiant.get("ville", "Non renseignée"))  # Non renseignée</code></pre>
+
+        <h3 style="color:#0f172a; margin-top:1.5rem;">4. Mini-programme combinant les trois structures</h3>
+        <pre style="background:#0f172a; color:#e2e8f0; padding:1rem 1.2rem; border-radius:12px; overflow-x:auto; font-size:0.85rem; line-height:1.6;"><code>etudiants = [
+    {"nom": "Awa", "notes": (15, 12, 18)},
+    {"nom": "Cheikh", "notes": (10, 14, 16)},
+]
+
+for etudiant in etudiants:
+    moyenne = sum(etudiant["notes"]) / len(etudiant["notes"])
+    print(f"{etudiant['nom']} : moyenne = {moyenne:.2f}")
+
+# Awa : moyenne = 15.00
+# Cheikh : moyenne = 13.33</code></pre>
+    </div>
+
+    <div style="background:white; border-radius:20px; padding:2rem; box-shadow:0 4px 24px rgba(37,99,235,0.08); border:1px solid #dbeafe;">
+        <h3 style="color:#0f172a;">📝 Exercice d'application</h3>
+        <p style="color:#475569; line-height:1.8; margin-top:0.5rem;">
+            Créez un dictionnaire <code>tuteur</code> contenant le nom, la matière et une liste de tarifs horaires (en FCFA) pour 3 créneaux différents. Affichez ensuite le tarif le plus bas.
+        </p>
+        <details style="margin-top:1rem;">
+            <summary style="cursor:pointer; color:#2563eb; font-weight:600;">Voir une solution possible</summary>
+            <pre style="background:#0f172a; color:#e2e8f0; padding:1rem 1.2rem; border-radius:12px; overflow-x:auto; font-size:0.85rem; line-height:1.6; margin-top:0.8rem;"><code>tuteur = {
+    "nom": "Cheikh Diallo",
+    "matiere": "Python",
+    "tarifs": [6000, 5500, 6500]
+}
+
+print(f"Tarif le plus bas : {min(tuteur['tarifs'])} FCFA")
+# Tarif le plus bas : 5500 FCFA</code></pre>
+        </details>
+    </div>
+
+</div>
+
+{% endblock %}

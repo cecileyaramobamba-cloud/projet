@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+
+{% block title %}Économie - Exemple de cours{% endblock %}
+
+{% block content %}
+
+<div style="max-width: 850px; margin: 0 auto; padding-bottom: 2rem;">
+
+    <a href="{{ url_for('main.matieres') }}" style="display:inline-flex; align-items:center; gap:0.4rem; color:#2563eb; text-decoration:none; font-weight:600; font-size:0.9rem; margin:1.5rem 0 1rem;">
+        <i class="fas fa-arrow-left"></i> Retour aux matières
+    </a>
+
+    <img src="https://placehold.co/850x260/b45309/ffffff?text=Economie" alt="Économie" style="width:100%; border-radius:16px; box-shadow:0 4px 24px rgba(37,99,235,0.08);">
+
+    <div style="text-align:center; padding:1.5rem 0;">
+        <span style="background:#eff6ff; color:#2563eb; padding:0.25rem 0.9rem; border-radius:40px; font-size:0.8rem; font-weight:700;">Licence 1 • Microéconomie</span>
+        <h1 style="font-size:2.2rem; color:#0f172a; font-weight:800; margin-top:0.8rem;">📊 La loi de l'offre et de la demande</h1>
+        <p style="color:#475569; font-size:1.05rem; margin-top:0.3rem;">Exemple de cours donné par un tuteur EduSen en Économie</p>
+    </div>
+
+    <div style="background:white; border-radius:20px; padding:2rem; box-shadow:0 4px 24px rgba(37,99,235,0.08); border:1px solid #dbeafe; margin-bottom:1.5rem;">
+        <h3 style="color:#0f172a;">🎯 Objectifs du cours</h3>
+        <ul style="color:#475569; line-height:2; list-style:none; margin-top:0.5rem;">
+            <li>✅ Définir l'offre et la demande</li>
+            <li>✅ Comprendre la notion de prix d'équilibre</li>
+            <li>✅ Analyser l'effet d'un déplacement de courbe</li>
+            <li>✅ Appliquer ces notions à un exemple concret</li>
+        </ul>
+    </div>
+
+    <div style="background:white; border-radius:20px; padding:2rem; box-shadow:0 4px 24px rgba(37,99,235,0.08); border:1px solid #dbeafe; margin-bottom:1.5rem;">
+        <h3 style="color:#0f172a;">1. La demande</h3>
+        <p style="color:#475569; line-height:1.8; margin-top:0.5rem;">
+            La <strong>demande</strong> représente la quantité d'un bien que les consommateurs sont prêts à acheter à un prix donné. En général, plus le prix augmente, plus la quantité demandée diminue : c'est la <strong>loi de la demande</strong>.
+        </p>
+
+        <h3 style="color:#0f172a; margin-top:1.5rem;">2. L'offre</h3>
+        <p style="color:#475569; line-height:1.8; margin-top:0.5rem;">
+            L'<strong>offre</strong> représente la quantité d'un bien que les producteurs sont prêts à vendre à un prix donné. En général, plus le prix augmente, plus les producteurs sont incités à produire et vendre : c'est la <strong>loi de l'offre</strong>.
+        </p>
+
+        <h3 style="color:#0f172a; margin-top:1.5rem;">3. Le prix d'équilibre</h3>
+        <p style="color:#475569; line-height:1.8; margin-top:0.5rem;">
+            Le marché atteint un <strong>équilibre</strong> lorsque la quantité offerte est égale à la quantité demandée. Le prix correspondant est appelé <strong>prix d'équilibre</strong>.
+        </p>
+
+        <p style="color:#475569; line-height:1.8; background:#f8fafc; border-left:4px solid #2563eb; padding:1rem 1.2rem; border-radius:8px; margin-top:1rem;">
+            <strong>Exemple concret — le marché de la tomate à Dakar :</strong>
+        </p>
+        <div style="overflow-x:auto;">
+        <table style="width:100%; border-collapse:collapse; margin-top:0.8rem; font-size:0.9rem;">
+            <thead>
+                <tr style="background:#eff6ff; color:#0f172a;">
+                    <th style="padding:0.6rem; text-align:left; border:1px solid #dbeafe;">Prix (FCFA/kg)</th>
+                    <th style="padding:0.6rem; text-align:left; border:1px solid #dbeafe;">Quantité demandée (kg)</th>
+                    <th style="padding:0.6rem; text-align:left; border:1px solid #dbeafe;">Quantité offerte (kg)</th>
+                </tr>
+            </thead>
+            <tbody style="color:#475569;">
+                <tr><td style="padding:0.6rem; border:1px solid #dbeafe;">300</td><td style="padding:0.6rem; border:1px solid #dbeafe;">1000</td><td style="padding:0.6rem; border:1px solid #dbeafe;">400</td></tr>
+                <tr><td style="padding:0.6rem; border:1px solid #dbeafe;">500</td><td style="padding:0.6rem; border:1px solid #dbeafe;">700</td><td style="padding:0.6rem; border:1px solid #dbeafe;">700</td></tr>
+                <tr style="background:#eff6ff; font-weight:600;"><td style="padding:0.6rem; border:1px solid #dbeafe;">500 ← équilibre</td><td style="padding:0.6rem; border:1px solid #dbeafe;">700</td><td style="padding:0.6rem; border:1px solid #dbeafe;">700</td></tr>
+                <tr><td style="padding:0.6rem; border:1px solid #dbeafe;">700</td><td style="padding:0.6rem; border:1px solid #dbeafe;">400</td><td style="padding:0.6rem; border:1px solid #dbeafe;">1000</td></tr>
+            </tbody>
+        </table>
+        </div>
+        <p style="color:#475569; line-height:1.8; margin-top:0.8rem;">
+            À 500 FCFA/kg, l'offre et la demande sont égales (700 kg) : c'est le <strong>prix d'équilibre</strong> du marché.
+        </p>
+
+        <h3 style="color:#0f172a; margin-top:1.5rem;">4. Déplacement des courbes</h3>
+        <p style="color:#475569; line-height:1.8; margin-top:0.5rem;">
+            Certains facteurs externes déplacent les courbes sans changer le prix directement :
+        </p>
+        <ul style="color:#475569; line-height:2;">
+            <li><strong>Une mauvaise récolte</strong> réduit l'offre à chaque prix → la courbe d'offre se déplace vers la gauche → le prix d'équilibre augmente.</li>
+            <li><strong>Une mode alimentaire</strong> favorable augmente la demande à chaque prix → la courbe de demande se déplace vers la droite → le prix d'équilibre augmente aussi.</li>
+        </ul>
+    </div>
+
+    <div style="background:white; border-radius:20px; padding:2rem; box-shadow:0 4px 24px rgba(37,99,235,0.08); border:1px solid #dbeafe;">
+        <h3 style="color:#0f172a;">📝 Exercice d'application</h3>
+        <p style="color:#475569; line-height:1.8; margin-top:0.5rem;">
+            Une sécheresse réduit fortement la production d'oignons au Sénégal, alors que la demande des ménages reste stable.
+        </p>
+        <ol style="color:#475569; line-height:2;">
+            <li>Quelle courbe est affectée : l'offre ou la demande ?</li>
+            <li>Dans quel sens se déplace-t-elle ?</li>
+            <li>Quel est l'effet attendu sur le prix d'équilibre ?</li>
+        </ol>
+        <details style="margin-top:1rem;">
+            <summary style="cursor:pointer; color:#2563eb; font-weight:600;">Voir la correction</summary>
+            <p style="color:#475569; line-height:1.8; margin-top:0.8rem;">
+                1) C'est la courbe d'<strong>offre</strong> qui est affectée.<br>
+                2) Elle se déplace vers la <strong>gauche</strong> (moins de quantité offerte à chaque prix).<br>
+                3) Le prix d'équilibre <strong>augmente</strong>, car la demande reste stable face à une offre réduite.
+            </p>
+        </details>
+    </div>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,52 @@
+
+{% extends "admin/base_admin.html" %}
+
+{% block title %}Paiements - Admin{% endblock %}
+
+{% block admin_content %}
+
+<div style="margin-bottom: 1.5rem;">
+    <h1 style="font-size: 2rem; color: #0f172a; font-weight: 800;">💳 Gestion des paiements</h1>
+    <p style="color: #475569; font-size: 1rem;">Consultez l'historique des paiements effectués sur la plateforme.</p>
+</div>
+
+<div style="background: white; border-radius: 16px; padding: 1.5rem; box-shadow: 0 4px 24px rgba(37,99,235,0.08); border: 1px solid #dbeafe;">
+    <div style="overflow-x: auto;">
+        <table style="width: 100%; border-collapse: collapse;">
+            <thead>
+                <tr style="background: #eff6ff;">
+                    <th style="padding: 0.75rem 1rem; text-align: left; font-weight: 600; color: #0f172a;">Référence</th>
+                    <th style="padding: 0.75rem 1rem; text-align: left; font-weight: 600; color: #0f172a;">Élève</th>
+                    <th style="padding: 0.75rem 1rem; text-align: left; font-weight: 600; color: #0f172a;">Tuteur</th>
+                    <th style="padding: 0.75rem 1rem; text-align: left; font-weight: 600; color: #0f172a;">Montant</th>
+                    <th style="padding: 0.75rem 1rem; text-align: left; font-weight: 600; color: #0f172a;">Date</th>
+                    <th style="padding: 0.75rem 1rem; text-align: left; font-weight: 600; color: #0f172a;">Statut</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for paiement in paiements %}
+                <tr>
+                    <td style="padding: 0.75rem 1rem; border-bottom: 1px solid #dbeafe;"><strong>{{ paiement.reference }}</strong></td>
+                    <td style="padding: 0.75rem 1rem; border-bottom: 1px solid #dbeafe;">{{ paiement.eleve }}</td>
+                    <td style="padding: 0.75rem 1rem; border-bottom: 1px solid #dbeafe;">{{ paiement.tuteur.nom if paiement.tuteur else "—" }}</td>
+                    <td style="padding: 0.75rem 1rem; border-bottom: 1px solid #dbeafe;">{{ "{:,}".format(paiement.montant).replace(",", " ") }} FCFA</td>
+                    <td style="padding: 0.75rem 1rem; border-bottom: 1px solid #dbeafe;">{{ paiement.date_paiement.strftime('%d/%m/%Y') }}</td>
+                    <td style="padding: 0.75rem 1rem; border-bottom: 1px solid #dbeafe;">
+                        {% if paiement.statut == "Payé" %}
+                        <span style="background: #d1fae5; color: #065f46; padding: 0.15rem 0.7rem; border-radius: 40px; font-size: 0.7rem; font-weight: 600;">✅ Payé</span>
+                        {% else %}
+                        <span style="background: #fef3c7; color: #92400e; padding: 0.15rem 0.7rem; border-radius: 40px; font-size: 0.7rem; font-weight: 600;">⏳ En attente</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="6" style="text-align: center; padding: 2rem; color: #475569;">Aucun paiement pour le moment.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock %}

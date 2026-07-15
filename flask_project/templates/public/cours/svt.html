@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+
+{% block title %}SVT - Exemple de cours{% endblock %}
+
+{% block content %}
+
+<div style="max-width: 850px; margin: 0 auto; padding-bottom: 2rem;">
+
+    <a href="{{ url_for('main.matieres') }}" style="display:inline-flex; align-items:center; gap:0.4rem; color:#2563eb; text-decoration:none; font-weight:600; font-size:0.9rem; margin:1.5rem 0 1rem;">
+        <i class="fas fa-arrow-left"></i> Retour aux matières
+    </a>
+
+    <img src="https://placehold.co/850x260/059669/ffffff?text=SVT" alt="SVT" style="width:100%; border-radius:16px; box-shadow:0 4px 24px rgba(37,99,235,0.08);">
+
+    <div style="text-align:center; padding:1.5rem 0;">
+        <span style="background:#eff6ff; color:#2563eb; padding:0.25rem 0.9rem; border-radius:40px; font-size:0.8rem; font-weight:700;">1ère S • Biologie cellulaire</span>
+        <h1 style="font-size:2.2rem; color:#0f172a; font-weight:800; margin-top:0.8rem;">🧬 La respiration cellulaire</h1>
+        <p style="color:#475569; font-size:1.05rem; margin-top:0.3rem;">Exemple de cours donné par un tuteur EduSen en SVT</p>
+    </div>
+
+    <div style="background:white; border-radius:20px; padding:2rem; box-shadow:0 4px 24px rgba(37,99,235,0.08); border:1px solid #dbeafe; margin-bottom:1.5rem;">
+        <h3 style="color:#0f172a;">🎯 Objectifs du cours</h3>
+        <ul style="color:#475569; line-height:2; list-style:none; margin-top:0.5rem;">
+            <li>✅ Expliquer le rôle de la respiration cellulaire</li>
+            <li>✅ Identifier les grandes étapes du processus</li>
+            <li>✅ Écrire l'équation bilan de la respiration</li>
+            <li>✅ Différencier respiration aérobie et fermentation</li>
+        </ul>
+    </div>
+
+    <div style="background:white; border-radius:20px; padding:2rem; box-shadow:0 4px 24px rgba(37,99,235,0.08); border:1px solid #dbeafe; margin-bottom:1.5rem;">
+        <h3 style="color:#0f172a;">1. Qu'est-ce que la respiration cellulaire ?</h3>
+        <p style="color:#475569; line-height:1.8; margin-top:0.5rem;">
+            La respiration cellulaire est l'ensemble des réactions chimiques qui se déroulent dans les cellules et permettent de produire de l'énergie utilisable (ATP) à partir du glucose, en présence de dioxygène. Elle se déroule principalement dans les <strong>mitochondries</strong>.
+        </p>
+
+        <h3 style="color:#0f172a; margin-top:1.5rem;">2. L'équation bilan</h3>
+        <div style="background:#eff6ff; border-radius:12px; padding:1rem 1.5rem; margin:1rem 0; font-weight:600; color:#0f172a; text-align:center;">
+            C₆H₁₂O₆ + 6 O₂ → 6 CO₂ + 6 H₂O + énergie (ATP)
+        </div>
+        <p style="color:#475569; line-height:1.8;">
+            Le glucose est oxydé en présence d'oxygène pour produire du dioxyde de carbone, de l'eau et de l'énergie utilisable par la cellule.
+        </p>
+
+        <h3 style="color:#0f172a; margin-top:1.5rem;">3. Les trois grandes étapes</h3>
+        <ol style="color:#475569; line-height:2;">
+            <li><strong>La glycolyse</strong> (dans le cytoplasme) : le glucose est dégradé en deux molécules de pyruvate, avec une petite production d'ATP.</li>
+            <li><strong>Le cycle de Krebs</strong> (dans la matrice mitochondriale) : le pyruvate est complètement oxydé, libérant du CO₂ et des molécules transporteuses d'électrons (NADH, FADH₂).</li>
+            <li><strong>La chaîne respiratoire</strong> (membrane interne de la mitochondrie) : les électrons transportés servent à produire une grande quantité d'ATP, l'oxygène étant l'accepteur final des électrons.</li>
+        </ol>
+
+        <h3 style="color:#0f172a; margin-top:1.5rem;">4. Respiration aérobie vs fermentation</h3>
+        <div style="overflow-x:auto;">
+        <table style="width:100%; border-collapse:collapse; margin-top:0.8rem; font-size:0.9rem;">
+            <thead>
+                <tr style="background:#eff6ff; color:#0f172a;">
+                    <th style="padding:0.6rem; text-align:left; border:1px solid #dbeafe;">Critère</th>
+                    <th style="padding:0.6rem; text-align:left; border:1px solid #dbeafe;">Respiration aérobie</th>
+                    <th style="padding:0.6rem; text-align:left; border:1px solid #dbeafe;">Fermentation</th>
+                </tr>
+            </thead>
+            <tbody style="color:#475569;">
+                <tr><td style="padding:0.6rem; border:1px solid #dbeafe;">Présence d'O₂</td><td style="padding:0.6rem; border:1px solid #dbeafe;">Oui, indispensable</td><td style="padding:0.6rem; border:1px solid #dbeafe;">Non</td></tr>
+                <tr><td style="padding:0.6rem; border:1px solid #dbeafe;">Lieu</td><td style="padding:0.6rem; border:1px solid #dbeafe;">Mitochondrie</td><td style="padding:0.6rem; border:1px solid #dbeafe;">Cytoplasme</td></tr>
+                <tr><td style="padding:0.6rem; border:1px solid #dbeafe;">Rendement énergétique</td><td style="padding:0.6rem; border:1px solid #dbeafe;">Élevé (~36-38 ATP)</td><td style="padding:0.6rem; border:1px solid #dbeafe;">Faible (2 ATP)</td></tr>
+                <tr><td style="padding:0.6rem; border:1px solid #dbeafe;">Exemple</td><td style="padding:0.6rem; border:1px solid #dbeafe;">Cellules musculaires au repos</td><td style="padding:0.6rem; border:1px solid #dbeafe;">Levures (fermentation alcoolique), muscles à l'effort intense</td></tr>
+            </tbody>
+        </table>
+        </div>
+    </div>
+
+    <div style="background:white; border-radius:20px; padding:2rem; box-shadow:0 4px 24px rgba(37,99,235,0.08); border:1px solid #dbeafe;">
+        <h3 style="color:#0f172a;">📝 Exercice d'application</h3>
+        <p style="color:#475569; line-height:1.8; margin-top:0.5rem;">
+            Lors d'un effort physique intense, les muscles manquent parfois d'oxygène.
+        </p>
+        <ol style="color:#475569; line-height:2;">
+            <li>Quel processus métabolique est alors utilisé par les cellules musculaires ?</li>
+            <li>Pourquoi ressent-on des courbatures après un effort intense ?</li>
+        </ol>
+        <details style="margin-top:1rem;">
+            <summary style="cursor:pointer; color:#2563eb; font-weight:600;">Voir la correction</summary>
+            <p style="color:#475569; line-height:1.8; margin-top:0.8rem;">
+                1) En l'absence suffisante d'oxygène, les cellules musculaires utilisent la <strong>fermentation lactique</strong>, moins efficace mais plus rapide.<br>
+                2) Cette fermentation produit de l'<strong>acide lactique</strong>, qui s'accumule dans les muscles et provoque une sensation de brûlure puis des courbatures.
+            </p>
+        </details>
+    </div>
+
+</div>
+
+{% endblock %}

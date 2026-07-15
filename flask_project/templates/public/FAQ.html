@@ -1,0 +1,67 @@
+
+{% extends "base.html" %}
+
+{% block title %}FAQ{% endblock %}
+
+{% block content %}
+
+<div style="max-width: 800px; margin: 0 auto;">
+    <div style="text-align: center; padding: 2rem 0;">
+        <h1 style="font-size: 2.5rem; color: #0f172a; font-weight: 800;">❓ Questions fréquentes</h1>
+        <p style="color: #475569; font-size: 1.05rem; margin-top: 0.3rem;">Tout ce que vous devez savoir sur EduSen</p>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 1rem;">
+        <div style="background: white; border-radius: 16px; box-shadow: 0 4px 24px rgba(37,99,235,0.08); border: 1px solid #dbeafe; overflow: hidden;">
+            <button onclick="toggleFaq(this)" style="width: 100%; padding: 1.2rem 1.5rem; background: none; border: none; text-align: left; font-size: 1rem; font-weight: 600; color: #0f172a; cursor: pointer; display: flex; justify-content: space-between; align-items: center;">
+                <span>🔹 Comment fonctionne la mise en relation ?</span>
+                <span style="transition: 0.3s ease;">▼</span>
+            </button>
+            <div style="display: none; padding: 0 1.5rem 1.5rem; color: #475569; line-height: 1.7;">
+                Vous recherchez une matière, vous parcourez les profils disponibles et envoyez une demande de session. Le tuteur accepte ou propose une autre disponibilité.
+            </div>
+        </div>
+        <div style="background: white; border-radius: 16px; box-shadow: 0 4px 24px rgba(37,99,235,0.08); border: 1px solid #dbeafe; overflow: hidden;">
+            <button onclick="toggleFaq(this)" style="width: 100%; padding: 1.2rem 1.5rem; background: none; border: none; text-align: left; font-size: 1rem; font-weight: 600; color: #0f172a; cursor: pointer; display: flex; justify-content: space-between; align-items: center;">
+                <span>🔹 Les tuteurs sont-ils vérifiés ?</span>
+                <span style="transition: 0.3s ease;">▼</span>
+            </button>
+            <div style="display: none; padding: 0 1.5rem 1.5rem; color: #475569; line-height: 1.7;">
+                Oui. Chaque tuteur passe par un processus de vérification : certificat de scolarité, relevé de notes et test de niveau.
+            </div>
+        </div>
+        <div style="background: white; border-radius: 16px; box-shadow: 0 4px 24px rgba(37,99,235,0.08); border: 1px solid #dbeafe; overflow: hidden;">
+            <button onclick="toggleFaq(this)" style="width: 100%; padding: 1.2rem 1.5rem; background: none; border: none; text-align: left; font-size: 1rem; font-weight: 600; color: #0f172a; cursor: pointer; display: flex; justify-content: space-between; align-items: center;">
+                <span>🔹 Comment se passent les paiements ?</span>
+                <span style="transition: 0.3s ease;">▼</span>
+            </button>
+            <div style="display: none; padding: 0 1.5rem 1.5rem; color: #475569; line-height: 1.7;">
+                Le paiement s'effectue via Wave, Orange Money ou carte bancaire. Les fonds sont libérés au tuteur après confirmation de fin de cours.
+            </div>
+        </div>
+        <div style="background: white; border-radius: 16px; box-shadow: 0 4px 24px rgba(37,99,235,0.08); border: 1px solid #dbeafe; overflow: hidden;">
+            <button onclick="toggleFaq(this)" style="width: 100%; padding: 1.2rem 1.5rem; background: none; border: none; text-align: left; font-size: 1rem; font-weight: 600; color: #0f172a; cursor: pointer; display: flex; justify-content: space-between; align-items: center;">
+                <span>🔹 Puis-je devenir tuteur sur EduSen ?</span>
+                <span style="transition: 0.3s ease;">▼</span>
+            </button>
+            <div style="display: none; padding: 0 1.5rem 1.5rem; color: #475569; line-height: 1.7;">
+                Oui ! Cliquez sur "Devenir tuteur" dans le menu. Vous devrez remplir un formulaire et passer un test de niveau.
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function toggleFaq(btn) {
+    const content = btn.nextElementSibling;
+    const icon = btn.querySelector('span:last-child');
+    if (content.style.display === 'block') {
+        content.style.display = 'none';
+        icon.textContent = '▼';
+    } else {
+        content.style.display = 'block';
+        icon.textContent = '▲';
+    }
+}
+</script>
+
+{% endblock %}

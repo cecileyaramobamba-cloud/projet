@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+
+{% block title %}Français - Exemple de cours{% endblock %}
+
+{% block content %}
+
+<div style="max-width: 850px; margin: 0 auto; padding-bottom: 2rem;">
+
+    <a href="{{ url_for('main.matieres') }}" style="display:inline-flex; align-items:center; gap:0.4rem; color:#2563eb; text-decoration:none; font-weight:600; font-size:0.9rem; margin:1.5rem 0 1rem;">
+        <i class="fas fa-arrow-left"></i> Retour aux matières
+    </a>
+
+    <img src="https://placehold.co/850x260/2563eb/ffffff?text=Francais" alt="Français" style="width:100%; border-radius:16px; box-shadow:0 4px 24px rgba(37,99,235,0.08);">
+
+    <div style="text-align:center; padding:1.5rem 0;">
+        <span style="background:#eff6ff; color:#2563eb; padding:0.25rem 0.9rem; border-radius:40px; font-size:0.8rem; font-weight:700;">1ère • Expression écrite</span>
+        <h1 style="font-size:2.2rem; color:#0f172a; font-weight:800; margin-top:0.8rem;">🇫🇷 Construire une dissertation argumentative</h1>
+        <p style="color:#475569; font-size:1.05rem; margin-top:0.3rem;">Exemple de cours donné par un tuteur EduSen en Français</p>
+    </div>
+
+    <div style="background:white; border-radius:20px; padding:2rem; box-shadow:0 4px 24px rgba(37,99,235,0.08); border:1px solid #dbeafe; margin-bottom:1.5rem;">
+        <h3 style="color:#0f172a;">🎯 Objectifs du cours</h3>
+        <ul style="color:#475569; line-height:2; list-style:none; margin-top:0.5rem;">
+            <li>✅ Distinguer thèse, argument et exemple</li>
+            <li>✅ Structurer un plan dialectique (thèse / antithèse / synthèse)</li>
+            <li>✅ Utiliser des connecteurs logiques pertinents</li>
+            <li>✅ Rédiger un paragraphe argumenté complet</li>
+        </ul>
+    </div>
+
+    <div style="background:white; border-radius:20px; padding:2rem; box-shadow:0 4px 24px rgba(37,99,235,0.08); border:1px solid #dbeafe; margin-bottom:1.5rem;">
+        <h3 style="color:#0f172a;">1. Les trois piliers de l'argumentation</h3>
+        <p style="color:#475569; line-height:1.8; margin-top:0.5rem;">
+            Argumenter, c'est défendre un point de vue à l'aide d'un raisonnement structuré. Trois éléments sont indispensables :
+        </p>
+        <ul style="color:#475569; line-height:2; margin-top:0.5rem;">
+            <li><strong>La thèse</strong> : l'idée générale que l'on souhaite défendre.</li>
+            <li><strong>L'argument</strong> : une raison logique qui justifie la thèse.</li>
+            <li><strong>L'exemple</strong> : un fait concret (historique, littéraire, personnel) qui illustre l'argument.</li>
+        </ul>
+
+        <h3 style="color:#0f172a; margin-top:1.5rem;">2. Le plan dialectique</h3>
+        <p style="color:#475569; line-height:1.8; margin-top:0.5rem;">
+            Face à un sujet du type <em>« Le progrès technique rend-il l'homme plus libre ? »</em>, le plan dialectique en trois temps est le plus adapté :
+        </p>
+        <ol style="color:#475569; line-height:2;">
+            <li><strong>Thèse</strong> : Oui, le progrès technique libère l'homme des contraintes matérielles.</li>
+            <li><strong>Antithèse</strong> : Mais il crée aussi de nouvelles dépendances et contraintes.</li>
+            <li><strong>Synthèse</strong> : La liberté dépend en réalité de l'usage que l'on fait de la technique.</li>
+        </ol>
+
+        <h3 style="color:#0f172a; margin-top:1.5rem;">3. Exemple de paragraphe argumenté rédigé</h3>
+        <p style="color:#475569; line-height:1.8; background:#f8fafc; border-left:4px solid #2563eb; padding:1rem 1.2rem; border-radius:8px;">
+            « Le progrès technique permet indéniablement à l'homme de se libérer de nombreuses contraintes matérielles. En effet, les machines ont remplacé des tâches pénibles autrefois réalisées à la main, laissant à l'homme davantage de temps libre. Par exemple, l'apparition du machinisme agricole au XIX<sup>e</sup> siècle a permis de réduire considérablement le temps consacré aux travaux des champs, libérant ainsi une partie de la population pour d'autres activités, notamment intellectuelles et culturelles. »
+        </p>
+        <p style="color:#475569; line-height:1.8; margin-top:0.8rem;">
+            Ce paragraphe suit la structure <strong>idée → argument → exemple</strong>, reliée par des connecteurs logiques (« en effet », « par exemple », « ainsi »).
+        </p>
+
+        <h3 style="color:#0f172a; margin-top:1.5rem;">4. Les connecteurs logiques à connaître</h3>
+        <div style="overflow-x:auto;">
+        <table style="width:100%; border-collapse:collapse; margin-top:0.8rem; font-size:0.9rem;">
+            <thead>
+                <tr style="background:#eff6ff; color:#0f172a;">
+                    <th style="padding:0.6rem; text-align:left; border:1px solid #dbeafe;">Fonction</th>
+                    <th style="padding:0.6rem; text-align:left; border:1px solid #dbeafe;">Connecteurs</th>
+                </tr>
+            </thead>
+            <tbody style="color:#475569;">
+                <tr><td style="padding:0.6rem; border:1px solid #dbeafe;">Ajout</td><td style="padding:0.6rem; border:1px solid #dbeafe;">de plus, en outre, par ailleurs</td></tr>
+                <tr><td style="padding:0.6rem; border:1px solid #dbeafe;">Opposition</td><td style="padding:0.6rem; border:1px solid #dbeafe;">cependant, néanmoins, toutefois, en revanche</td></tr>
+                <tr><td style="padding:0.6rem; border:1px solid #dbeafe;">Cause</td><td style="padding:0.6rem; border:1px solid #dbeafe;">car, en effet, parce que</td></tr>
+                <tr><td style="padding:0.6rem; border:1px solid #dbeafe;">Conséquence</td><td style="padding:0.6rem; border:1px solid #dbeafe;">ainsi, donc, par conséquent</td></tr>
+            </tbody>
+        </table>
+        </div>
+    </div>
+
+    <div style="background:white; border-radius:20px; padding:2rem; box-shadow:0 4px 24px rgba(37,99,235,0.08); border:1px solid #dbeafe;">
+        <h3 style="color:#0f172a;">📝 Exercice d'application</h3>
+        <p style="color:#475569; line-height:1.8; margin-top:0.5rem;">
+            Sujet : <em>« Faut-il toujours dire la vérité ? »</em>
+        </p>
+        <p style="color:#475569; line-height:1.8;">
+            Rédigez un paragraphe argumenté défendant la thèse selon laquelle la vérité doit parfois être nuancée, en respectant la structure idée / argument / exemple.
+        </p>
+        <details style="margin-top:1rem;">
+            <summary style="cursor:pointer; color:#2563eb; font-weight:600;">Voir un exemple de correction</summary>
+            <p style="color:#475569; line-height:1.8; margin-top:0.8rem;">
+                « Dire la vérité est une valeur morale essentielle, mais elle doit parfois être nuancée pour préserver autrui. En effet, une vérité brutale peut blesser inutilement sans apporter de bénéfice réel à celui qui la reçoit. Par exemple, un médecin qui annonce un diagnostic difficile choisit souvent ses mots avec précaution, non pour mentir, mais pour accompagner le patient dans l'acceptation de la réalité. »
+            </p>
+        </details>
+    </div>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,32 @@
+
+{% extends "base.html" %}
+
+{% block title %}Contact{% endblock %}
+
+{% block content %}
+
+<div style="max-width: 700px; margin: 0 auto;">
+    <div style="text-align: center; padding: 2rem 0;">
+        <h1 style="font-size: 2.5rem; color: #0f172a; font-weight: 800;">📞 Contactez-nous</h1>
+        <p style="color: #475569; font-size: 1.05rem; margin-top: 0.3rem;">Une question ? Nous sommes là pour vous aider.</p>
+    </div>
+    <div style="background: white; border-radius: 20px; padding: 2rem; box-shadow: 0 4px 24px rgba(37,99,235,0.08); border: 1px solid #dbeafe;">
+        <form onsubmit="event.preventDefault(); showToast('✅ Message envoyé ! Nous vous répondrons sous 24h.');">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                <div><label style="display: block; font-weight: 600; font-size: 0.85rem; color: #0f172a; margin-bottom: 0.3rem;">Prénom</label><input type="text" placeholder="Votre prénom" style="width: 100%; padding: 0.6rem 1rem; border-radius: 10px; border: 1px solid #dbeafe; font-size: 0.9rem; outline: none;"></div>
+                <div><label style="display: block; font-weight: 600; font-size: 0.85rem; color: #0f172a; margin-bottom: 0.3rem;">Nom</label><input type="text" placeholder="Votre nom" style="width: 100%; padding: 0.6rem 1rem; border-radius: 10px; border: 1px solid #dbeafe; font-size: 0.9rem; outline: none;"></div>
+            </div>
+            <div style="margin-top: 1rem;"><label style="display: block; font-weight: 600; font-size: 0.85rem; color: #0f172a; margin-bottom: 0.3rem;">Email</label><input type="email" placeholder="votre@email.com" style="width: 100%; padding: 0.6rem 1rem; border-radius: 10px; border: 1px solid #dbeafe; font-size: 0.9rem; outline: none;"></div>
+            <div style="margin-top: 1rem;"><label style="display: block; font-weight: 600; font-size: 0.85rem; color: #0f172a; margin-bottom: 0.3rem;">Sujet</label><select style="width: 100%; padding: 0.6rem 1rem; border-radius: 10px; border: 1px solid #dbeafe; font-size: 0.9rem; outline: none;"><option>Question générale</option><option>Problème technique</option><option>Devenir tuteur</option><option>Partenariat</option><option>Autre</option></select></div>
+            <div style="margin-top: 1rem;"><label style="display: block; font-weight: 600; font-size: 0.85rem; color: #0f172a; margin-bottom: 0.3rem;">Message</label><textarea rows="5" placeholder="Votre message..." style="width: 100%; padding: 0.6rem 1rem; border-radius: 10px; border: 1px solid #dbeafe; font-size: 0.9rem; outline: none; resize: vertical;"></textarea></div>
+            <button type="submit" style="margin-top: 1.5rem; width: 100%; padding: 0.8rem; background: #2563eb; color: #fff; border: none; border-radius: 60px; font-weight: 600; font-size: 1rem; cursor: pointer; transition: 0.3s ease;"><i class="fas fa-paper-plane"></i> Envoyer</button>
+        </form>
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-top: 2rem; padding-top: 2rem; border-top: 1px solid #dbeafe; text-align: center;">
+            <div><div style="font-size: 1.5rem;">📧</div><div style="font-weight: 600; font-size: 0.9rem;">Email</div><div style="color: #475569; font-size: 0.85rem;">contact@edusen.sn</div></div>
+            <div><div style="font-size: 1.5rem;">📞</div><div style="font-weight: 600; font-size: 0.9rem;">Téléphone</div><div style="color: #475569; font-size: 0.85rem;">+221 XX XXX XX XX</div></div>
+            <div><div style="font-size: 1.5rem;">📍</div><div style="font-weight: 600; font-size: 0.9rem;">Localisation</div><div style="color: #475569; font-size: 0.85rem;">Dakar, Sénégal</div></div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

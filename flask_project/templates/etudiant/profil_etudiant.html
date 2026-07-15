@@ -1,0 +1,325 @@
+
+{% extends "base.html" %}
+
+{% block title %}Mon Profil - EduSen{% endblock %}
+
+{% block content %}
+
+<style>
+    .stat-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 12px 48px rgba(37,99,235,0.12);
+    }
+    .profile-card {
+        animation: fadeInUp 0.4s ease forwards;
+    }
+    @keyframes fadeInUp {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    .info-row {
+        display: flex;
+        padding: 0.5rem 0;
+        border-bottom: 1px solid #f1f5f9;
+    }
+    .info-label {
+        width: 140px;
+        font-weight: 600;
+        color: #475569;
+        font-size: 0.85rem;
+        flex-shrink: 0;
+    }
+    .info-value {
+        color: #0f172a;
+        font-size: 0.9rem;
+    }
+    .security-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.6rem 0;
+        border-bottom: 1px solid #f1f5f9;
+    }
+    .security-item:last-child {
+        border-bottom: none;
+    }
+    .toggle-switch {
+        width: 44px;
+        height: 24px;
+        background: #cbd5e1;
+        border-radius: 12px;
+        cursor: pointer;
+        position: relative;
+        transition: 0.3s ease;
+    }
+    .toggle-switch.active {
+        background: #2563eb;
+    }
+    .toggle-switch::after {
+        content: '';
+        position: absolute;
+        width: 18px;
+        height: 18px;
+        background: white;
+        border-radius: 50%;
+        top: 3px;
+        left: 3px;
+        transition: 0.3s ease;
+    }
+    .toggle-switch.active::after {
+        left: 23px;
+    }
+</style>
+
+<div style="max-width: 1400px; margin: 0 auto; padding: 1rem 0;">
+
+    <!-- ===== TOPBAR ===== -->
+    <div style="background: white; border-radius: 16px; padding: 0.8rem 1.5rem; box-shadow: 0 4px 24px rgba(37,99,235,0.08); border: 1px solid #dbeafe; margin-bottom: 1.5rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+        <div style="display: flex; align-items: center; gap: 1rem; flex: 1; min-width: 200px;">
+            <a href="/" style="font-size: 1.3rem; font-weight: 800; color: #0f172a; text-decoration: none;">
+                Edu<span style="color: #2563eb;">Sen</span>
+            </a>
+            <span style="background: #dbeafe; padding: 0.15rem 0.8rem; border-radius: 40px; font-size: 0.7rem; font-weight: 600; color: #2563eb;">Étudiant</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;">
+            <div style="display: flex; align-items: center; background: #f8fafc; border-radius: 60px; padding: 0.2rem 0.2rem 0.2rem 1rem; border: 1px solid #e2e8f0; max-width: 200px;">
+                <i class="fas fa-search" style="color: #94a3b8; font-size: 0.8rem;"></i>
+                <input type="text" placeholder="Rechercher..." style="border: none; padding: 0.4rem 0.6rem; flex: 1; background: transparent; font-size: 0.85rem; outline: none; min-width: 60px;">
+            </div>
+            <button onclick="showToast('🔔 Aucune notification')" style="background: transparent; border: none; font-size: 1.1rem; cursor: pointer; position: relative; color: #475569;">
+                <i class="fas fa-bell"></i>
+                <span style="position: absolute; top: -5px; right: -8px; background: #dc2626; color: #fff; font-size: 0.5rem; padding: 0.1rem 0.4rem; border-radius: 50%;">3</span>
+            </button>
+            <button onclick="window.location.href='/etudiant/messages'" style="background: transparent; border: none; font-size: 1.1rem; cursor: pointer; position: relative; color: #475569;">
+                <i class="fas fa-envelope"></i>
+                <span style="position: absolute; top: -5px; right: -8px; background: #2563eb; color: #fff; font-size: 0.5rem; padding: 0.1rem 0.4rem; border-radius: 50%;">2</span>
+            </button>
+            <div style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;" onclick="window.location.href='/etudiant/dashboard'">
+                <div style="width: 32px; height: 32px; border-radius: 50%; background: #2563eb; color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.8rem;">SK</div>
+                <span style="font-weight: 600; color: #0f172a; font-size: 0.9rem;">Soukeyna</span>
+                <i class="fas fa-chevron-down" style="color: #94a3b8; font-size: 0.6rem;"></i>
+            </div>
+        </div>
+    </div>
+
+    <div style="display: flex; gap: 2rem;">
+
+        <!-- ===== SIDEBAR ===== -->
+        <div style="flex: 0 0 220px; min-width: 180px;">
+            <div style="background: white; border-radius: 16px; padding: 1.5rem; box-shadow: 0 4px 24px rgba(37,99,235,0.08); border: 1px solid #dbeafe; position: sticky; top: 90px;">
+                <div style="font-weight: 700; font-size: 0.8rem; text-transform: uppercase; color: #94a3b8; margin-bottom: 1rem; letter-spacing: 0.5px;">📋 Menu</div>
+                <nav style="display: flex; flex-direction: column; gap: 0.2rem;">
+                    <a href="/etudiant/dashboard" style="padding: 0.5rem 0.8rem; border-radius: 8px; color: #475569; text-decoration: none; display: flex; align-items: center; gap: 0.8rem; font-size: 0.9rem; transition: 0.3s ease;">
+                        <i class="fas fa-home" style="width: 20px; text-align: center;"></i> Tableau de bord
+                    </a>
+                    <a href="/etudiant/cours" style="padding: 0.5rem 0.8rem; border-radius: 8px; color: #475569; text-decoration: none; display: flex; align-items: center; gap: 0.8rem; font-size: 0.9rem; transition: 0.3s ease;">
+                        <i class="fas fa-book" style="width: 20px; text-align: center;"></i> Mes cours
+                    </a>
+                    <a href="/accueil/liste_tuteurs" style="padding: 0.5rem 0.8rem; border-radius: 8px; color: #475569; text-decoration: none; display: flex; align-items: center; gap: 0.8rem; font-size: 0.9rem; transition: 0.3s ease;">
+                        <i class="fas fa-search" style="width: 20px; text-align: center;"></i> Trouver un tuteur
+                    </a>
+                    <a href="/etudiant/reservations" style="padding: 0.5rem 0.8rem; border-radius: 8px; color: #475569; text-decoration: none; display: flex; align-items: center; gap: 0.8rem; font-size: 0.9rem; transition: 0.3s ease;">
+                        <i class="fas fa-calendar-check" style="width: 20px; text-align: center;"></i> Réservations
+                    </a>
+                    <a href="/etudiant/messages" style="padding: 0.5rem 0.8rem; border-radius: 8px; color: #475569; text-decoration: none; display: flex; align-items: center; gap: 0.8rem; font-size: 0.9rem; transition: 0.3s ease;">
+                        <i class="fas fa-envelope" style="width: 20px; text-align: center;"></i> Messages
+                    </a>
+                    <a href="/etudiant/devoirs" style="padding: 0.5rem 0.8rem; border-radius: 8px; color: #475569; text-decoration: none; display: flex; align-items: center; gap: 0.8rem; font-size: 0.9rem; transition: 0.3s ease;">
+                        <i class="fas fa-file-alt" style="width: 20px; text-align: center;"></i> Devoirs
+                    </a>
+                    <a href="/etudiant/examens" style="padding: 0.5rem 0.8rem; border-radius: 8px; color: #475569; text-decoration: none; display: flex; align-items: center; gap: 0.8rem; font-size: 0.9rem; transition: 0.3s ease;">
+                        <i class="fas fa-pencil-alt" style="width: 20px; text-align: center;"></i> Examens
+                    </a>
+                    <a href="/etudiant/certificats" style="padding: 0.5rem 0.8rem; border-radius: 8px; color: #475569; text-decoration: none; display: flex; align-items: center; gap: 0.8rem; font-size: 0.9rem; transition: 0.3s ease;">
+                        <i class="fas fa-award" style="width: 20px; text-align: center;"></i> Certificats
+                    </a>
+                    <a href="/etudiant/profil" style="padding: 0.5rem 0.8rem; border-radius: 8px; background: #eff6ff; color: #2563eb; text-decoration: none; display: flex; align-items: center; gap: 0.8rem; font-size: 0.9rem; font-weight: 600;">
+                        <i class="fas fa-user" style="width: 20px; text-align: center;"></i> Mon profil
+                    </a>
+                    <div style="border-top: 1px solid #dbeafe; margin-top: 0.3rem; padding-top: 0.3rem;">
+                        <a href="/auth/deconnexion" style="padding: 0.5rem 0.8rem; border-radius: 8px; color: #dc2626; text-decoration: none; display: flex; align-items: center; gap: 0.8rem; font-size: 0.9rem; transition: 0.3s ease;">
+                            <i class="fas fa-sign-out-alt" style="width: 20px; text-align: center;"></i> Déconnexion
+                        </a>
+                    </div>
+                </nav>
+            </div>
+        </div>
+
+        <!-- ===== CONTENU PRINCIPAL ===== -->
+        <div style="flex: 1; min-width: 0;">
+
+            <!-- ===== PROFIL ===== -->
+            <div style="background: white; border-radius: 16px; padding: 2rem; box-shadow: 0 4px 24px rgba(37,99,235,0.08); border: 1px solid #dbeafe; margin-bottom: 1.5rem;">
+                <div style="display: flex; align-items: center; gap: 2rem; flex-wrap: wrap;">
+
+                    <!-- Photo de profil -->
+                    <div style="text-align: center;">
+                        <div style="width: 100px; height: 100px; border-radius: 50%; background: #2563eb; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; font-weight: 700; margin: 0 auto;">SK</div>
+                        <div style="margin-top: 0.5rem; font-weight: 600; font-size: 1.1rem; color: #0f172a;">Soukeyna Mbengue</div>
+                        <div style="color: #475569; font-size: 0.9rem;">Étudiante en Informatique</div>
+                        <div style="color: #475569; font-size: 0.85rem;">📍 Dakar, Sénégal</div>
+                    </div>
+
+                    <!-- Informations -->
+                    <div style="flex: 1; min-width: 200px;">
+                        <div class="info-row">
+                            <span class="info-label">📧 Email</span>
+                            <span class="info-value">soukeyna@email.com</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">📱 Téléphone</span>
+                            <span class="info-value">+221 XX XXX XX XX</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">🎓 Niveau</span>
+                            <span class="info-value">Licence 2 - Informatique</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">📅 Inscrit</span>
+                            <span class="info-value">01/01/2026</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">⭐ Note moyenne</span>
+                            <span class="info-value" style="color: #f59e0b;">4.8/5</span>
+                        </div>
+                    </div>
+
+                    <!-- Actions -->
+                    <div style="display: flex; flex-direction: column; gap: 0.5rem; min-width: 150px;">
+                        <button onclick="showToast('✏️ Modifier le profil')" style="padding: 0.6rem 1.5rem; background: #2563eb; color: #fff; border: none; border-radius: 60px; font-weight: 600; cursor: pointer; transition: 0.3s ease;">
+                            <i class="fas fa-edit"></i> Modifier le profil
+                        </button>
+                        <button onclick="showToast('📷 Changer la photo')" style="padding: 0.6rem 1.5rem; background: transparent; color: #2563eb; border: 1px solid #2563eb; border-radius: 60px; font-weight: 600; cursor: pointer; transition: 0.3s ease;">
+                            <i class="fas fa-camera"></i> Changer la photo
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===== STATISTIQUES ===== -->
+            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 1.5rem;">
+                <div class="stat-card" style="background: white; border-radius: 12px; padding: 1rem; box-shadow: 0 4px 24px rgba(37,99,235,0.08); border: 1px solid #dbeafe; text-align: center; transition: 0.3s ease;">
+                    <div style="font-size: 1.8rem; font-weight: 800; color: #2563eb;">12</div>
+                    <div style="color: #475569; font-size: 0.8rem;">📚 Cours</div>
+                </div>
+                <div class="stat-card" style="background: white; border-radius: 12px; padding: 1rem; box-shadow: 0 4px 24px rgba(37,99,235,0.08); border: 1px solid #dbeafe; text-align: center; transition: 0.3s ease;">
+                    <div style="font-size: 1.8rem; font-weight: 800; color: #2563eb;">24</div>
+                    <div style="color: #475569; font-size: 0.8rem;">📅 Réservations</div>
+                </div>
+                <div class="stat-card" style="background: white; border-radius: 12px; padding: 1rem; box-shadow: 0 4px 24px rgba(37,99,235,0.08); border: 1px solid #dbeafe; text-align: center; transition: 0.3s ease;">
+                    <div style="font-size: 1.8rem; font-weight: 800; color: #2563eb;">3</div>
+                    <div style="color: #475569; font-size: 0.8rem;">🏆 Certificats</div>
+                </div>
+                <div class="stat-card" style="background: white; border-radius: 12px; padding: 1rem; box-shadow: 0 4px 24px rgba(37,99,235,0.08); border: 1px solid #dbeafe; text-align: center; transition: 0.3s ease;">
+                    <div style="font-size: 1.8rem; font-weight: 800; color: #f59e0b;">4.8</div>
+                    <div style="color: #475569; font-size: 0.8rem;">⭐ Note</div>
+                </div>
+            </div>
+
+            <!-- ===== OBJECTIFS ===== -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;">
+
+                <!-- Objectifs -->
+                <div style="background: white; border-radius: 16px; padding: 1.5rem; box-shadow: 0 4px 24px rgba(37,99,235,0.08); border: 1px solid #dbeafe;">
+                    <h3 style="color: #0f172a; font-size: 1.1rem; margin-bottom: 1rem;">🎯 Objectifs d'apprentissage</h3>
+                    <ul style="list-style: none; padding: 0; margin: 0;">
+                        <li style="display: flex; align-items: center; gap: 0.5rem; padding: 0.5rem 0; border-bottom: 1px solid #f1f5f9;">
+                            <span style="color: #2563eb;">●</span>
+                            <span style="color: #0f172a;">Apprendre Python</span>
+                            <span style="margin-left: auto; background: #d1fae5; color: #065f46; padding: 0.1rem 0.5rem; border-radius: 40px; font-size: 0.65rem; font-weight: 600;">En cours</span>
+                        </li>
+                        <li style="display: flex; align-items: center; gap: 0.5rem; padding: 0.5rem 0; border-bottom: 1px solid #f1f5f9;">
+                            <span style="color: #2563eb;">●</span>
+                            <span style="color: #0f172a;">Réussir les examens</span>
+                            <span style="margin-left: auto; background: #fef3c7; color: #92400e; padding: 0.1rem 0.5rem; border-radius: 40px; font-size: 0.65rem; font-weight: 600;">En attente</span>
+                        </li>
+                        <li style="display: flex; align-items: center; gap: 0.5rem; padding: 0.5rem 0;">
+                            <span style="color: #2563eb;">●</span>
+                            <span style="color: #0f172a;">Obtenir un certificat</span>
+                            <span style="margin-left: auto; background: #d1fae5; color: #065f46; padding: 0.1rem 0.5rem; border-radius: 40px; font-size: 0.65rem; font-weight: 600;">En cours</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Sécurité -->
+                <div style="background: white; border-radius: 16px; padding: 1.5rem; box-shadow: 0 4px 24px rgba(37,99,235,0.08); border: 1px solid #dbeafe;">
+                    <h3 style="color: #0f172a; font-size: 1.1rem; margin-bottom: 1rem;">🔐 Sécurité du compte</h3>
+                    <div class="security-item">
+                        <span style="color: #0f172a;">Changer le mot de passe</span>
+                        <button onclick="showToast('🔑 Réinitialiser le mot de passe')" style="padding: 0.3rem 1rem; background: #2563eb; color: #fff; border: none; border-radius: 40px; font-weight: 600; cursor: pointer; font-size: 0.8rem;">
+                            Modifier
+                        </button>
+                    </div>
+                    <div class="security-item">
+                        <span style="color: #0f172a;">Authentification à deux facteurs</span>
+                        <div class="toggle-switch active" onclick="this.classList.toggle('active'); showToast(this.classList.contains('active') ? '✅ 2FA activé' : '❌ 2FA désactivé')"></div>
+                    </div>
+                    <div class="security-item">
+                        <span style="color: #0f172a;">Appareils connectés</span>
+                        <button onclick="showToast('📱 Gérer les appareils')" style="padding: 0.3rem 1rem; background: transparent; color: #2563eb; border: 1px solid #2563eb; border-radius: 40px; font-weight: 600; cursor: pointer; font-size: 0.8rem;">
+                            Gérer
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===== DOCUMENTS ===== -->
+            <div style="background: white; border-radius: 16px; padding: 1.5rem; box-shadow: 0 4px 24px rgba(37,99,235,0.08); border: 1px solid #dbeafe;">
+                <h3 style="color: #0f172a; font-size: 1.1rem; margin-bottom: 1rem;">📄 Documents</h3>
+                <div style="display: flex; flex-wrap: wrap; gap: 1rem;">
+                    <div style="display: flex; align-items: center; gap: 0.8rem; background: #f8fafc; padding: 0.6rem 1.2rem; border-radius: 12px; border: 1px solid #e2e8f0;">
+                        <span style="font-size: 1.5rem;">🪪</span>
+                        <div>
+                            <div style="font-weight: 600; color: #0f172a; font-size: 0.9rem;">Carte d'étudiant</div>
+                            <div style="color: #475569; font-size: 0.75rem;">Validée</div>
+                        </div>
+                        <button onclick="showToast('📄 Télécharger la carte')" style="padding: 0.2rem 0.8rem; background: #2563eb; color: #fff; border: none; border-radius: 40px; cursor: pointer; font-size: 0.75rem;">
+                            <i class="fas fa-download"></i>
+                        </button>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 0.8rem; background: #f8fafc; padding: 0.6rem 1.2rem; border-radius: 12px; border: 1px solid #e2e8f0;">
+                        <span style="font-size: 1.5rem;">📜</span>
+                        <div>
+                            <div style="font-weight: 600; color: #0f172a; font-size: 0.9rem;">Certificat Python</div>
+                            <div style="color: #475569; font-size: 0.75rem;">2026</div>
+                        </div>
+                        <button onclick="showToast('📄 Télécharger le certificat')" style="padding: 0.2rem 0.8rem; background: #2563eb; color: #fff; border: none; border-radius: 40px; cursor: pointer; font-size: 0.75rem;">
+                            <i class="fas fa-download"></i>
+                        </button>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 0.8rem; background: #f8fafc; padding: 0.6rem 1.2rem; border-radius: 12px; border: 1px solid #e2e8f0;">
+                        <span style="font-size: 1.5rem;">📜</span>
+                        <div>
+                            <div style="font-weight: 600; color: #0f172a; font-size: 0.9rem;">Certificat Maths</div>
+                            <div style="color: #475569; font-size: 0.75rem;">2025</div>
+                        </div>
+                        <button onclick="showToast('📄 Télécharger le certificat')" style="padding: 0.2rem 0.8rem; background: #2563eb; color: #fff; border: none; border-radius: 40px; cursor: pointer; font-size: 0.75rem;">
+                            <i class="fas fa-download"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    function showToast(msg) {
+        const existing = document.querySelector('.toast-custom');
+        if (existing) existing.remove();
+        const toast = document.createElement('div');
+        toast.className = 'toast-custom';
+        toast.innerHTML = `
+            <div style="position:fixed;bottom:30px;right:30px;background:#0f172a;color:white;padding:14px 24px;border-radius:14px;box-shadow:0 8px 40px rgba(0,0,0,0.3);display:flex;align-items:center;gap:12px;z-index:9999;max-width:450px;">
+                <span style="font-size:1.3rem;">📋</span>
+                <div><div style="font-weight:600;font-size:0.9rem;">${msg}</div></div>
+                <button onclick="this.parentElement.parentElement.remove()" style="background:none;border:none;color:rgba(255,255,255,0.4);cursor:pointer;font-size:1.2rem;padding:0 4px;">×</button>
+            </div>
+        `;
+        document.body.appendChild(toast);
+        setTimeout(() => { const el = document.querySelector('.toast-custom'); if (el) el.remove(); }, 3500);
+    }
+</script>
+
+{% endblock %}
