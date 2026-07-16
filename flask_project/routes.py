@@ -1,3 +1,5 @@
+from functools import wraps
+from datetime import datetime  # <-- Ajouté pour corriger le crash sur datetime.min
 from flask import Blueprint, render_template, request, redirect, url_for, flash, jsonify, abort, send_from_directory, current_app, session
 from sqlalchemy import func
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -5,12 +7,10 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from models import db, Matiere, Tuteur, Annonce, Etudiant, Paiement, Avis, Reservation, User
 from forms import RegistrationForm, LoginForm
 
-# Blueprint regroupant toutes les routes de l'application (enregistré dans app.py)
 main = Blueprint("main", __name__)
 
 MOIS_LABELS_FR = ["Jan", "Fév", "Mar", "Avr", "Mai", "Juin", "Juil", "Août", "Sep", "Oct", "Nov", "Déc"]
 
-# Dictionnaire conservé uniquement pour mapper les slugs d'URL aux vrais noms de matières en BDD
 MATIERES_COURS = {
     "maths": "Mathématiques",
     "informatique": "Informatique",
@@ -26,24 +26,54 @@ MATIERES_COURS = {
 }
 
 
-# ==========================
-# HELPER DE RÔLES FACTICES (À remplacer plus tard par un vrai système de session)
-# ==========================
+# ====================================
+# DÉCORATEUR DE SÉCURITÉ DE SESSION
+# ====================================
+def login_required(role=None):
+    """
+    Décorateur pour sécuriser les routes en fonction de l'authentification et du rôle.
+    Utilisation: 
+    @main.route('/admin')
+    @login_required(role="admin")
+    """
+    def decorator(f):
+        @wraps(f)
+        def decorated_function(*args, **kwargs):
+            if "user_id" not in session:
+                flash("Veuillez vous connecter pour accéder à cette page.", "warning")
+                return redirect(url_for("main.login"))
+            
+            if role:
+                user_role = session.get("role")
+                if user_role != role:
+                    flash("Accès non autorisé à cet espace.", "danger")
+                    return redirect(url_for("main.accueil"))
+            return f(*args, **kwargs)
+        return decorated_function
+    return decorator
+
+
+# ====================================
+# HELPERS DE SESSION SÉCURISÉS
+# ====================================
 def _tuteur_courant():
-    # Récupère le vrai tuteur en BDD basé sur l'email de démonstration
-    return Tuteur.query.filter_by(email="fall@gmail.com").first() or Tuteur.query.first()
+    user_id = session.get("user_id")
+    if user_id:
+        return Tuteur.query.filter_by(user_id=user_id).first()
+    return None
 
 
 def _etudiant_courant():
-    # Récupère le vrai étudiant en BDD basé sur l'email de démonstration
-    return Etudiant.query.filter_by(email="diop@gmail.com").first() or Etudiant.query.first()
+    user_id = session.get("user_id")
+    if user_id:
+        return Etudiant.query.filter_by(user_id=user_id).first()
+    return None
 
 
-# ==========================
-# STATISTIQUES MULTI-VUES
-# ==========================
+# ====================================
+# UTILS / STATS
+# ====================================
 def _repartition_matieres():
-    # Nombre de tuteurs par matière, trié du plus grand au plus petit
     compte = dict(
         db.session.query(Tuteur.matiere, func.count(Tuteur.id)).group_by(Tuteur.matiere).all()
     )
@@ -51,7 +81,6 @@ def _repartition_matieres():
 
 
 def _paiements_par_mois():
-    # Total des paiements payés, regroupé par mois
     totaux = {}
     paiements_payes = Paiement.query.filter_by(statut="Payé").all()
     for paiement in paiements_payes:
@@ -65,9 +94,9 @@ def _paiements_par_mois():
     ]
 
 
-# ==========================
-# FAVICON
-# ==========================
+# ====================================
+# STATIC / FAVICON / ACCUEIL
+# ====================================
 @main.route("/favicon.ico")
 def favicon():
     return send_from_directory(
@@ -77,52 +106,148 @@ def favicon():
     )
 
 
-# ==========================
-# PAGE D'ACCUEIL
-# ==========================
 @main.route("/")
 def accueil():
     return render_template("accueil/index.html")
 
 
-# ==========================
-# PROFIL D'UN TUTEUR (ESPACE TUTEUR CONNECTÉ)
-# ==========================
-@main.route("/tuteur/profil")
-def profil_tuteur():
-    tuteur_bdd = _tuteur_courant()
-    if not tuteur_bdd:
-        flash("Aucun profil tuteur trouvé.", "danger")
+# ====================================
+# SYSTEME D'AUTHENTIFICATION & SESSIONS
+# ====================================
+@main.route("/register_tuteurs", methods=["GET", "POST"])
+def register_tuteurs():
+    form = RegistrationForm()
+    if form.validate_on_submit():
+        email = form.email.data.strip().lower()
+        username = form.username.data.strip()
+
+        if User.query.filter_by(email=email).first():
+            flash("Un compte existe déjà avec cet email.", "danger")
+            return redirect(url_for("main.register_tuteurs"))
+
+        if User.query.filter_by(username=username).first():
+            flash("Ce nom d'utilisateur est déjà pris.", "danger")
+            return redirect(url_for("main.register_tuteurs"))
+
+        user = User(
+            username=username,
+            email=email,
+            password_hash=generate_password_hash(form.password.data)
+        )
+        db.session.add(user)
+        db.session.commit()
+
+        tuteur = Tuteur(
+            user_id=user.id,
+            nom=username,
+            email=email,
+            matiere=form.matiere.data.strip(),
+            statut="En attente"
+        )
+        db.session.add(tuteur)
+        db.session.commit()
+
+        session.clear()
+        session["user_id"] = user.id
+        session["role"] = "tuteur"
+        session["prenom"] = username
+
+        flash("Compte tuteur créé avec succès ! Bienvenue sur votre espace.", "success")
+        return redirect(url_for("main.dashboard_tuteur"))
+
+    return render_template("auth/register_tuteurs.html", form=form)
+
+
+@main.route("/register_etudiants", methods=["GET", "POST"])
+def register_etudiants():
+    form = RegistrationForm()
+    if form.validate_on_submit():
+        email = form.email.data.strip().lower()
+        username = form.username.data.strip()
+
+        if User.query.filter_by(email=email).first():
+            flash("Un compte existe déjà avec cet email.", "danger")
+            return redirect(url_for("main.register_etudiants"))
+
+        user = User(
+            username=username,
+            email=email,
+            password_hash=generate_password_hash(form.password.data)
+        )
+        db.session.add(user)
+        db.session.commit()
+
+        etudiant = Etudiant(
+            user_id=user.id,
+            nom=username,
+            email=email,
+            niveau="Non renseigné"
+        )
+        db.session.add(etudiant)
+        db.session.commit()
+
+        session.clear()
+        session["user_id"] = user.id
+        session["role"] = "etudiant"
+        session["prenom"] = username
+
+        flash("Compte étudiant créé avec succès ! Bienvenue sur votre espace.", "success")
+        return redirect(url_for("main.dashboard_etudiant"))
+
+    return render_template("auth/register_etudiants.html", form=form)
+
+
+@main.route("/login", methods=["GET", "POST"])
+def login():
+    form = LoginForm()
+    if form.validate_on_submit():
+        email = form.email.data.strip().lower()
+        user = User.query.filter_by(email=email).first()
+
+        if user is None or not check_password_hash(user.password_hash, form.password.data):
+            flash("Email ou mot de passe incorrect.", "danger")
+            return redirect(url_for("main.login"))
+
+        session.clear()
+        session["user_id"] = user.id
+        session["prenom"] = user.username
+        
+        if email == "admin@edusen.sn" or user.username.lower() == "admin":
+            session["role"] = "admin"
+            flash(f"Bienvenue Administrateur, {user.username} !", "success")
+            return redirect(url_for("main.dashboard_admin"))
+
+        tuteur = Tuteur.query.filter_by(user_id=user.id).first()
+        if tuteur:
+            session["role"] = "tuteur"
+            flash(f"Bienvenue Tuteur, {user.username} !", "success")
+            return redirect(url_for("main.dashboard_tuteur"))
+            
+        etudiant = Etudiant.query.filter_by(user_id=user.id).first()
+        if etudiant:
+            session["role"] = "etudiant"
+            flash(f"Bienvenue Étudiant, {user.username} !", "success")
+            return redirect(url_for("main.dashboard_etudiant"))
+            
+        flash(f"Bienvenue, {user.username} !", "success")
         return redirect(url_for("main.accueil"))
 
-    # Extraction des données réelles de la base de données
-    tuteur = {
-        "nom": tuteur_bdd.nom,
-        "matiere": tuteur_bdd.matiere,
-        "experience": "Donnée non renseignée",  # À ajouter à ton modèle Tuteur si nécessaire
-        "prix": "À négocier"  # À ajouter à ton modèle Tuteur si nécessaire
-    }
-
-    return render_template(
-        "tuteur/profil_tuteur.html",
-        tuteur=tuteur
-    )
+    return render_template("auth/login.html", form=form)
 
 
-# ==========================
-# DÉCONNEXION
-# ==========================
 @main.route("/auth/deconnexion")
+@main.route("/logout")
 def deconnexion():
-    session.pop("user_id", None)
+    session.clear()
     flash("Vous avez été déconnecté avec succès.", "success")
     return redirect(url_for("main.accueil"))
 
 
-# ==========================
-# DASHBOARDS
-# ==========================
+# ====================================
+# ESPACE SÉCURISÉ : ADMIN
+# ====================================
 @main.route("/admin/dashboard")
+@login_required(role="admin")
 def dashboard_admin():
     revenus_payes = db.session.query(func.sum(Paiement.montant)).filter_by(statut="Payé").scalar() or 0
 
@@ -146,7 +271,8 @@ def dashboard_admin():
         activites.append({"icone": "💳", "texte": f"Paiement {paiement.reference} ({paiement.statut})", "date": paiement.date_paiement})
     for reservation in Reservation.query.order_by(Reservation.date_creation.desc()).limit(3):
         activites.append({"icone": "📅", "texte": f"Réservation : {reservation.etudiant.nom} avec {reservation.tuteur.nom}", "date": reservation.date_creation})
-    activites.sort(key=lambda a: a["date"], reverse=True)
+    
+    activites.sort(key=lambda a: a["date"] if a["date"] else datetime.min, reverse=True)
 
     return render_template(
         "admin/dashboard_admin.html",
@@ -166,26 +292,15 @@ def dashboard_admin():
     )
 
 
-@main.route("/etudiant/dashboard")
-def dashboard_etudiant():
-    return render_template("etudiant/dashboard_etudiant.html")
-
-
-@main.route("/tuteur/dashboard")
-def dashboard_tuteur():
-    return render_template("tuteur/dashboard_tuteur.html")
-
-
-# ==========================
-# ADMIN MANAGEMENT
-# ==========================
 @main.route("/admin/reservations")
+@login_required(role="admin")
 def reservations_admin():
     reservations = Reservation.query.order_by(Reservation.date_seance.desc()).all()
     return render_template("admin/reservation_admin.html", reservations=reservations)
 
 
 @main.route("/admin/reservations/<int:reservation_id>/confirmer", methods=["POST"])
+@login_required(role="admin")
 def confirmer_reservation_admin(reservation_id):
     reservation = Reservation.query.get_or_404(reservation_id)
     reservation.statut = "Confirmée"
@@ -195,6 +310,7 @@ def confirmer_reservation_admin(reservation_id):
 
 
 @main.route("/admin/reservations/<int:reservation_id>/annuler", methods=["POST"])
+@login_required(role="admin")
 def annuler_reservation_admin(reservation_id):
     reservation = Reservation.query.get_or_404(reservation_id)
     reservation.statut = "Annulée"
@@ -204,6 +320,7 @@ def annuler_reservation_admin(reservation_id):
 
 
 @main.route("/admin/reservations/<int:reservation_id>/terminer", methods=["POST"])
+@login_required(role="admin")
 def terminer_reservation_admin(reservation_id):
     reservation = Reservation.query.get_or_404(reservation_id)
     reservation.statut = "Terminée"
@@ -213,19 +330,21 @@ def terminer_reservation_admin(reservation_id):
 
 
 @main.route("/admin/utilisateurs")
+@login_required(role="admin")
 def utilisateurs_admin():
-    # Optionnel : Tu peux passer la liste globale des utilisateurs si ton template en a besoin
     utilisateurs = User.query.all()
     return render_template("admin/utilisateurs_admin.html", utilisateurs=utilisateurs)
 
 
 @main.route("/admin/tuteurs")
+@login_required(role="admin")
 def tuteurs_admin():
     tuteurs = Tuteur.query.order_by(Tuteur.date_inscription.desc()).all()
     return render_template("admin/tuteurs_admin.html", tuteurs=tuteurs)
 
 
 @main.route("/admin/tuteurs/ajouter", methods=["GET", "POST"])
+@login_required(role="admin")
 def ajouter_tuteur_admin():
     if request.method == "POST":
         nom = (request.form.get("nom") or "").strip()
@@ -265,6 +384,7 @@ def ajouter_tuteur_admin():
 
 
 @main.route("/admin/tuteurs/<int:tuteur_id>/valider", methods=["POST"])
+@login_required(role="admin")
 def valider_tuteur_admin(tuteur_id):
     tuteur = Tuteur.query.get_or_404(tuteur_id)
     tuteur.statut = "Actif"
@@ -274,26 +394,34 @@ def valider_tuteur_admin(tuteur_id):
 
 
 @main.route("/admin/tuteurs/<int:tuteur_id>/refuser", methods=["POST"])
+@login_required(role="admin")
 def refuser_tuteur_admin(tuteur_id):
     tuteur = Tuteur.query.get_or_404(tuteur_id)
     nom = tuteur.nom
+    user = User.query.get(tuteur.user_id)
+    
     db.session.delete(tuteur)
+    if user:
+        db.session.delete(user)
+        
     db.session.commit()
-    flash(f"Le tuteur « {nom} » a été refusé.", "danger")
+    flash(f"Le profil et le compte du tuteur « {nom} » ont été supprimés.", "danger")
     return redirect(request.referrer or url_for("main.dashboard_admin"))
 
 
 @main.route("/admin/etudiants")
+@login_required(role="admin")
 def etudiants_admin():
     etudiants = Etudiant.query.order_by(Etudiant.date_inscription.desc()).all()
     return render_template("admin/etudiants_admin.html", etudiants=etudiants)
 
 
 @main.route("/admin/matieres")
+@login_required(role="admin")
 def matieres_admin():
     matieres = Matiere.query.order_by(Matiere.nom).all()
     compte_tuteurs = dict(
-        db.session.query(Tuteur.matiere, db.func.count(Tuteur.id)).group_by(Tuteur.matiere).all()
+        db.session.query(Tuteur.matiere, func.count(Tuteur.id)).group_by(Tuteur.matiere).all()  # <-- Corrigé db.func par func
     )
     for m in matieres:
         m.nb_tuteurs = compte_tuteurs.get(m.nom, 0)
@@ -302,6 +430,7 @@ def matieres_admin():
 
 
 @main.route("/admin/matieres/ajouter", methods=["GET", "POST"])
+@login_required(role="admin")
 def ajouter_matiere_admin():
     if request.method == "POST":
         nom = (request.form.get("nom") or "").strip()
@@ -325,6 +454,7 @@ def ajouter_matiere_admin():
 
 
 @main.route("/admin/annonces", methods=["GET", "POST"])
+@login_required(role="admin")
 def annonces_admin():
     if request.method == "POST":
         titre = (request.form.get("titre") or "").strip()
@@ -345,12 +475,14 @@ def annonces_admin():
 
 
 @main.route("/admin/paiements")
+@login_required(role="admin")
 def paiements_admin():
     paiements = Paiement.query.order_by(Paiement.date_paiement.desc()).all()
     return render_template("admin/paiements_admin.html", paiements=paiements)
 
 
 @main.route("/admin/statistiques")
+@login_required(role="admin")
 def statistiques_admin():
     revenus_totaux = db.session.query(func.sum(Paiement.montant)).filter_by(statut="Payé").scalar() or 0
     satisfaction_moyenne = db.session.query(func.avg(Avis.note)).scalar()
@@ -381,6 +513,7 @@ def statistiques_admin():
 
 
 @main.route("/admin/parametres", methods=["GET", "POST"])
+@login_required(role="admin")
 def parametres_admin():
     if request.method == "POST":
         flash("Les paramètres ont été enregistrés avec succès.", "success")
@@ -388,20 +521,29 @@ def parametres_admin():
     return render_template("admin/parametres_admin.html")
 
 
-# ==========================
-# ESPACE ÉTUDIANT
-# ==========================
+# ====================================
+# ESPACE SÉCURISÉ : ÉTUDIANT
+# ====================================
+@main.route("/etudiant/dashboard")
+@login_required(role="etudiant")
+def dashboard_etudiant():
+    return render_template("etudiant/dashboard_etudiant.html")
+
+
 @main.route("/etudiant/messages")
+@login_required(role="etudiant")
 def messages_etudiant():
     return render_template("etudiant/messages_etudiant.html")
 
 
 @main.route("/etudiant/profil")
+@login_required(role="etudiant")
 def profil_etudiant():
     return render_template("etudiant/profil_etudiant.html")
 
 
 @main.route("/etudiant/reservations")
+@login_required(role="etudiant")
 def reservations_etudiant():
     etudiant = _etudiant_courant()
     reservations = (
@@ -412,6 +554,7 @@ def reservations_etudiant():
 
 
 @main.route("/etudiant/reservations/<int:reservation_id>/annuler", methods=["POST"])
+@login_required(role="etudiant")
 def annuler_reservation_etudiant(reservation_id):
     reservation = Reservation.query.get_or_404(reservation_id)
     reservation.statut = "Annulée"
@@ -421,24 +564,51 @@ def annuler_reservation_etudiant(reservation_id):
 
 
 @main.route("/etudiant/cours")
+@login_required(role="etudiant")
 def cours_etudiant():
     return render_template("etudiant/cours_etudiant.html")
 
 
 @main.route("/etudiant/devoirs")
+@login_required(role="etudiant")
 def devoirs_etudiant():
     return render_template("etudiant/devoirs_etudiant.html")
 
 
-# ==========================
-# ESPACE TUTEUR
-# ==========================
+# ====================================
+# ESPACE SÉCURISÉ : TUTEUR
+# ====================================
+@main.route("/tuteur/dashboard")
+@login_required(role="tuteur")
+def dashboard_tuteur():
+    return render_template("tuteur/dashboard_tuteur.html")
+
+
+@main.route("/tuteur/profil")
+@login_required(role="tuteur")
+def profil_tuteur():
+    tuteur_bdd = _tuteur_courant()
+    if not tuteur_bdd:
+        flash("Aucun profil tuteur trouvé.", "danger")
+        return redirect(url_for("main.accueil"))
+
+    tuteur = {
+        "nom": tuteur_bdd.nom,
+        "matiere": tuteur_bdd.matiere,
+        "experience": "Donnée non renseignée",
+        "prix": "À négocier"
+    }
+    return render_template("tuteur/profil_tuteur.html", tuteur=tuteur)
+
+
 @main.route("/tuteur/disponibilites")
+@login_required(role="tuteur")
 def disponibilites_tuteur():
     return render_template("tuteur/disponibilites.html")
 
 
 @main.route("/tuteur/reservation")
+@login_required(role="tuteur")
 def reservation_tuteur():
     tuteur = _tuteur_courant()
     reservations = (
@@ -449,6 +619,7 @@ def reservation_tuteur():
 
 
 @main.route("/tuteur/reservations/<int:reservation_id>/accepter", methods=["POST"])
+@login_required(role="tuteur")
 def accepter_reservation_tuteur(reservation_id):
     reservation = Reservation.query.get_or_404(reservation_id)
     reservation.statut = "Confirmée"
@@ -458,6 +629,7 @@ def accepter_reservation_tuteur(reservation_id):
 
 
 @main.route("/tuteur/reservations/<int:reservation_id>/refuser", methods=["POST"])
+@login_required(role="tuteur")
 def refuser_reservation_tuteur(reservation_id):
     reservation = Reservation.query.get_or_404(reservation_id)
     reservation.statut = "Annulée"
@@ -467,22 +639,24 @@ def refuser_reservation_tuteur(reservation_id):
 
 
 @main.route("/tuteur/cours")
+@login_required(role="tuteur")
 def cours_tuteur():
     return render_template("tuteur/cours_tuteur.html")
 
 
 @main.route("/tuteur/messages")
+@login_required(role="tuteur")
 def messages_tuteur():
     return render_template("tuteur/messages_tuteur.html")
 
 
 @main.route("/tuteur/etudiants")
+@login_required(role="tuteur")
 def etudiants_tuteur():
     tuteur = _tuteur_courant()
     etudiants_uniques = []
 
     if tuteur:
-        # Récupère tous les étudiants uniques ayant réservé un cours (validé ou terminé) avec ce tuteur
         reservations = Reservation.query.filter(
             Reservation.tuteur_id == tuteur.id,
             Reservation.statut.in_(["Confirmée", "Terminée"])
@@ -492,7 +666,6 @@ def etudiants_tuteur():
         for res in reservations:
             if res.etudiant_id not in vus:
                 vus.add(res.etudiant_id)
-                # Compte le nombre total de sessions pour cet étudiant spécifique avec ce tuteur
                 nb_sessions = Reservation.query.filter_by(
                     tuteur_id=tuteur.id, 
                     etudiant_id=res.etudiant_id
@@ -506,29 +679,23 @@ def etudiants_tuteur():
                     "note": "-"
                 })
 
-    return render_template(
-        "tuteur/etudiants_tuteur.html",
-        etudiants=etudiants_uniques
-    )
+    return render_template("tuteur/etudiants_tuteur.html", etudiants=etudiants_uniques)
 
 
 @main.route("/tuteur/revenus")
+@login_required(role="tuteur")
 def revenus_tuteur():
     tuteur = _tuteur_courant()
     paiements = []
     totaux_mensuels = {}
 
     if tuteur:
-        # Récupère tous les paiements réels du tuteur depuis la BDD
         paiements = Paiement.query.filter_by(tuteur_id=tuteur.id).order_by(Paiement.date_paiement.desc()).all()
-        
-        # Calcule les revenus réels mensuels agrégés
         for p in paiements:
             if p.statut == "Payé" and p.date_paiement:
                 mois_str = MOIS_LABELS_FR[p.date_paiement.month - 1]
                 totaux_mensuels[mois_str] = totaux_mensuels.get(mois_str, 0) + p.montant
 
-    # Formate le résultat pour le template Jinja
     revenus_mensuels = [{"mois": m, "montant": v} for m, v in totaux_mensuels.items()]
     if not revenus_mensuels:
         revenus_mensuels = [{"mois": "Aucun", "montant": 0}]
@@ -542,6 +709,7 @@ def revenus_tuteur():
 
 
 @main.route("/tuteur/avis")
+@login_required(role="tuteur")
 def avis_tuteur():
     tuteur = _tuteur_courant()
     avis = (
@@ -556,9 +724,9 @@ def avis_tuteur():
     )
 
 
-# ==========================
-# CHATBOT ASSISTANT IA
-# ==========================
+# ====================================
+# PUBLIC / CHATBOT / PAGES STATIQUES
+# ====================================
 def generer_reponse_chatbot(message):
     message = message.lower()
     if any(mot in message for mot in ("bonjour", "salut", "hello")):
@@ -587,12 +755,8 @@ def chatbot():
     return jsonify({"reponse": generer_reponse_chatbot(message)})
 
 
-# ==========================
-# VUES PUBLIQUES DYNAMIQUES
-# ==========================
 @main.route("/public/avis")
 def avis_public():
-    # Liste tous les avis clients enregistrés en BDD
     tous_les_avis = Avis.query.order_by(Avis.date_avis.desc()).all()
     return render_template("public/avis_public.html", avis=tous_les_avis)
 
@@ -609,7 +773,6 @@ def faq():
 
 @main.route("/tuteurs")
 def liste_tuteurs():
-    # Liste tous les tuteurs actifs, avec filtre optionnel par matière (slug d'URL)
     matiere_slug = (request.args.get("matiere") or "").strip()
     matiere_nom = MATIERES_COURS.get(matiere_slug)
 
@@ -627,7 +790,6 @@ def liste_tuteurs():
 
 @main.route("/matieres")
 def matieres():
-    # Liste toutes les matières réelles enregistrées en BDD
     matieres_bdd = Matiere.query.order_by(Matiere.nom).all()
     return render_template("public/matieres.html", matieres=matieres_bdd)
 
@@ -652,9 +814,9 @@ def recrutement():
     return render_template("public/recrutement.html")
 
 
-# ==========================
+# ====================================
 # GESTIONNAIRES D'ERREURS
-# ==========================
+# ====================================
 @main.app_errorhandler(404)
 def erreur_404(error):
     return render_template("404.html"), 404
@@ -663,70 +825,3 @@ def erreur_404(error):
 @main.app_errorhandler(500)
 def erreur_500(error):
     return render_template("500.html"), 500
-
-
-# ==========================
-# SYSTEME D'AUTHENTIFICATION
-# ==========================
-@main.route("/register_tuteurs", methods=["GET", "POST"])
-def register_tuteurs():
-    form = RegistrationForm()
-    if form.validate_on_submit():
-        email = form.email.data.strip().lower()
-        username = form.username.data.strip()
-
-        if User.query.filter_by(email=email).first():
-            flash("Un compte existe déjà avec cet email.", "danger")
-            return redirect(url_for("main.register_tuteurs"))
-
-        if User.query.filter_by(username=username).first():
-            flash("Ce nom d'utilisateur est déjà pris.", "danger")
-            return redirect(url_for("main.register_tuteurs"))
-
-        user = User(
-            username=username,
-            email=email,
-            password_hash=generate_password_hash(form.password.data)
-        )
-        db.session.add(user)
-        db.session.commit()
-
-        tuteur = Tuteur(
-            user_id=user.id,
-            nom=username,
-            email=email,
-            matiere=form.matiere.data.strip(),
-            statut="En attente"
-        )
-        db.session.add(tuteur)
-        db.session.commit()
-
-        flash("Compte créé avec succès ! Votre profil tuteur est en attente de validation.", "success")
-        return redirect(url_for("main.accueil"))
-
-    return render_template("auth/register_tuteurs.html", form=form)
-
-
-@main.route("/login", methods=["GET", "POST"])
-def login():
-    form = LoginForm()
-    if form.validate_on_submit():
-        email = form.email.data.strip().lower()
-        user = User.query.filter_by(email=email).first()
-
-        if user is None or not check_password_hash(user.password_hash, form.password.data):
-            flash("Email ou mot de passe incorrect.", "danger")
-            return redirect(url_for("main.login"))
-
-        session["user_id"] = user.id
-        flash(f"Bienvenue, {user.username} !", "success")
-        return redirect(url_for("main.accueil"))
-
-    return render_template("auth/login.html", form=form)
-
-
-@main.route("/logout")
-def logout():
-    session.pop("user_id", None)
-    flash("Vous avez été déconnecté avec succès.", "success")
-    return redirect(url_for("main.accueil"))
