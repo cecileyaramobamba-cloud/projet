@@ -12,6 +12,10 @@ class RegistrationForm(FlaskForm):
         "Email",
         validators=[DataRequired(), Email()]
     )
+    matiere = StringField(
+        "Matière enseignée",
+        validators=[DataRequired(), Length(min=2, max=80)]
+    )
     password = PasswordField(
         "Mot de passe",
         validators=[DataRequired(), Length(min=6)]

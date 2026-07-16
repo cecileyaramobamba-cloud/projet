@@ -89,7 +89,7 @@
                     <a href="/etudiant/cours" style="padding: 0.5rem 0.8rem; border-radius: 8px; color: #475569; text-decoration: none; display: flex; align-items: center; gap: 0.8rem; font-size: 0.9rem; transition: 0.3s ease;">
                         <i class="fas fa-book" style="width: 20px; text-align: center;"></i> Mes cours
                     </a>
-                    <a href="/accueil/liste_tuteurs" style="padding: 0.5rem 0.8rem; border-radius: 8px; color: #475569; text-decoration: none; display: flex; align-items: center; gap: 0.8rem; font-size: 0.9rem; transition: 0.3s ease;">
+                    <a href="{{ url_for('main.liste_tuteurs') }}" style="padding: 0.5rem 0.8rem; border-radius: 8px; color: #475569; text-decoration: none; display: flex; align-items: center; gap: 0.8rem; font-size: 0.9rem; transition: 0.3s ease;">
                         <i class="fas fa-search" style="width: 20px; text-align: center;"></i> Trouver un tuteur
                     </a>
                     <a href="/etudiant/reservations" style="padding: 0.5rem 0.8rem; border-radius: 8px; background: #eff6ff; color: #2563eb; text-decoration: none; display: flex; align-items: center; gap: 0.8rem; font-size: 0.9rem; font-weight: 600;">
@@ -125,7 +125,7 @@
                     <h1 style="font-size: 1.8rem; color: #0f172a; font-weight: 800;">📅 Mes réservations</h1>
                     <p style="color: #475569; font-size: 0.95rem;">Gérez toutes vos réservations de cours.</p>
                 </div>
-                <button onclick="window.location.href='/accueil/liste_tuteurs'" style="padding: 0.7rem 1.5rem; background: #2563eb; color: #fff; border: none; border-radius: 60px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 0.5rem;">
+                <button onclick="window.location.href='{{ url_for("main.liste_tuteurs") }}'" style="padding: 0.7rem 1.5rem; background: #2563eb; color: #fff; border: none; border-radius: 60px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 0.5rem;">
                     <i class="fas fa-plus"></i> Nouvelle réservation
                 </button>
             </div>

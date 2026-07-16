@@ -19,7 +19,7 @@
                 <h4 style="font-weight: 600; margin: 0.3rem 0 0.2rem;">Mathématiques</h4>
                 <small style="color: #475569;">200+ tuteurs</small>
                 <div style="display: flex; flex-direction: column; gap: 0.5rem; margin-top: 0.8rem;">
-                    <a href="/accueil/liste_tuteurs?matiere=maths" style="padding: 0.4rem; background: #2563eb; color: #fff; border-radius: 40px; font-size: 0.8rem; font-weight: 600; text-decoration: none;">Trouver un tuteur</a>
+                    <a href="{{ url_for('main.liste_tuteurs', matiere='maths') }}" style="padding: 0.4rem; background: #2563eb; color: #fff; border-radius: 40px; font-size: 0.8rem; font-weight: 600; text-decoration: none;">Trouver un tuteur</a>
                     <a href="{{ url_for('main.cours_matiere', slug='maths') }}" style="padding: 0.4rem; border: 1px solid #dbeafe; color: #2563eb; border-radius: 40px; font-size: 0.8rem; font-weight: 600; text-decoration: none;">Exemple de cours</a>
                 </div>
             </div>
@@ -32,7 +32,7 @@
                 <h4 style="font-weight: 600; margin: 0.3rem 0 0.2rem;">Informatique</h4>
                 <small style="color: #475569;">180+ tuteurs</small>
                 <div style="display: flex; flex-direction: column; gap: 0.5rem; margin-top: 0.8rem;">
-                    <a href="/accueil/liste_tuteurs?matiere=informatique" style="padding: 0.4rem; background: #2563eb; color: #fff; border-radius: 40px; font-size: 0.8rem; font-weight: 600; text-decoration: none;">Trouver un tuteur</a>
+                    <a href="{{ url_for('main.liste_tuteurs', matiere='informatique') }}" style="padding: 0.4rem; background: #2563eb; color: #fff; border-radius: 40px; font-size: 0.8rem; font-weight: 600; text-decoration: none;">Trouver un tuteur</a>
                     <a href="{{ url_for('main.cours_matiere', slug='informatique') }}" style="padding: 0.4rem; border: 1px solid #dbeafe; color: #2563eb; border-radius: 40px; font-size: 0.8rem; font-weight: 600; text-decoration: none;">Exemple de cours</a>
                 </div>
             </div>
@@ -45,7 +45,7 @@
                 <h4 style="font-weight: 600; margin: 0.3rem 0 0.2rem;">Français</h4>
                 <small style="color: #475569;">150+ tuteurs</small>
                 <div style="display: flex; flex-direction: column; gap: 0.5rem; margin-top: 0.8rem;">
-                    <a href="/accueil/liste_tuteurs?matiere=francais" style="padding: 0.4rem; background: #2563eb; color: #fff; border-radius: 40px; font-size: 0.8rem; font-weight: 600; text-decoration: none;">Trouver un tuteur</a>
+                    <a href="{{ url_for('main.liste_tuteurs', matiere='francais') }}" style="padding: 0.4rem; background: #2563eb; color: #fff; border-radius: 40px; font-size: 0.8rem; font-weight: 600; text-decoration: none;">Trouver un tuteur</a>
                     <a href="{{ url_for('main.cours_matiere', slug='francais') }}" style="padding: 0.4rem; border: 1px solid #dbeafe; color: #2563eb; border-radius: 40px; font-size: 0.8rem; font-weight: 600; text-decoration: none;">Exemple de cours</a>
                 </div>
             </div>
@@ -58,7 +58,7 @@
                 <h4 style="font-weight: 600; margin: 0.3rem 0 0.2rem;">Anglais</h4>
                 <small style="color: #475569;">140+ tuteurs</small>
                 <div style="display: flex; flex-direction: column; gap: 0.5rem; margin-top: 0.8rem;">
-                    <a href="/accueil/liste_tuteurs?matiere=anglais" style="padding: 0.4rem; background: #2563eb; color: #fff; border-radius: 40px; font-size: 0.8rem; font-weight: 600; text-decoration: none;">Trouver un tuteur</a>
+                    <a href="{{ url_for('main.liste_tuteurs', matiere='anglais') }}" style="padding: 0.4rem; background: #2563eb; color: #fff; border-radius: 40px; font-size: 0.8rem; font-weight: 600; text-decoration: none;">Trouver un tuteur</a>
                     <a href="{{ url_for('main.cours_matiere', slug='anglais') }}" style="padding: 0.4rem; border: 1px solid #dbeafe; color: #2563eb; border-radius: 40px; font-size: 0.8rem; font-weight: 600; text-decoration: none;">Exemple de cours</a>
                 </div>
             </div>
@@ -71,7 +71,7 @@
                 <h4 style="font-weight: 600; margin: 0.3rem 0 0.2rem;">Physique</h4>
                 <small style="color: #475569;">130+ tuteurs</small>
                 <div style="display: flex; flex-direction: column; gap: 0.5rem; margin-top: 0.8rem;">
-                    <a href="/accueil/liste_tuteurs?matiere=physique" style="padding: 0.4rem; background: #2563eb; color: #fff; border-radius: 40px; font-size: 0.8rem; font-weight: 600; text-decoration: none;">Trouver un tuteur</a>
+                    <a href="{{ url_for('main.liste_tuteurs', matiere='physique') }}" style="padding: 0.4rem; background: #2563eb; color: #fff; border-radius: 40px; font-size: 0.8rem; font-weight: 600; text-decoration: none;">Trouver un tuteur</a>
                     <a href="{{ url_for('main.cours_matiere', slug='physique') }}" style="padding: 0.4rem; border: 1px solid #dbeafe; color: #2563eb; border-radius: 40px; font-size: 0.8rem; font-weight: 600; text-decoration: none;">Exemple de cours</a>
                 </div>
             </div>
@@ -84,7 +84,7 @@
                 <h4 style="font-weight: 600; margin: 0.3rem 0 0.2rem;">SVT</h4>
                 <small style="color: #475569;">110+ tuteurs</small>
                 <div style="display: flex; flex-direction: column; gap: 0.5rem; margin-top: 0.8rem;">
-                    <a href="/accueil/liste_tuteurs?matiere=svt" style="padding: 0.4rem; background: #2563eb; color: #fff; border-radius: 40px; font-size: 0.8rem; font-weight: 600; text-decoration: none;">Trouver un tuteur</a>
+                    <a href="{{ url_for('main.liste_tuteurs', matiere='svt') }}" style="padding: 0.4rem; background: #2563eb; color: #fff; border-radius: 40px; font-size: 0.8rem; font-weight: 600; text-decoration: none;">Trouver un tuteur</a>
                     <a href="{{ url_for('main.cours_matiere', slug='svt') }}" style="padding: 0.4rem; border: 1px solid #dbeafe; color: #2563eb; border-radius: 40px; font-size: 0.8rem; font-weight: 600; text-decoration: none;">Exemple de cours</a>
                 </div>
             </div>
@@ -97,7 +97,7 @@
                 <h4 style="font-weight: 600; margin: 0.3rem 0 0.2rem;">Développement Web</h4>
                 <small style="color: #475569;">120+ tuteurs</small>
                 <div style="display: flex; flex-direction: column; gap: 0.5rem; margin-top: 0.8rem;">
-                    <a href="/accueil/liste_tuteurs?matiere=web" style="padding: 0.4rem; background: #2563eb; color: #fff; border-radius: 40px; font-size: 0.8rem; font-weight: 600; text-decoration: none;">Trouver un tuteur</a>
+                    <a href="{{ url_for('main.liste_tuteurs', matiere='web') }}" style="padding: 0.4rem; background: #2563eb; color: #fff; border-radius: 40px; font-size: 0.8rem; font-weight: 600; text-decoration: none;">Trouver un tuteur</a>
                     <a href="{{ url_for('main.cours_matiere', slug='web') }}" style="padding: 0.4rem; border: 1px solid #dbeafe; color: #2563eb; border-radius: 40px; font-size: 0.8rem; font-weight: 600; text-decoration: none;">Exemple de cours</a>
                 </div>
             </div>
@@ -110,7 +110,7 @@
                 <h4 style="font-weight: 600; margin: 0.3rem 0 0.2rem;">Économie</h4>
                 <small style="color: #475569;">100+ tuteurs</small>
                 <div style="display: flex; flex-direction: column; gap: 0.5rem; margin-top: 0.8rem;">
-                    <a href="/accueil/liste_tuteurs?matiere=economie" style="padding: 0.4rem; background: #2563eb; color: #fff; border-radius: 40px; font-size: 0.8rem; font-weight: 600; text-decoration: none;">Trouver un tuteur</a>
+                    <a href="{{ url_for('main.liste_tuteurs', matiere='economie') }}" style="padding: 0.4rem; background: #2563eb; color: #fff; border-radius: 40px; font-size: 0.8rem; font-weight: 600; text-decoration: none;">Trouver un tuteur</a>
                     <a href="{{ url_for('main.cours_matiere', slug='economie') }}" style="padding: 0.4rem; border: 1px solid #dbeafe; color: #2563eb; border-radius: 40px; font-size: 0.8rem; font-weight: 600; text-decoration: none;">Exemple de cours</a>
                 </div>
             </div>
@@ -123,7 +123,7 @@
                 <h4 style="font-weight: 600; margin: 0.3rem 0 0.2rem;">Droit</h4>
                 <small style="color: #475569;">90+ tuteurs</small>
                 <div style="display: flex; flex-direction: column; gap: 0.5rem; margin-top: 0.8rem;">
-                    <a href="/accueil/liste_tuteurs?matiere=droit" style="padding: 0.4rem; background: #2563eb; color: #fff; border-radius: 40px; font-size: 0.8rem; font-weight: 600; text-decoration: none;">Trouver un tuteur</a>
+                    <a href="{{ url_for('main.liste_tuteurs', matiere='droit') }}" style="padding: 0.4rem; background: #2563eb; color: #fff; border-radius: 40px; font-size: 0.8rem; font-weight: 600; text-decoration: none;">Trouver un tuteur</a>
                     <a href="{{ url_for('main.cours_matiere', slug='droit') }}" style="padding: 0.4rem; border: 1px solid #dbeafe; color: #2563eb; border-radius: 40px; font-size: 0.8rem; font-weight: 600; text-decoration: none;">Exemple de cours</a>
                 </div>
             </div>
@@ -136,7 +136,7 @@
                 <h4 style="font-weight: 600; margin: 0.3rem 0 0.2rem;">Python</h4>
                 <small style="color: #475569;">100+ tuteurs</small>
                 <div style="display: flex; flex-direction: column; gap: 0.5rem; margin-top: 0.8rem;">
-                    <a href="/accueil/liste_tuteurs?matiere=python" style="padding: 0.4rem; background: #2563eb; color: #fff; border-radius: 40px; font-size: 0.8rem; font-weight: 600; text-decoration: none;">Trouver un tuteur</a>
+                    <a href="{{ url_for('main.liste_tuteurs', matiere='python') }}" style="padding: 0.4rem; background: #2563eb; color: #fff; border-radius: 40px; font-size: 0.8rem; font-weight: 600; text-decoration: none;">Trouver un tuteur</a>
                     <a href="{{ url_for('main.cours_matiere', slug='python') }}" style="padding: 0.4rem; border: 1px solid #dbeafe; color: #2563eb; border-radius: 40px; font-size: 0.8rem; font-weight: 600; text-decoration: none;">Exemple de cours</a>
                 </div>
             </div>
@@ -149,7 +149,7 @@
                 <h4 style="font-weight: 600; margin: 0.3rem 0 0.2rem;">MySQL</h4>
                 <small style="color: #475569;">85+ tuteurs</small>
                 <div style="display: flex; flex-direction: column; gap: 0.5rem; margin-top: 0.8rem;">
-                    <a href="/accueil/liste_tuteurs?matiere=mysql" style="padding: 0.4rem; background: #2563eb; color: #fff; border-radius: 40px; font-size: 0.8rem; font-weight: 600; text-decoration: none;">Trouver un tuteur</a>
+                    <a href="{{ url_for('main.liste_tuteurs', matiere='mysql') }}" style="padding: 0.4rem; background: #2563eb; color: #fff; border-radius: 40px; font-size: 0.8rem; font-weight: 600; text-decoration: none;">Trouver un tuteur</a>
                     <a href="{{ url_for('main.cours_matiere', slug='mysql') }}" style="padding: 0.4rem; border: 1px solid #dbeafe; color: #2563eb; border-radius: 40px; font-size: 0.8rem; font-weight: 600; text-decoration: none;">Exemple de cours</a>
                 </div>
             </div>

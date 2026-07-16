@@ -31,12 +31,12 @@ MATIERES_COURS = {
 # ==========================
 def _tuteur_courant():
     # Récupère le vrai tuteur en BDD basé sur l'email de démonstration
-    return Tuteur.query.filter_by(email="fatou.diop@email.com").first()
+    return Tuteur.query.filter_by(email="fall@gmail.com").first() or Tuteur.query.first()
 
 
 def _etudiant_courant():
     # Récupère le vrai étudiant en BDD basé sur l'email de démonstration
-    return Etudiant.query.filter_by(email="soukeyna.mbengue@email.com").first()
+    return Etudiant.query.filter_by(email="diop@gmail.com").first() or Etudiant.query.first()
 
 
 # ==========================
@@ -607,6 +607,24 @@ def faq():
     return render_template("public/FAQ.html")
 
 
+@main.route("/tuteurs")
+def liste_tuteurs():
+    # Liste tous les tuteurs actifs, avec filtre optionnel par matière (slug d'URL)
+    matiere_slug = (request.args.get("matiere") or "").strip()
+    matiere_nom = MATIERES_COURS.get(matiere_slug)
+
+    requete = Tuteur.query.filter_by(statut="Actif")
+    if matiere_nom:
+        requete = requete.filter_by(matiere=matiere_nom)
+
+    tuteurs = requete.order_by(Tuteur.nom).all()
+    return render_template(
+        "public/liste_tuteurs.html",
+        tuteurs=tuteurs,
+        matiere_nom=matiere_nom
+    )
+
+
 @main.route("/matieres")
 def matieres():
     # Liste toutes les matières réelles enregistrées en BDD
@@ -673,7 +691,17 @@ def register_tuteurs():
         db.session.add(user)
         db.session.commit()
 
-        flash("Compte créé avec succès ! Vous pouvez maintenant vous connecter.", "success")
+        tuteur = Tuteur(
+            user_id=user.id,
+            nom=username,
+            email=email,
+            matiere=form.matiere.data.strip(),
+            statut="En attente"
+        )
+        db.session.add(tuteur)
+        db.session.commit()
+
+        flash("Compte créé avec succès ! Votre profil tuteur est en attente de validation.", "success")
         return redirect(url_for("main.accueil"))
 
     return render_template("auth/register_tuteurs.html", form=form)
