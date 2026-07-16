@@ -1,11 +1,11 @@
 from functools import wraps
-from datetime import datetime  # <-- Ajouté pour corriger le crash sur datetime.min
+from datetime import datetime
 from flask import Blueprint, render_template, request, redirect, url_for, flash, jsonify, abort, send_from_directory, current_app, session
 from sqlalchemy import func
 from werkzeug.security import generate_password_hash, check_password_hash
 
 from models import db, Matiere, Tuteur, Annonce, Etudiant, Paiement, Avis, Reservation, User
-from forms import RegistrationForm, LoginForm
+from forms import RegistrationForm, StudentRegistrationForm, LoginForm
 
 main = Blueprint("main", __name__)
 
@@ -30,19 +30,13 @@ MATIERES_COURS = {
 # DÉCORATEUR DE SÉCURITÉ DE SESSION
 # ====================================
 def login_required(role=None):
-    """
-    Décorateur pour sécuriser les routes en fonction de l'authentification et du rôle.
-    Utilisation: 
-    @main.route('/admin')
-    @login_required(role="admin")
-    """
     def decorator(f):
         @wraps(f)
         def decorated_function(*args, **kwargs):
             if "user_id" not in session:
                 flash("Veuillez vous connecter pour accéder à cette page.", "warning")
                 return redirect(url_for("main.login"))
-            
+
             if role:
                 user_role = session.get("role")
                 if user_role != role:
@@ -158,15 +152,19 @@ def register_tuteurs():
     return render_template("auth/register_tuteurs.html", form=form)
 
 
-@main.route("/register_etudiants", methods=["GET", "POST"])
+@main.route("/register_etudiant", methods=["GET", "POST"])
 def register_etudiants():
-    form = RegistrationForm()
+    form = StudentRegistrationForm()
     if form.validate_on_submit():
         email = form.email.data.strip().lower()
         username = form.username.data.strip()
 
         if User.query.filter_by(email=email).first():
             flash("Un compte existe déjà avec cet email.", "danger")
+            return redirect(url_for("main.register_etudiants"))
+
+        if User.query.filter_by(username=username).first():
+            flash("Ce nom d'utilisateur est déjà pris.", "danger")
             return redirect(url_for("main.register_etudiants"))
 
         user = User(
@@ -181,7 +179,8 @@ def register_etudiants():
             user_id=user.id,
             nom=username,
             email=email,
-            niveau="Non renseigné"
+            niveau=form.niveau.data.strip(),
+            etablissement=form.etablissement.data.strip()
         )
         db.session.add(etudiant)
         db.session.commit()
@@ -211,7 +210,7 @@ def login():
         session.clear()
         session["user_id"] = user.id
         session["prenom"] = user.username
-        
+
         if email == "admin@edusen.sn" or user.username.lower() == "admin":
             session["role"] = "admin"
             flash(f"Bienvenue Administrateur, {user.username} !", "success")
@@ -222,13 +221,13 @@ def login():
             session["role"] = "tuteur"
             flash(f"Bienvenue Tuteur, {user.username} !", "success")
             return redirect(url_for("main.dashboard_tuteur"))
-            
+
         etudiant = Etudiant.query.filter_by(user_id=user.id).first()
         if etudiant:
             session["role"] = "etudiant"
             flash(f"Bienvenue Étudiant, {user.username} !", "success")
             return redirect(url_for("main.dashboard_etudiant"))
-            
+
         flash(f"Bienvenue, {user.username} !", "success")
         return redirect(url_for("main.accueil"))
 
@@ -271,7 +270,7 @@ def dashboard_admin():
         activites.append({"icone": "💳", "texte": f"Paiement {paiement.reference} ({paiement.statut})", "date": paiement.date_paiement})
     for reservation in Reservation.query.order_by(Reservation.date_creation.desc()).limit(3):
         activites.append({"icone": "📅", "texte": f"Réservation : {reservation.etudiant.nom} avec {reservation.tuteur.nom}", "date": reservation.date_creation})
-    
+
     activites.sort(key=lambda a: a["date"] if a["date"] else datetime.min, reverse=True)
 
     return render_template(
@@ -399,11 +398,11 @@ def refuser_tuteur_admin(tuteur_id):
     tuteur = Tuteur.query.get_or_404(tuteur_id)
     nom = tuteur.nom
     user = User.query.get(tuteur.user_id)
-    
+
     db.session.delete(tuteur)
     if user:
         db.session.delete(user)
-        
+
     db.session.commit()
     flash(f"Le profil et le compte du tuteur « {nom} » ont été supprimés.", "danger")
     return redirect(request.referrer or url_for("main.dashboard_admin"))
@@ -421,7 +420,7 @@ def etudiants_admin():
 def matieres_admin():
     matieres = Matiere.query.order_by(Matiere.nom).all()
     compte_tuteurs = dict(
-        db.session.query(Tuteur.matiere, func.count(Tuteur.id)).group_by(Tuteur.matiere).all()  # <-- Corrigé db.func par func
+        db.session.query(Tuteur.matiere, func.count(Tuteur.id)).group_by(Tuteur.matiere).all()
     )
     for m in matieres:
         m.nb_tuteurs = compte_tuteurs.get(m.nom, 0)
@@ -661,16 +660,16 @@ def etudiants_tuteur():
             Reservation.tuteur_id == tuteur.id,
             Reservation.statut.in_(["Confirmée", "Terminée"])
         ).all()
-        
+
         vus = set()
         for res in reservations:
             if res.etudiant_id not in vus:
                 vus.add(res.etudiant_id)
                 nb_sessions = Reservation.query.filter_by(
-                    tuteur_id=tuteur.id, 
+                    tuteur_id=tuteur.id,
                     etudiant_id=res.etudiant_id
                 ).count()
-                
+
                 etudiants_uniques.append({
                     "nom": res.etudiant.nom,
                     "matiere": res.matiere,
@@ -761,7 +760,7 @@ def avis_public():
     return render_template("public/avis_public.html", avis=tous_les_avis)
 
 
-@main.route("/a-propos")
+@main.route("/a_propos")
 def a_propos():
     return render_template("public/A_propos.html")
 
@@ -776,7 +775,7 @@ def liste_tuteurs():
     matiere_slug = (request.args.get("matiere") or "").strip()
     matiere_nom = MATIERES_COURS.get(matiere_slug)
 
-    requete = Tuteur.query.filter_by(statut="Actif")
+    requete = Tuteur.query.filter(Tuteur.statut != "En attente")
     if matiere_nom:
         requete = requete.filter_by(matiere=matiere_nom)
 

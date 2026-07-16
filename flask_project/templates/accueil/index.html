@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Accueil - EduSen</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-    <!-- On conserve l'accès aux variables CSS globales si elles sont définies ailleurs, sinon des valeurs de secours sont prêtes -->
     <style>
         :root {
             --primary: #2563eb;
@@ -42,10 +41,14 @@
             color: var(--muted);
         }
         .tutor-card {
-            transition: transform 0.2s;
+            text-decoration: none;
+            color: inherit;
+            transition: transform 0.2s, box-shadow 0.2s;
+            display: block;
         }
         .tutor-card:hover {
-            transform: translateY(-2px);
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
         }
         .tutor-type-student {
             background: rgba(37, 99, 235, 0.1);
@@ -68,7 +71,7 @@
 <body>
 
     <!-- ============================================
-         NOUVELLE NAVBAR (Logo, Nom, Connexion, S'inscrire)
+         NAVBAR DYNAMIQUE
          ============================================ -->
     <header style="background: var(--surface); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 100; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
         <div class="wrap" style="height: 70px; display: flex; align-items: center; justify-content: space-between;">
@@ -81,24 +84,59 @@
                 </span>
             </a>
 
-            <!-- Boutons d'authentification -->
-            <div style="display: flex; align-items: center; gap: 1rem;">
-                <!-- Bouton Connexion -->
-                <a href="{{ url_for('main.login') }}" style="display: flex; align-items: center; gap: 0.5rem; color: var(--primary); background: transparent; border: 1px solid var(--border); padding: 0.6rem 1.2rem; border-radius: 40px; font-weight: 600; text-decoration: none; font-size: 0.9rem; transition: background 0.2s;">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4M10 17l5-5-5-5M13.8 12H3"/>
-                    </svg>
-                    Connexion
+            <!-- Boutons d'authentification dynamiques -->
+            <div style="display: flex; align-items: center; gap: 1.2rem;">
+                
+                <!-- Liens publics permanents -->
+                <a href="{{ url_for('main.liste_tuteurs') }}" style="color: var(--text); font-weight: 600; text-decoration: none; font-size: 0.9rem; transition: color 0.2s;">
+                    Nos Tuteurs
                 </a>
-                <!-- Bouton S'inscrire -->
-                <a href="{{ url_for('main.register_tuteurs') }}" style="display: flex; align-items: center; gap: 0.5rem; color: #fff; background: var(--primary); padding: 0.6rem 1.4rem; border-radius: 40px; font-weight: 600; text-decoration: none; font-size: 0.9rem; box-shadow: var(--shadow); transition: opacity 0.2s;">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2M8.5 3a4.5 4.5 0 1 0 0 9 4.5 4.5 0 1 0 0-9zM19 8v6M16 11h6"/>
-                    </svg>
-                    S'inscrire
+                <a href="{{ url_for('main.matieres') }}" style="color: var(--text); font-weight: 600; text-decoration: none; font-size: 0.9rem; transition: color 0.2s; margin-right: 0.5rem;">
+                    Matières
                 </a>
-            </div>
 
+                {% if session.get('user_id') %}
+                    <!-- CAS 1 : L'utilisateur est connecté -->
+                    {% if session.get('role') == 'admin' %}
+                        <a href="{{ url_for('main.dashboard_admin') }}" style="color: var(--primary); font-weight: 600; text-decoration: none; font-size: 0.9rem; display: flex; align-items: center; gap: 0.4rem;">
+                            <i class="fa-solid fa-gauge-high"></i> Dashboard Admin
+                        </a>
+                    {% elif session.get('role') == 'tuteur' %}
+                        <a href="{{ url_for('main.dashboard_tuteur') }}" style="color: var(--primary); font-weight: 600; text-decoration: none; font-size: 0.9rem; display: flex; align-items: center; gap: 0.4rem;">
+                            <i class="fa-solid fa-chalkboard-user"></i> Mon Espace Tuteur
+                        </a>
+                    {% elif session.get('role') == 'etudiant' %}
+                        <a href="{{ url_for('main.dashboard_etudiant') }}" style="color: var(--primary); font-weight: 600; text-decoration: none; font-size: 0.9rem; display: flex; align-items: center; gap: 0.4rem;">
+                            <i class="fa-solid fa-graduation-cap"></i> Mon Espace Étudiant
+                        </a>
+                    {% endif %}
+
+                    <!-- Bouton Déconnexion -->
+                    <a href="{{ url_for('main.deconnexion') }}" style="display: flex; align-items: center; gap: 0.5rem; color: #dc2626; background: rgba(220, 38, 38, 0.1); padding: 0.6rem 1.2rem; border-radius: 40px; font-weight: 600; text-decoration: none; font-size: 0.9rem; transition: background 0.2s;">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/>
+                        </svg>
+                        Quitter
+                    </a>
+                {% else %}
+                    <!-- CAS 2 : L'utilisateur est déconnecté -->
+                    <!-- Bouton Connexion -->
+                    <a href="{{ url_for('main.login') }}" style="display: flex; align-items: center; gap: 0.5rem; color: var(--primary); background: transparent; border: 1px solid var(--border); padding: 0.6rem 1.2rem; border-radius: 40px; font-weight: 600; text-decoration: none; font-size: 0.9rem; transition: background 0.2s;">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4M10 17l5-5-5-5M13.8 12H3"/>
+                        </svg>
+                        Connexion
+                    </a>
+                    <!-- Bouton Inscription (vers l'espace étudiant par défaut) -->
+                    <a href="{{ url_for('main.register_etudiants') }}" style="display: flex; align-items: center; gap: 0.5rem; color: #fff; background: var(--primary); padding: 0.6rem 1.4rem; border-radius: 40px; font-weight: 600; text-decoration: none; font-size: 0.9rem; box-shadow: var(--shadow); transition: opacity 0.2s;">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2M8.5 3a4.5 4.5 0 1 0 0 9 4.5 4.5 0 1 0 0-9zM19 8v6M16 11h6"/>
+                        </svg>
+                        S'inscrire
+                    </a>
+                {% endif %}
+
+            </div>
         </div>
     </header>
 
@@ -107,9 +145,7 @@
          ============================================ -->
     <div class="wrap">
 
-        <!-- ============================================
-           HERO
-           ============================================ -->
+        <!-- HERO SECTION -->
         <section style="padding: 3rem 0; display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 3rem; align-items: center;">
 
             <div>
@@ -120,24 +156,26 @@
                     </span>
                 </div>
 
-                <h1 style="font-size: 2.6rem; font-weight: 800; line-height: 1.2; color: var(--text);">
+                <h1 style="font-size: 2.6rem; font-weight: 800; line-height: 1.2; color: var(--text); margin-top: 0.5rem; margin-bottom: 1rem;">
                     L'entraide universitaire <span style="color: var(--primary);">à portée de main.</span>
                 </h1>
 
-                <p style="color: var(--muted); font-size: 1.05rem; margin-top: 1rem; max-width: 520px;">
+                <p style="color: var(--muted); font-size: 1.05rem; line-height: 1.5; margin-bottom: 1.5rem; max-width: 520px;">
                     Propulsez votre réussite académique avec EduSen. Trouvez un tuteur dans votre filière ou partagez vos compétences avec vos pairs dans toutes les universités du Sénégal.
                 </p>
 
-                <div style="display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 1.5rem;">
-                    <a href="{{ url_for('main.register_tuteurs') }}" style="background: var(--primary); color: #fff; padding: 0.8rem 1.8rem; border-radius: 60px; font-weight: 700; text-decoration: none; box-shadow: var(--shadow);">
+                <div style="display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 2rem;">
+                    <!-- Trouver un tuteur -->
+                    <a href="{{ url_for('main.liste_tuteurs') }}" style="background: var(--primary); color: #fff; padding: 0.8rem 1.8rem; border-radius: 60px; font-weight: 700; text-decoration: none; box-shadow: var(--shadow);">
                         Trouver un Tuteur
                     </a>
+                    <!-- Devenir Tuteur -->
                     <a href="{{ url_for('main.register_tuteurs') }}" style="background: transparent; color: var(--primary); border: 2px solid var(--primary); padding: 0.8rem 1.8rem; border-radius: 60px; font-weight: 700; text-decoration: none;">
                         Devenir Tuteur
                     </a>
                 </div>
 
-                <div style="display: flex; align-items: center; gap: 1rem; margin-top: 2rem;">
+                <div style="display: flex; align-items: center; gap: 1rem;">
                     <div style="display: flex;">
                         <div class="tutor-avatar" style="width: 38px; height: 38px; font-size: 0.85rem; background: #2563eb; border: 2px solid var(--surface);">A</div>
                         <div class="tutor-avatar" style="width: 38px; height: 38px; font-size: 0.85rem; background: #059669; border: 2px solid var(--surface); margin-left: -12px;">B</div>
@@ -154,41 +192,39 @@
             </figure>
         </section>
 
-        <!-- ============================================
-           POUR QUI ?
-           ============================================ -->
+        <!-- POUR QUI ? -->
         <section style="padding: 2.5rem 0; border-top: 1px solid var(--border);">
-            <h2 style="text-align: center; font-size: 1.8rem; color: var(--text);">Pour qui est EduSen ?</h2>
-            <p style="text-align: center; color: var(--muted); margin-top: 0.4rem;">Une plateforme pensée pour les étudiants, par les étudiants.</p>
+            <h2 style="text-align: center; font-size: 1.8rem; color: var(--text); margin-bottom: 0.5rem;">Pour qui est EduSen ?</h2>
+            <p style="text-align: center; color: var(--muted); margin-top: 0; margin-bottom: 2rem;">Une plateforme pensée pour les étudiants, par les étudiants.</p>
 
-            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; margin-top: 2rem;">
-                <article class="tutor-card" style="text-align: center; padding: 2rem 1.5rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow);">
-                    <img src="https://placehold.co/56x56/2563eb/ffffff?text=Etudiant" alt="Icône étudiant" style="width: 56px; height: 56px; border-radius: 50%; object-fit: cover;">
+            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem;">
+                <!-- Lien vers la liste des tuteurs disponibles (Cherche un tuteur -> Étudiant) -->
+                <a href="{{ url_for('main.register_etudiants') }}" class="tutor-card" style="text-align: center; padding: 2rem 1.5rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow);">
+                    <img src="https://placehold.co/56x56/2563eb/ffffff?text=Etudiant" alt="Icône étudiant" style="width: 56px; height: 56px; border-radius: 50%; object-fit: cover; margin: 0 auto;">
                     <div style="margin-top: 1rem;">
                         <span class="tutor-type-student">Étudiant</span>
                     </div>
-                    <h3 style="margin-top: 0.6rem; color: var(--text);">Je cherche un tuteur</h3>
-                    <p style="color: var(--muted); margin-top: 0.4rem; font-size: 0.9rem;">
+                    <h3 style="margin-top: 0.6rem; margin-bottom: 0.4rem; color: var(--text);">Je cherche un tuteur</h3>
+                    <p style="color: var(--muted); margin: 0; font-size: 0.9rem;">
                         Trouvez un tuteur dans votre filière, réservez une session et progressez à votre rythme.
                     </p>
-                </article>
+                </a>
 
-                <article class="tutor-card" style="text-align: center; padding: 2rem 1.5rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow);">
-                    <img src="https://placehold.co/56x56/059669/ffffff?text=Tuteur" alt="Icône tuteur" style="width: 56px; height: 56px; border-radius: 50%; object-fit: cover;">
+                <!-- Lien vers l'inscription des tuteurs (Veux enseigner -> Tuteur) -->
+                <a href="{{ url_for('main.register_tuteurs') }}" class="tutor-card" style="text-align: center; padding: 2rem 1.5rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow);">
+                    <img src="https://placehold.co/56x56/059669/ffffff?text=Tuteur" alt="Icône tuteur" style="width: 56px; height: 56px; border-radius: 50%; object-fit: cover; margin: 0 auto;">
                     <div style="margin-top: 1rem;">
                         <span class="tutor-type-prof">Tuteur</span>
                     </div>
-                    <h3 style="margin-top: 0.6rem; color: var(--text);">Je veux enseigner</h3>
-                    <p style="color: var(--muted); margin-top: 0.4rem; font-size: 0.9rem;">
+                    <h3 style="margin-top: 0.6rem; margin-bottom: 0.4rem; color: var(--text);">Je veux enseigner</h3>
+                    <p style="color: var(--muted); margin: 0; font-size: 0.9rem;">
                         Partagez vos compétences avec vos pairs et gagnez un revenu complémentaire.
                     </p>
-                </article>
+                </a>
             </div>
         </section>
 
-        <!-- ============================================
-           BANNIÈRE
-           ============================================ -->
+        <!-- BANNIÈRE VISUELLE -->
         <section style="padding: 2.5rem 0; border-top: 1px solid var(--border);">
             <figure style="margin: 0; text-align: center;">
                 <img src="https://placehold.co/1200x400/2563eb/ffffff?text=La+vie+academique+sur+EduSen"
@@ -200,13 +236,11 @@
             </figure>
         </section>
 
-        <!-- ============================================
-           ILS NOUS FONT CONFIANCE
-           ============================================ -->
-        <section style="padding: 2.5rem 0; border-top: 1px solid var(--border);">
-            <h2 style="text-align: center; font-size: 1.8rem; color: var(--text);">Ils nous font confiance</h2>
+        <!-- ILS NOUS FONT CONFIANCE -->
+        <section style="padding: 2.5rem 0; border-top: 1px solid var(--border); margin-bottom: 3rem;">
+            <h2 style="text-align: center; font-size: 1.8rem; color: var(--text); margin-bottom: 2rem;">Ils nous font confiance</h2>
 
-            <div style="display: flex; flex-wrap: wrap; justify-content: center; align-items: flex-start; gap: 2.5rem; margin-top: 2rem;">
+            <div style="display: flex; flex-wrap: wrap; justify-content: center; align-items: flex-start; gap: 2.5rem;">
                 <figure style="margin: 0; text-align: center;">
                     <div style="height: 48px; display: flex; align-items: center; justify-content: center;">
                         <img src="https://placehold.co/140x48/2563eb/ffffff?text=EduSen" alt="EduSen" style="max-height: 48px;">
