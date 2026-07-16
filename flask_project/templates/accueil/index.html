@@ -86,15 +86,6 @@
 
             <!-- Boutons d'authentification dynamiques -->
             <div style="display: flex; align-items: center; gap: 1.2rem;">
-                
-                <!-- Liens publics permanents -->
-                <a href="{{ url_for('main.liste_tuteurs') }}" style="color: var(--text); font-weight: 600; text-decoration: none; font-size: 0.9rem; transition: color 0.2s;">
-                    Nos Tuteurs
-                </a>
-                <a href="{{ url_for('main.matieres') }}" style="color: var(--text); font-weight: 600; text-decoration: none; font-size: 0.9rem; transition: color 0.2s; margin-right: 0.5rem;">
-                    Matières
-                </a>
-
                 {% if session.get('user_id') %}
                     <!-- CAS 1 : L'utilisateur est connecté -->
                     {% if session.get('role') == 'admin' %}
@@ -166,7 +157,7 @@
 
                 <div style="display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 2rem;">
                     <!-- Trouver un tuteur -->
-                    <a href="{{ url_for('main.liste_tuteurs') }}" style="background: var(--primary); color: #fff; padding: 0.8rem 1.8rem; border-radius: 60px; font-weight: 700; text-decoration: none; box-shadow: var(--shadow);">
+                    <a href="{{ url_for('main.register_etudiants') }}" style="background: var(--primary); color: #fff; padding: 0.8rem 1.8rem; border-radius: 60px; font-weight: 700; text-decoration: none; box-shadow: var(--shadow);">
                         Trouver un Tuteur
                     </a>
                     <!-- Devenir Tuteur -->
