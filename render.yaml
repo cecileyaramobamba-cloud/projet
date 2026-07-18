@@ -1,0 +1,24 @@
+services:
+  - type: web
+    name: edusen
+    runtime: python
+    rootDir: flask_project
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn run:app
+    envVars:
+      - key: SECRET_KEY
+        generateValue: true
+      - key: FLASK_DEBUG
+        value: "False"
+      - key: ADMIN_EMAIL
+        sync: false
+      - key: ADMIN_PASSWORD
+        sync: false
+      - key: DATABASE_URL
+        fromDatabase:
+          name: edusen-db
+          property: connectionString
+
+databases:
+  - name: edusen-db
+    plan: free
