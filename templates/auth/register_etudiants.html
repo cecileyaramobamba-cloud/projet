@@ -8,33 +8,49 @@
 <body class="bg-light">
 
     <div class="container py-5">
+        <!-- Logo & Nom, lien retour vers l'accueil -->
+        <div class="text-center mb-4">
+            <a href="/" style="display: inline-flex; align-items: center; gap: 0.4rem; text-decoration: none;">
+                <span style="font-size: 1.6rem;">📚</span>
+                <span style="font-size: 1.5rem; font-weight: 800; color: #1e293b; letter-spacing: -0.5px;">
+                    Edu<span style="color: #2563eb;">Sen</span>
+                </span>
+            </a>
+        </div>
         <div class="card shadow-sm mx-auto" style="max-width: 500px;">
             <div class="card-body p-4">
                 <h3 class="text-center mb-4">Inscription Étudiant</h3>
-                
+
+                <!-- Formulaire d'inscription étudiant : envoie vers register_etudiants() -->
                 <form method="POST" action="{{ url_for('main.register_etudiants') }}">
                     {{ form.hidden_tag() }}
 
+                    <!-- Nom d'utilisateur -->
                     <div class="mb-3">
                         <label>{{ form.username.label }}</label>
                         {{ form.username(class="form-control") }}
                     </div>
+                    <!-- Adresse email -->
                     <div class="mb-3">
                         <label>{{ form.email.label }}</label>
                         {{ form.email(class="form-control") }}
                     </div>
+                    <!-- Niveau scolaire -->
                     <div class="mb-3">
                         <label>{{ form.niveau.label }}</label>
                         {{ form.niveau(class="form-control", placeholder="Ex: Licence 1") }}
                     </div>
+                    <!-- Établissement fréquenté -->
                     <div class="mb-3">
                         <label>{{ form.etablissement.label }}</label>
                         {{ form.etablissement(class="form-control", placeholder="Ex: UCAD") }}
                     </div>
+                    <!-- Mot de passe -->
                     <div class="mb-3">
                         <label>{{ form.password.label }}</label>
                         {{ form.password(class="form-control") }}
                     </div>
+                    <!-- Confirmation du mot de passe (doit correspondre au champ précédent) -->
                     <div class="mb-3">
                         <label>{{ form.password_confirm.label }}</label>
                         {{ form.password_confirm(class="form-control") }}

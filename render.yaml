@@ -2,7 +2,6 @@ services:
   - type: web
     name: edusen
     runtime: python
-    rootDir: flask_project
     buildCommand: pip install -r requirements.txt
     startCommand: gunicorn run:app
     envVars:

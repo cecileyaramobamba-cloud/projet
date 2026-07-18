@@ -26,12 +26,12 @@ EduSen est une application web Flask de mise en relation entre tuteurs et étudi
 
 ```bash
 # Cloner le dépôt puis se placer dans le dossier du projet
-cd flask_project
+cd edusen
 
 # Créer et activer un environnement virtuel
-python -m venv ../flask_venv
-../flask_venv/Scripts/activate      # Windows
-source ../flask_venv/bin/activate   # macOS / Linux
+python -m venv venv
+venv/Scripts/activate      # Windows
+source venv/bin/activate   # macOS / Linux
 
 # Installer les dépendances
 pip install -r requirements.txt
@@ -39,7 +39,7 @@ pip install -r requirements.txt
 
 ## Configuration
 
-Créer un fichier `.env` à la racine de `flask_project/` (non versionné) avec les variables suivantes :
+Créer un fichier `.env` à la racine du projet (non versionné) avec les variables suivantes :
 
 ```env
 FLASK_DEBUG=True
@@ -58,7 +58,7 @@ L'application est accessible sur [http://127.0.0.1:5000](http://127.0.0.1:5000).
 ## Structure du projet
 
 ```
-flask_project/
+edusen/
 ├── app.py              # Factory de l'application Flask
 ├── run.py              # Point d'entrée pour lancer le serveur
 ├── config.py           # Configuration (variables d'environnement)
@@ -88,9 +88,9 @@ flask db upgrade
 
 ## Déploiement (Render)
 
-Le projet se déploie sur [Render](https://render.com) via le fichier [`render.yaml`](../render.yaml) à la racine du dépôt (Blueprint), qui décrit :
+Le projet se déploie sur [Render](https://render.com) via le fichier [`render.yaml`](render.yaml) à la racine du dépôt (Blueprint), qui décrit :
 
-- un service web Python (`gunicorn run:app`) avec `rootDir: flask_project`
+- un service web Python (`gunicorn run:app`)
 - une base PostgreSQL gratuite (`edusen-db`), branchée automatiquement sur `DATABASE_URL`
 
 ### Étapes

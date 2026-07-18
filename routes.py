@@ -9,8 +9,11 @@ from forms import RegistrationForm, StudentRegistrationForm, LoginForm
 
 main = Blueprint("main", __name__)
 
+# Libellés courts des mois utilisés pour les graphiques (revenus, statistiques)
 MOIS_LABELS_FR = ["Jan", "Fév", "Mar", "Avr", "Mai", "Juin", "Juil", "Août", "Sep", "Oct", "Nov", "Déc"]
 
+# Fait le lien entre le slug de l'URL (/matieres/<slug>) et le nom affiché,
+# utilisé aussi pour filtrer la liste des tuteurs par matière
 MATIERES_COURS = {
     "maths": "Mathématiques",
     "informatique": "Informatique",
@@ -29,6 +32,9 @@ MATIERES_COURS = {
 # ====================================
 # DÉCORATEUR DE SÉCURITÉ DE SESSION
 # ====================================
+# Protège une route : redirige vers /login si l'utilisateur n'est pas connecté,
+# et vers l'accueil si son rôle en session ne correspond pas au rôle attendu.
+# Usage : @login_required() pour "connecté uniquement", @login_required(role="admin") pour restreindre le rôle.
 def login_required(role=None):
     def decorator(f):
         @wraps(f)
@@ -50,6 +56,8 @@ def login_required(role=None):
 # ====================================
 # HELPERS DE SESSION SÉCURISÉS
 # ====================================
+# Récupère le profil Tuteur/Etudiant correspondant à l'utilisateur actuellement
+# connecté (via son user_id en session), ou None si personne n'est connecté.
 def _tuteur_courant():
     user_id = session.get("user_id")
     if user_id:
@@ -67,6 +75,8 @@ def _etudiant_courant():
 # ====================================
 # UTILS / STATS
 # ====================================
+# Nombre de tuteurs par matière, triés du plus au moins représenté
+# (utilisé pour le graphique "répartition des matières" côté admin)
 def _repartition_matieres():
     compte = dict(
         db.session.query(Tuteur.matiere, func.count(Tuteur.id)).group_by(Tuteur.matiere).all()
@@ -74,6 +84,8 @@ def _repartition_matieres():
     return sorted(compte.items(), key=lambda item: item[1], reverse=True)
 
 
+# Total des paiements "Payé" regroupés par mois, formaté pour un graphique
+# (ex: [{"mois": "Jan", "montant": 12000}, ...])
 def _paiements_par_mois():
     totaux = {}
     paiements_payes = Paiement.query.filter_by(statut="Payé").all()
@@ -115,6 +127,7 @@ def register_tuteurs():
         email = form.email.data.strip().lower()
         username = form.username.data.strip()
 
+        # Un email ou un nom d'utilisateur ne peut être utilisé qu'une seule fois
         if User.query.filter_by(email=email).first():
             flash("Un compte existe déjà avec cet email.", "danger")
             return redirect(url_for("main.register_tuteurs"))
@@ -123,6 +136,7 @@ def register_tuteurs():
             flash("Ce nom d'utilisateur est déjà pris.", "danger")
             return redirect(url_for("main.register_tuteurs"))
 
+        # Étape 1 : création du compte de connexion (User)
         user = User(
             username=username,
             email=email,
@@ -131,6 +145,7 @@ def register_tuteurs():
         db.session.add(user)
         db.session.commit()
 
+        # Étape 2 : création du profil Tuteur lié, en attente de validation admin
         tuteur = Tuteur(
             user_id=user.id,
             nom=username,
@@ -141,6 +156,7 @@ def register_tuteurs():
         db.session.add(tuteur)
         db.session.commit()
 
+        # Connexion automatique après inscription
         session.clear()
         session["user_id"] = user.id
         session["role"] = "tuteur"
@@ -167,6 +183,7 @@ def register_etudiants():
             flash("Ce nom d'utilisateur est déjà pris.", "danger")
             return redirect(url_for("main.register_etudiants"))
 
+        # Même principe que l'inscription tuteur : User puis profil Etudiant lié
         user = User(
             username=username,
             email=email,
@@ -211,7 +228,9 @@ def login():
         session["user_id"] = user.id
         session["prenom"] = user.username
 
-        if email == "admin@edusen.sn" or user.username.lower() == "admin":
+        # Le rôle n'est pas stocké sur User : on le déduit en cherchant
+        # dans quelle table (admin / Tuteur / Etudiant) ce compte existe
+        if user.is_admin:
             session["role"] = "admin"
             flash(f"Bienvenue Administrateur, {user.username} !", "success")
             return redirect(url_for("main.dashboard_admin"))
@@ -259,6 +278,8 @@ def dashboard_admin():
     derniers_paiements = Paiement.query.order_by(Paiement.date_paiement.desc()).limit(3).all()
     dernieres_reservations = Reservation.query.order_by(Reservation.date_creation.desc()).limit(3).all()
 
+    # Fil d'activité : on agrège les derniers événements de chaque table,
+    # puis on les trie tous ensemble par date pour ne garder que les 6 plus récents
     activites = []
     for tuteur in Tuteur.query.order_by(Tuteur.date_inscription.desc()).limit(3):
         activites.append({"icone": "✅", "texte": f"Nouveau tuteur inscrit : {tuteur.nom}", "date": tuteur.date_inscription})
@@ -371,12 +392,12 @@ def ajouter_tuteur_admin():
             nom=nom,
             email=email,
             matiere=matiere,
-            statut="En attente"
+            statut="Actif"
         )
         db.session.add(tuteur)
         db.session.commit()
 
-        flash("Le tuteur a été ajouté avec succès.", "success")
+        flash("Le tuteur a été ajouté avec succès et est visible sur la page « Trouver un tuteur ».", "success")
         return redirect(url_for("main.tuteurs_admin"))
 
     return render_template("admin/ajouter_tuteur.html")
@@ -399,6 +420,8 @@ def refuser_tuteur_admin(tuteur_id):
     nom = tuteur.nom
     user = User.query.get(tuteur.user_id)
 
+    # Un tuteur refusé n'a pas de raison de garder un compte de connexion :
+    # on supprime le profil Tuteur ET le User associé
     db.session.delete(tuteur)
     if user:
         db.session.delete(user)
@@ -422,6 +445,7 @@ def matieres_admin():
     compte_tuteurs = dict(
         db.session.query(Tuteur.matiere, func.count(Tuteur.id)).group_by(Tuteur.matiere).all()
     )
+    # Attribut ajouté dynamiquement (non stocké en base) pour affichage dans le template
     for m in matieres:
         m.nb_tuteurs = compte_tuteurs.get(m.nom, 0)
 
@@ -480,12 +504,29 @@ def paiements_admin():
     return render_template("admin/paiements_admin.html", paiements=paiements)
 
 
+@main.route("/admin/paiements/<int:paiement_id>/valider", methods=["POST"])
+@login_required(role="admin")
+def valider_paiement_admin(paiement_id):
+    paiement = Paiement.query.get_or_404(paiement_id)
+    paiement.statut = "Payé"
+    db.session.commit()
+
+    # Une fois le paiement validé, la réservation liée est automatiquement confirmée
+    if paiement.reservation and paiement.reservation.statut == "En attente":
+        paiement.reservation.statut = "Confirmée"
+        db.session.commit()
+
+    flash(f"Le paiement « {paiement.reference} » a été validé.", "success")
+    return redirect(url_for("main.paiements_admin"))
+
+
 @main.route("/admin/statistiques")
 @login_required(role="admin")
 def statistiques_admin():
     revenus_totaux = db.session.query(func.sum(Paiement.montant)).filter_by(statut="Payé").scalar() or 0
     satisfaction_moyenne = db.session.query(func.avg(Avis.note)).scalar()
 
+    # Top 3 des tuteurs par note moyenne (nécessite au moins un avis, via le JOIN)
     meilleurs_tuteurs = (
         db.session.query(Tuteur, func.avg(Avis.note).label("moyenne"), func.count(Avis.id).label("nb_avis"))
         .join(Avis, Avis.tuteur_id == Tuteur.id)
@@ -574,6 +615,18 @@ def devoirs_etudiant():
     return render_template("etudiant/devoirs_etudiant.html")
 
 
+@main.route("/etudiant/examens")
+@login_required(role="etudiant")
+def examens_etudiant():
+    return render_template("etudiant/examens_etudiant.html")
+
+
+@main.route("/etudiant/certificats")
+@login_required(role="etudiant")
+def certificats_etudiant():
+    return render_template("etudiant/certificats_etudiant.html")
+
+
 # ====================================
 # ESPACE SÉCURISÉ : TUTEUR
 # ====================================
@@ -656,6 +709,8 @@ def etudiants_tuteur():
     etudiants_uniques = []
 
     if tuteur:
+        # Un même étudiant peut avoir plusieurs réservations : on ne veut
+        # qu'une seule ligne par étudiant, donc on déduplique avec un set
         reservations = Reservation.query.filter(
             Reservation.tuteur_id == tuteur.id,
             Reservation.statut.in_(["Confirmée", "Terminée"])
@@ -689,6 +744,7 @@ def revenus_tuteur():
     totaux_mensuels = {}
 
     if tuteur:
+        # Somme des paiements "Payé" regroupée par mois pour ce tuteur uniquement
         paiements = Paiement.query.filter_by(tuteur_id=tuteur.id).order_by(Paiement.date_paiement.desc()).all()
         for p in paiements:
             if p.statut == "Payé" and p.date_paiement:
@@ -726,6 +782,8 @@ def avis_tuteur():
 # ====================================
 # PUBLIC / CHATBOT / PAGES STATIQUES
 # ====================================
+# Chatbot simple basé sur la détection de mots-clés (pas d'IA/LLM ici) :
+# on répond dès qu'un mot-clé attendu est trouvé dans le message de l'utilisateur.
 def generer_reponse_chatbot(message):
     message = message.lower()
     if any(mot in message for mot in ("bonjour", "salut", "hello")):
@@ -775,6 +833,7 @@ def liste_tuteurs():
     matiere_slug = (request.args.get("matiere") or "").strip()
     matiere_nom = MATIERES_COURS.get(matiere_slug)
 
+    # Seuls les tuteurs validés par un admin sont visibles publiquement
     requete = Tuteur.query.filter(Tuteur.statut != "En attente")
     if matiere_nom:
         requete = requete.filter_by(matiere=matiere_nom)
@@ -787,6 +846,78 @@ def liste_tuteurs():
     )
 
 
+@main.route("/tuteurs/<int:tuteur_id>")
+def profil_tuteur_public(tuteur_id):
+    tuteur = Tuteur.query.get_or_404(tuteur_id)
+    if tuteur.statut == "En attente":
+        abort(404)
+
+    avis = Avis.query.filter_by(tuteur_id=tuteur.id).order_by(Avis.date_avis.desc()).all()
+    note_moyenne = round(sum(a.note for a in avis) / len(avis), 1) if avis else None
+
+    return render_template(
+        "public/profil_tuteur_public.html",
+        tuteur=tuteur,
+        avis=avis,
+        note_moyenne=note_moyenne
+    )
+
+
+@main.route("/tuteurs/<int:tuteur_id>/reserver", methods=["POST"])
+@login_required(role="etudiant")
+def reserver_tuteur(tuteur_id):
+    tuteur = Tuteur.query.get_or_404(tuteur_id)
+    etudiant = _etudiant_courant()
+
+    if not etudiant:
+        flash("Aucun profil étudiant trouvé.", "danger")
+        return redirect(url_for("main.profil_tuteur_public", tuteur_id=tuteur.id))
+
+    date_str = (request.form.get("date_seance") or "").strip()
+    montant_str = (request.form.get("montant") or "").strip()
+
+    if not date_str or not montant_str:
+        flash("Merci de renseigner la date de la séance et le montant convenu.", "danger")
+        return redirect(url_for("main.profil_tuteur_public", tuteur_id=tuteur.id))
+
+    try:
+        date_seance = datetime.strptime(date_str, "%Y-%m-%dT%H:%M")
+        montant = float(montant_str)
+    except ValueError:
+        flash("La date ou le montant renseigné est invalide.", "danger")
+        return redirect(url_for("main.profil_tuteur_public", tuteur_id=tuteur.id))
+
+    if montant <= 0:
+        flash("Le montant doit être supérieur à 0.", "danger")
+        return redirect(url_for("main.profil_tuteur_public", tuteur_id=tuteur.id))
+
+    # Étape 1 : la réservation part "En attente" de confirmation par le tuteur
+    reservation = Reservation(
+        etudiant_id=etudiant.id,
+        tuteur_id=tuteur.id,
+        matiere=tuteur.matiere,
+        date_seance=date_seance,
+        statut="En attente"
+    )
+    db.session.add(reservation)
+    db.session.commit()
+
+    # Étape 2 : le paiement associé part aussi "En attente", à valider par un admin
+    paiement = Paiement(
+        reference=f"PAY-{reservation.id:05d}",
+        montant=montant,
+        statut="En attente",
+        tuteur_id=tuteur.id,
+        etudiant_id=etudiant.id,
+        reservation_id=reservation.id
+    )
+    db.session.add(paiement)
+    db.session.commit()
+
+    flash("Votre demande de réservation a été envoyée. Le paiement sera validé par un administrateur.", "success")
+    return redirect(url_for("main.reservations_etudiant"))
+
+
 @main.route("/matieres")
 def matieres():
     matieres_bdd = Matiere.query.order_by(Matiere.nom).all()
@@ -795,6 +926,7 @@ def matieres():
 
 @main.route("/matieres/<slug>")
 def cours_matiere(slug):
+    # Un template dédié existe pour chaque slug connu (public/cours/<slug>.html)
     if slug not in MATIERES_COURS:
         abort(404)
     return render_template(

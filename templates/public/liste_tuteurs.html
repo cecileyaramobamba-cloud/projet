@@ -27,12 +27,18 @@
             <div style="width: 64px; height: 64px; border-radius: 50%; background: var(--primary, #2563eb); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1.4rem; margin: 0 auto 0.8rem;">
                 {{ tuteur.nom[0]|upper }}
             </div>
-            <h4 style="font-weight: 700; margin: 0.2rem 0;">{{ tuteur.nom }}</h4>
+            <a href="{{ url_for('main.profil_tuteur_public', tuteur_id=tuteur.id) }}" style="text-decoration: none; color: inherit;">
+                <h4 style="font-weight: 700; margin: 0.2rem 0;">{{ tuteur.nom }}</h4>
+            </a>
             <small style="color: #475569;">{{ tuteur.matiere }}</small>
             <div style="margin-top: 0.6rem;">
                 <span style="background: #dcfce7; color: #16a34a; padding: 0.2rem 0.8rem; border-radius: 40px; font-size: 0.75rem; font-weight: 600;">Actif</span>
             </div>
-            <a href="mailto:{{ tuteur.email }}" style="display: inline-block; margin-top: 1rem; padding: 0.5rem 1.2rem; background: #2563eb; color: #fff; border-radius: 40px; font-size: 0.85rem; font-weight: 600; text-decoration: none;">Contacter</a>
+            <div style="margin-top: 1rem; display: flex; gap: 0.5rem; justify-content: center; flex-wrap: wrap;">
+                <a href="{{ url_for('main.profil_tuteur_public', tuteur_id=tuteur.id) }}" style="display: inline-block; padding: 0.5rem 1.2rem; background: #eff6ff; color: #2563eb; border-radius: 40px; font-size: 0.85rem; font-weight: 600; text-decoration: none;">Réserver</a>
+                <a href="mailto:{{ tuteur.email }}" id="email-{{ tuteur.id }}" style="display: none; color: #2563eb; font-weight: 600; font-size: 0.85rem; word-break: break-all; text-decoration: underline; align-self: center;">{{ tuteur.email }}</a>
+                <button type="button" onclick="document.getElementById('email-{{ tuteur.id }}').style.display='inline-block'; this.style.display='none';" style="padding: 0.5rem 1.2rem; background: #2563eb; color: #fff; border: none; border-radius: 40px; font-size: 0.85rem; font-weight: 600; cursor: pointer;">Contacter</button>
+            </div>
         </div>
         {% endfor %}
     </div>

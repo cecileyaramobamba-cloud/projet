@@ -1,0 +1,136 @@
+
+{% extends "base.html" %}
+
+{% block title %}Examens - EduSen{% endblock %}
+
+{% block content %}
+
+<style>
+    .examen-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 32px rgba(37,99,235,0.1);
+    }
+    @keyframes fadeInUp {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    .examen-card {
+        animation: fadeInUp 0.4s ease forwards;
+    }
+</style>
+
+<div style="max-width: 1400px; margin: 0 auto; padding: 1rem 0;">
+
+    <!-- ===== TOPBAR ===== -->
+    <div style="background: white; border-radius: 16px; padding: 0.8rem 1.5rem; box-shadow: 0 4px 24px rgba(37,99,235,0.08); border: 1px solid #dbeafe; margin-bottom: 1.5rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+        <div style="display: flex; align-items: center; gap: 1rem; flex: 1; min-width: 200px;">
+            <a href="/" style="font-size: 1.3rem; font-weight: 800; color: #0f172a; text-decoration: none;">
+                Edu<span style="color: #2563eb;">Sen</span>
+            </a>
+            <span style="background: #dbeafe; padding: 0.15rem 0.8rem; border-radius: 40px; font-size: 0.7rem; font-weight: 600; color: #2563eb;">Étudiant</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;">
+            <button onclick="window.location.href='/etudiant/messages'" style="background: transparent; border: none; font-size: 1.1rem; cursor: pointer; position: relative; color: #475569;">
+                <i class="fas fa-envelope"></i>
+                <span style="position: absolute; top: -5px; right: -8px; background: #2563eb; color: #fff; font-size: 0.5rem; padding: 0.1rem 0.4rem; border-radius: 50%;">2</span>
+            </button>
+            <div style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;" onclick="window.location.href='/etudiant/dashboard'">
+                <div style="width: 32px; height: 32px; border-radius: 50%; background: #2563eb; color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.8rem;">SK</div>
+                <span style="font-weight: 600; color: #0f172a; font-size: 0.9rem;">Soukeyna</span>
+            </div>
+        </div>
+    </div>
+
+    <div style="display: flex; gap: 2rem;">
+
+        <!-- ===== SIDEBAR ===== -->
+        <div style="flex: 0 0 220px; min-width: 180px;">
+            <div style="background: white; border-radius: 16px; padding: 1.5rem; box-shadow: 0 4px 24px rgba(37,99,235,0.08); border: 1px solid #dbeafe; position: sticky; top: 90px;">
+                <div style="font-weight: 700; font-size: 0.8rem; text-transform: uppercase; color: #94a3b8; margin-bottom: 1rem; letter-spacing: 0.5px;">📋 Menu</div>
+                <nav style="display: flex; flex-direction: column; gap: 0.2rem;">
+                    <a href="/etudiant/dashboard" style="padding: 0.5rem 0.8rem; border-radius: 8px; color: #475569; text-decoration: none; display: flex; align-items: center; gap: 0.8rem; font-size: 0.9rem; transition: 0.3s ease;">
+                        <i class="fas fa-home" style="width: 20px; text-align: center;"></i> Tableau de bord
+                    </a>
+                    <a href="/etudiant/cours" style="padding: 0.5rem 0.8rem; border-radius: 8px; color: #475569; text-decoration: none; display: flex; align-items: center; gap: 0.8rem; font-size: 0.9rem; transition: 0.3s ease;">
+                        <i class="fas fa-book" style="width: 20px; text-align: center;"></i> Mes cours
+                    </a>
+                    <a href="{{ url_for('main.liste_tuteurs') }}" style="padding: 0.5rem 0.8rem; border-radius: 8px; color: #475569; text-decoration: none; display: flex; align-items: center; gap: 0.8rem; font-size: 0.9rem; transition: 0.3s ease;">
+                        <i class="fas fa-search" style="width: 20px; text-align: center;"></i> Trouver un tuteur
+                    </a>
+                    <a href="/etudiant/reservations" style="padding: 0.5rem 0.8rem; border-radius: 8px; color: #475569; text-decoration: none; display: flex; align-items: center; gap: 0.8rem; font-size: 0.9rem; transition: 0.3s ease;">
+                        <i class="fas fa-calendar-check" style="width: 20px; text-align: center;"></i> Réservations
+                    </a>
+                    <a href="/etudiant/messages" style="padding: 0.5rem 0.8rem; border-radius: 8px; color: #475569; text-decoration: none; display: flex; align-items: center; gap: 0.8rem; font-size: 0.9rem; transition: 0.3s ease;">
+                        <i class="fas fa-envelope" style="width: 20px; text-align: center;"></i> Messages
+                    </a>
+                    <a href="/etudiant/devoirs" style="padding: 0.5rem 0.8rem; border-radius: 8px; color: #475569; text-decoration: none; display: flex; align-items: center; gap: 0.8rem; font-size: 0.9rem; transition: 0.3s ease;">
+                        <i class="fas fa-file-alt" style="width: 20px; text-align: center;"></i> Devoirs
+                    </a>
+                    <a href="/etudiant/examens" style="padding: 0.5rem 0.8rem; border-radius: 8px; background: #eff6ff; color: #2563eb; text-decoration: none; display: flex; align-items: center; gap: 0.8rem; font-size: 0.9rem; font-weight: 600;">
+                        <i class="fas fa-pencil-alt" style="width: 20px; text-align: center;"></i> Examens
+                    </a>
+                    <a href="/etudiant/certificats" style="padding: 0.5rem 0.8rem; border-radius: 8px; color: #475569; text-decoration: none; display: flex; align-items: center; gap: 0.8rem; font-size: 0.9rem; transition: 0.3s ease;">
+                        <i class="fas fa-award" style="width: 20px; text-align: center;"></i> Certificats
+                    </a>
+                    <a href="/etudiant/profil" style="padding: 0.5rem 0.8rem; border-radius: 8px; color: #475569; text-decoration: none; display: flex; align-items: center; gap: 0.8rem; font-size: 0.9rem; transition: 0.3s ease;">
+                        <i class="fas fa-user" style="width: 20px; text-align: center;"></i> Mon profil
+                    </a>
+                    <div style="border-top: 1px solid #dbeafe; margin-top: 0.3rem; padding-top: 0.3rem;">
+                        <a href="/auth/deconnexion" style="padding: 0.5rem 0.8rem; border-radius: 8px; color: #dc2626; text-decoration: none; display: flex; align-items: center; gap: 0.8rem; font-size: 0.9rem; transition: 0.3s ease;">
+                            <i class="fas fa-sign-out-alt" style="width: 20px; text-align: center;"></i> Déconnexion
+                        </a>
+                    </div>
+                </nav>
+            </div>
+        </div>
+
+        <!-- ===== CONTENU PRINCIPAL ===== -->
+        <div style="flex: 1; min-width: 0;">
+
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
+                <div>
+                    <h1 style="font-size: 1.8rem; color: #0f172a; font-weight: 800;">📝 Examens</h1>
+                    <p style="color: #475569; font-size: 0.95rem;">Retrouvez vos examens à venir et vos résultats.</p>
+                </div>
+            </div>
+
+            <!-- Données de démonstration codées en dur : cette page n'est pas
+                 encore reliée à un modèle "Examen" en base de données -->
+            <div class="examen-card" style="background: white; border-radius: 16px; padding: 1.2rem 1.5rem; box-shadow: 0 4px 24px rgba(37,99,235,0.08); border: 1px solid #dbeafe; margin-bottom: 1rem;">
+                <div style="display: flex; justify-content: space-between; align-items: start; flex-wrap: wrap; gap: 0.5rem;">
+                    <div>
+                        <div style="font-weight: 700; font-size: 1.05rem; color: #0f172a;">🐍 Contrôle : structures de données en Python</div>
+                        <div style="color: #475569; font-size: 0.85rem; margin-top: 0.2rem;">Python Avancé · Fatou Diop</div>
+                        <div style="color: #475569; font-size: 0.85rem; margin-top: 0.3rem;">📅 Prévu le 25 Août 2026 à 10h00</div>
+                    </div>
+                    <span style="background: #dbeafe; color: #1d4ed8; padding: 0.15rem 0.7rem; border-radius: 40px; font-size: 0.75rem; font-weight: 600;">🔵 À venir</span>
+                </div>
+            </div>
+
+            <div class="examen-card" style="background: white; border-radius: 16px; padding: 1.2rem 1.5rem; box-shadow: 0 4px 24px rgba(37,99,235,0.08); border: 1px solid #dbeafe; margin-bottom: 1rem;">
+                <div style="display: flex; justify-content: space-between; align-items: start; flex-wrap: wrap; gap: 0.5rem;">
+                    <div>
+                        <div style="font-weight: 700; font-size: 1.05rem; color: #0f172a;">📊 Évaluation : statistiques descriptives</div>
+                        <div style="color: #475569; font-size: 0.85rem; margin-top: 0.2rem;">Statistiques · Awa Ndiaye</div>
+                        <div style="color: #475569; font-size: 0.85rem; margin-top: 0.3rem;">📅 Passé le 02 Août 2026</div>
+                    </div>
+                    <span style="background: #d1fae5; color: #065f46; padding: 0.15rem 0.7rem; border-radius: 40px; font-size: 0.75rem; font-weight: 600;">✅ Noté : 17/20</span>
+                </div>
+            </div>
+
+            <div class="examen-card" style="background: white; border-radius: 16px; padding: 1.2rem 1.5rem; box-shadow: 0 4px 24px rgba(37,99,235,0.08); border: 1px solid #dbeafe; margin-bottom: 1rem; opacity: 0.8;">
+                <div style="display: flex; justify-content: space-between; align-items: start; flex-wrap: wrap; gap: 0.5rem;">
+                    <div>
+                        <div style="font-weight: 700; font-size: 1.05rem; color: #0f172a;">🗄️ Examen final : bases de données relationnelles</div>
+                        <div style="color: #475569; font-size: 0.85rem; margin-top: 0.2rem;">Base de données · Khady Diop</div>
+                        <div style="color: #475569; font-size: 0.85rem; margin-top: 0.3rem;">📅 Passé le 12 Juillet 2026</div>
+                    </div>
+                    <span style="background: #d1fae5; color: #065f46; padding: 0.15rem 0.7rem; border-radius: 40px; font-size: 0.75rem; font-weight: 600;">✅ Noté : 15/20</span>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+{% endblock %}

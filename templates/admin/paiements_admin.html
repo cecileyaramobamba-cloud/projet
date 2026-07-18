@@ -21,13 +21,14 @@
                     <th style="padding: 0.75rem 1rem; text-align: left; font-weight: 600; color: #0f172a;">Montant</th>
                     <th style="padding: 0.75rem 1rem; text-align: left; font-weight: 600; color: #0f172a;">Date</th>
                     <th style="padding: 0.75rem 1rem; text-align: left; font-weight: 600; color: #0f172a;">Statut</th>
+                    <th style="padding: 0.75rem 1rem; text-align: left; font-weight: 600; color: #0f172a;">Actions</th>
                 </tr>
             </thead>
             <tbody>
                 {% for paiement in paiements %}
                 <tr>
                     <td style="padding: 0.75rem 1rem; border-bottom: 1px solid #dbeafe;"><strong>{{ paiement.reference }}</strong></td>
-                    <td style="padding: 0.75rem 1rem; border-bottom: 1px solid #dbeafe;">{{ paiement.eleve }}</td>
+                    <td style="padding: 0.75rem 1rem; border-bottom: 1px solid #dbeafe;">{{ paiement.etudiant.nom if paiement.etudiant else "—" }}</td>
                     <td style="padding: 0.75rem 1rem; border-bottom: 1px solid #dbeafe;">{{ paiement.tuteur.nom if paiement.tuteur else "—" }}</td>
                     <td style="padding: 0.75rem 1rem; border-bottom: 1px solid #dbeafe;">{{ "{:,}".format(paiement.montant).replace(",", " ") }} FCFA</td>
                     <td style="padding: 0.75rem 1rem; border-bottom: 1px solid #dbeafe;">{{ paiement.date_paiement.strftime('%d/%m/%Y') }}</td>
@@ -38,10 +39,19 @@
                         <span style="background: #fef3c7; color: #92400e; padding: 0.15rem 0.7rem; border-radius: 40px; font-size: 0.7rem; font-weight: 600;">⏳ En attente</span>
                         {% endif %}
                     </td>
+                    <td style="padding: 0.75rem 1rem; border-bottom: 1px solid #dbeafe;">
+                        {% if paiement.statut != "Payé" %}
+                        <form method="POST" action="{{ url_for('main.valider_paiement_admin', paiement_id=paiement.id) }}" style="display: inline;">
+                            <button type="submit" style="padding: 0.3rem 0.9rem; background: #059669; color: #fff; border: none; border-radius: 40px; cursor: pointer; font-size: 0.8rem;"><i class="fas fa-check"></i> Valider</button>
+                        </form>
+                        {% else %}
+                        <span style="color: #94a3b8; font-size: 0.8rem;">—</span>
+                        {% endif %}
+                    </td>
                 </tr>
                 {% else %}
                 <tr>
-                    <td colspan="6" style="text-align: center; padding: 2rem; color: #475569;">Aucun paiement pour le moment.</td>
+                    <td colspan="7" style="text-align: center; padding: 2rem; color: #475569;">Aucun paiement pour le moment.</td>
                 </tr>
                 {% endfor %}
             </tbody>
