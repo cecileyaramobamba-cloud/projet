@@ -14,12 +14,12 @@
                 🏠 Dashboard Admin
             </h1>
             <p style="color: #475569; font-size: 1rem;">
-                Bonjour cecile👋 Voici un aperçu de l'activité de la plateforme aujourd'hui.
+                Bonjour {{ current_user.prenom }} 👋 Voici un aperçu de l'activité de la plateforme aujourd'hui.
             </p>
         </div>
         <div style="display: flex; align-items: center; gap: 1rem;">
             <span style="background: #dbeafe; padding: 0.3rem 1rem; border-radius: 40px; color: #2563eb; font-weight: 600; font-size: 0.85rem;">
-                👤 Admin
+                👤 {{ current_user.prenom }}
             </span>
             <a href="/auth/deconnexion" style="padding: 0.3rem 1rem; background: #dc2626; color: #fff; border-radius: 40px; text-decoration: none; font-weight: 600; font-size: 0.85rem;">
                 <i class="fas fa-sign-out-alt"></i> Déconnexion

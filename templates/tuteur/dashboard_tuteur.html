@@ -49,8 +49,8 @@
                 <span style="position: absolute; top: -5px; right: -8px; background: #2563eb; color: #fff; font-size: 0.5rem; padding: 0.1rem 0.4rem; border-radius: 50%;">3</span>
             </button>
             <a href="{{ url_for('main.profil_tuteur') }}" style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; text-decoration: none;">
-                <div style="width: 32px; height: 32px; border-radius: 50%; background: #2563eb; color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.8rem;">FD</div>
-                <span style="font-weight: 600; color: #0f172a; font-size: 0.9rem;">Fatou Diop</span>
+                <div style="width: 32px; height: 32px; border-radius: 50%; background: #2563eb; color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.8rem;">{{ current_user.prenom[:2]|upper }}</div>
+                <span style="font-weight: 600; color: #0f172a; font-size: 0.9rem;">{{ current_user.prenom }}</span>
                 <i class="fas fa-chevron-down" style="color: #94a3b8; font-size: 0.6rem;"></i>
             </a>
         </div>
@@ -105,7 +105,7 @@
             <!-- ===== BONJOUR ===== -->
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
                 <div>
-                    <h1 style="font-size: 1.8rem; color: #0f172a; font-weight: 800;">Bonjour Cecile👋</h1>
+                    <h1 style="font-size: 1.8rem; color: #0f172a; font-weight: 800;">Bonjour {{ current_user.prenom }} 👋</h1>
                     <p style="color: #475569; font-size: 0.95rem;">Voici un résumé de votre activité aujourd'hui.</p>
                 </div>
                 <div style="display: flex; gap: 0.5rem;">

@@ -6,6 +6,7 @@
     <title>Inscription Tuteur - EduSen</title>
     <!-- Bootstrap pour le formatage des champs de formulaire -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <style>
         :root {
             --primary: #2563eb;
@@ -79,11 +80,9 @@
                     </svg>
                     Connexion
                 </a>
-                <a href="{{ url_for('main.register_tuteurs') }}" style="display: flex; align-items: center; gap: 0.5rem; color: #fff; background: var(--primary); padding: 0.6rem 1.4rem; border-radius: 40px; font-weight: 600; text-decoration: none; font-size: 0.9rem; box-shadow: var(--shadow); transition: opacity 0.2s;">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2M8.5 3a4.5 4.5 0 1 0 0 9 4.5 4.5 0 1 0 0-9zM19 8v6M16 11h6"/>
-                    </svg>
-                    S'inscrire
+                <a href="{{ url_for('main.login_admin') }}" style="display: flex; align-items: center; gap: 0.5rem; color: #fff; background: #0f172a; padding: 0.6rem 1.4rem; border-radius: 40px; font-weight: 600; text-decoration: none; font-size: 0.9rem; box-shadow: var(--shadow); transition: opacity 0.2s;">
+                    <i class="fas fa-user-shield"></i>
+                    Mon Espace Admin
                 </a>
             </div>
 
@@ -191,7 +190,7 @@
 
             <div class="text-center mt-4 pt-3 border-top">
                 <p class="mb-0" style="font-size: 0.95rem;">
-                    Déjà un compte ? <a href="{{ url_for('main.login') }}" style="color: var(--primary); text-decoration: none; font-weight: 600;">Se connecter</a>
+                    Déjà un compte ? <a href="{{ url_for('main.login_tuteur') }}" style="color: var(--primary); text-decoration: none; font-weight: 600;">Se connecter</a>
                 </p>
             </div>
         </div>

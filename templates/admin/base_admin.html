@@ -15,7 +15,7 @@
         <div style="display: flex; align-items: center; gap: 0.8rem; flex-wrap: wrap;">
             <div style="display: flex; align-items: center; gap: 0.5rem; background: #eff6ff; padding: 0.3rem 1rem; border-radius: 40px;">
                 <span style="font-size: 1rem;">👤</span>
-                <span style="font-weight: 600; color: #2563eb; font-size: 0.9rem;">Admin</span>
+                <span style="font-weight: 600; color: #2563eb; font-size: 0.9rem;">{{ current_user.prenom }}</span>
             </div>
             <a href="/auth/deconnexion" style="padding: 0.3rem 1rem; background: #dc2626; color: #fff; border-radius: 40px; text-decoration: none; font-weight: 600; font-size: 0.85rem;">
                 <i class="fas fa-sign-out-alt"></i> Déconnexion

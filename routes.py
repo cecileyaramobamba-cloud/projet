@@ -156,14 +156,9 @@ def register_tuteurs():
         db.session.add(tuteur)
         db.session.commit()
 
-        # Connexion automatique après inscription
-        session.clear()
-        session["user_id"] = user.id
-        session["role"] = "tuteur"
-        session["prenom"] = username
-
-        flash("Compte tuteur créé avec succès ! Bienvenue sur votre espace.", "success")
-        return redirect(url_for("main.dashboard_tuteur"))
+        # Pas de connexion automatique : direction la page de connexion tuteur
+        flash("Compte tuteur créé avec succès ! Connectez-vous pour accéder à votre espace.", "success")
+        return redirect(url_for("main.login_tuteur"))
 
     return render_template("auth/register_tuteurs.html", form=form)
 
@@ -202,55 +197,90 @@ def register_etudiants():
         db.session.add(etudiant)
         db.session.commit()
 
-        session.clear()
-        session["user_id"] = user.id
-        session["role"] = "etudiant"
-        session["prenom"] = username
-
-        flash("Compte étudiant créé avec succès ! Bienvenue sur votre espace.", "success")
-        return redirect(url_for("main.dashboard_etudiant"))
+        # Pas de connexion automatique : direction la page de connexion étudiant
+        flash("Compte étudiant créé avec succès ! Connectez-vous pour accéder à votre espace.", "success")
+        return redirect(url_for("main.login_etudiant"))
 
     return render_template("auth/register_etudiants.html", form=form)
 
 
-@main.route("/login", methods=["GET", "POST"])
+# Page d'accueil des choix de connexion (Étudiant / Tuteur / Admin) :
+# chaque rôle a son propre formulaire, il n'y a plus de connexion unique
+@main.route("/login")
 def login():
+    return render_template("auth/login.html")
+
+
+# Page d'accueil des choix d'inscription (Étudiant / Tuteur) : l'admin
+# n'a pas de formulaire d'inscription, son compte existe déjà (voir app.py)
+@main.route("/register")
+def register():
+    return render_template("auth/register.html")
+
+
+@main.route("/login/etudiant", methods=["GET", "POST"])
+def login_etudiant():
+    form = LoginForm()
+    if form.validate_on_submit():
+        email = form.email.data.strip().lower()
+        user = User.query.filter_by(email=email).first()
+        etudiant = Etudiant.query.filter_by(user_id=user.id).first() if user else None
+
+        if user is None or not check_password_hash(user.password_hash, form.password.data) or not etudiant:
+            flash("Email ou mot de passe incorrect pour un compte étudiant.", "danger")
+            return redirect(url_for("main.login_etudiant"))
+
+        session.clear()
+        session["user_id"] = user.id
+        session["prenom"] = user.username
+        session["role"] = "etudiant"
+        flash(f"Bienvenue Étudiant, {user.username} !", "success")
+        return redirect(url_for("main.dashboard_etudiant"))
+
+    return render_template("auth/login_etudiant.html", form=form)
+
+
+@main.route("/login/tuteur", methods=["GET", "POST"])
+def login_tuteur():
+    form = LoginForm()
+    if form.validate_on_submit():
+        email = form.email.data.strip().lower()
+        user = User.query.filter_by(email=email).first()
+        tuteur = Tuteur.query.filter_by(user_id=user.id).first() if user else None
+
+        if user is None or not check_password_hash(user.password_hash, form.password.data) or not tuteur:
+            flash("Email ou mot de passe incorrect pour un compte tuteur.", "danger")
+            return redirect(url_for("main.login_tuteur"))
+
+        session.clear()
+        session["user_id"] = user.id
+        session["prenom"] = user.username
+        session["role"] = "tuteur"
+        flash(f"Bienvenue Tuteur, {user.username} !", "success")
+        return redirect(url_for("main.dashboard_tuteur"))
+
+    return render_template("auth/login_tuteur.html", form=form)
+
+
+@main.route("/login/admin", methods=["GET", "POST"])
+def login_admin():
     form = LoginForm()
     if form.validate_on_submit():
         email = form.email.data.strip().lower()
         user = User.query.filter_by(email=email).first()
 
-        if user is None or not check_password_hash(user.password_hash, form.password.data):
-            flash("Email ou mot de passe incorrect.", "danger")
-            return redirect(url_for("main.login"))
+        if user is None or not check_password_hash(user.password_hash, form.password.data) or not user.is_admin:
+            flash("Email ou mot de passe incorrect pour l'espace administrateur.", "danger")
+            return redirect(url_for("main.login_admin"))
 
         session.clear()
         session["user_id"] = user.id
         session["prenom"] = user.username
+        session["role"] = "admin"
+        flash(f"Bienvenue Administrateur, {user.username} !", "success")
+        return redirect(url_for("main.dashboard_admin"))
 
-        # Le rôle n'est pas stocké sur User : on le déduit en cherchant
-        # dans quelle table (admin / Tuteur / Etudiant) ce compte existe
-        if user.is_admin:
-            session["role"] = "admin"
-            flash(f"Bienvenue Administrateur, {user.username} !", "success")
-            return redirect(url_for("main.dashboard_admin"))
-
-        tuteur = Tuteur.query.filter_by(user_id=user.id).first()
-        if tuteur:
-            session["role"] = "tuteur"
-            flash(f"Bienvenue Tuteur, {user.username} !", "success")
-            return redirect(url_for("main.dashboard_tuteur"))
-
-        etudiant = Etudiant.query.filter_by(user_id=user.id).first()
-        if etudiant:
-            session["role"] = "etudiant"
-            flash(f"Bienvenue Étudiant, {user.username} !", "success")
-            return redirect(url_for("main.dashboard_etudiant"))
-
-        flash(f"Bienvenue, {user.username} !", "success")
-        return redirect(url_for("main.accueil"))
-
-    return render_template("auth/login.html", form=form)
+    return render_template("auth/login_admin.html", form=form)
 
 
 @main.route("/auth/deconnexion")
